@@ -775,37 +775,45 @@ export const CosmicPrayerTimes: React.FC<CosmicPrayerTimesProps> = ({ language }
       try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 4500);
-        const timestampSec = Math.floor(Date.now() / 1000);
-        const url = `https://api.aladhan.com/v1/timings/${timestampSec}?latitude=${targetLat}&longitude=${targetLng}&method=${methodId}`;
-        const res = await fetch(url, { signal: controller.signal });
+        const url = `/api/prayer-times?latitude=${targetLat}&longitude=${targetLng}&method=${methodId}`;
+        const res = await fetch(url, {
+          headers: { Accept: 'application/json' },
+          signal: controller.signal,
+        });
         clearTimeout(timeoutId);
 
         if (res.ok) {
-          const json = await res.json();
-          const data = json?.data;
-          if (data?.timings) {
-            const cleanTime = (str: string) => (str ? str.split(' ')[0] : '00:00');
-            setApiTimingsOverride({
-              Fajr: cleanTime(data.timings.Fajr),
-              Sunrise: cleanTime(data.timings.Sunrise),
-              Dhuhr: cleanTime(data.timings.Dhuhr),
-              Asr: cleanTime(data.timings.Asr),
-              Maghrib: cleanTime(data.timings.Maghrib),
-              Isha: cleanTime(data.timings.Isha),
-              LastThird: cleanTime(data.timings.Lastthird || data.timings.Imsak),
-              Midnight: cleanTime(data.timings.Midnight),
-            });
+          const rawText = await res.text();
+          const trimmed = rawText.trim();
+          if (trimmed.startsWith('{')) {
+            const json = JSON.parse(trimmed);
+            const data = json?.data;
+            if (data?.timings) {
+              const cleanTime = (str: string) => (str ? str.split(' ')[0] : '00:00');
+              setApiTimingsOverride({
+                Fajr: cleanTime(data.timings.Fajr),
+                Sunrise: cleanTime(data.timings.Sunrise),
+                Dhuhr: cleanTime(data.timings.Dhuhr),
+                Asr: cleanTime(data.timings.Asr),
+                Maghrib: cleanTime(data.timings.Maghrib),
+                Isha: cleanTime(data.timings.Isha),
+                LastThird: cleanTime(data.timings.Lastthird || data.timings.Imsak),
+                Midnight: cleanTime(data.timings.Midnight),
+              });
+            }
+            if (data?.date?.hijri) {
+              const h = data.date.hijri;
+              setApiHijriOverride({
+                day: parseInt(h.day, 10) || 1,
+                monthNumber: Number(h.month?.number) || 1,
+                year: parseInt(h.year, 10) || 1448,
+              });
+            }
+            if (json?.success && data) {
+              setApiSyncStatus('synced');
+              return;
+            }
           }
-          if (data?.date?.hijri) {
-            const h = data.date.hijri;
-            setApiHijriOverride({
-              day: parseInt(h.day, 10) || 1,
-              monthNumber: Number(h.month?.number) || 1,
-              year: parseInt(h.year, 10) || 1448,
-            });
-          }
-          setApiSyncStatus('synced');
-          return;
         }
       } catch {
         // Fallback to built-in astronomical engine

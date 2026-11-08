@@ -82,24 +82,39 @@ export const AiCosmicLab: React.FC<AiCosmicLabProps> = ({ language, onSaveArticl
     try {
       const response = await fetch('/api/gemini/generate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
           prompt: textToSend,
           mode,
-          language
+          language,
         }),
       });
 
-      const data = await response.json();
+      const rawText = await response.text();
+      const trimmed = rawText.trim();
 
-      if (!response.ok) {
+      if (!trimmed || trimmed.startsWith('<')) {
+        throw new Error(
+          language === 'ar'
+            ? 'الخادم قيد التحديث اللحظي، يرجى المحاولة مرة أخرى بعد ثوانٍ.'
+            : 'The server is refreshing. Please try again in a moment.'
+        );
+      }
+
+      const data = JSON.parse(trimmed);
+
+      if (!response.ok || data.error) {
         throw new Error(data.error || 'Failed to communicate with Gemini API');
       }
 
       setResult(data.result);
     } catch (err: any) {
-      console.error(err);
-      setError(err?.message || 'Error occurred while contacting Gemini');
+      setError(
+        err?.message ||
+          (language === 'ar'
+            ? 'حدث خطأ أثناء الاتصال بمحرك الذكاء الاصطناعي.'
+            : 'Error occurred while contacting Gemini')
+      );
     } finally {
       setLoading(false);
     }

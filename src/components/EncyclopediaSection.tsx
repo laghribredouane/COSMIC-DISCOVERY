@@ -3,6 +3,7 @@ import { Search, Filter, BookOpen, Sparkles, X } from 'lucide-react';
 import { ScientificArticle, Language, CosmicCategory } from '../types/cosmic';
 import { filterArticlesList } from '../utils/cosmicCalculations';
 import { ArticleCard } from './ArticleCard';
+import { KaheelPartnerAds } from './KaheelPartnerAds';
 import { translations } from '../i18n/translations';
 
 interface EncyclopediaSectionProps {
@@ -90,6 +91,9 @@ export const EncyclopediaSection: React.FC<EncyclopediaSectionProps> = ({
           </button>
         ))}
       </div>
+
+      {/* Promotional Partner Banner for https://kaheel7.net/ */}
+      <KaheelPartnerAds language={language} variant="compact-banner" />
 
       {/* Articles Grid */}
       {filteredArticles.length > 0 ? (

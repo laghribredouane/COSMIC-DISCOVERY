@@ -23,6 +23,8 @@ import { SkyMap } from './components/SkyMap';
 import { LiveSpaceFeeds } from './components/LiveSpaceFeeds';
 import { CelestialEvents } from './components/CelestialEvents';
 import { CosmicPrayerTimes } from './components/CosmicPrayerTimes';
+import { CosmicHadithOfTheDay } from './components/CosmicHadithOfTheDay';
+import { KaheelPartnerAds } from './components/KaheelPartnerAds';
 import { Footer } from './components/Footer';
 import { ArticleModal } from './components/ArticleModal';
 import { GlobalSearchModal } from './components/GlobalSearchModal';
@@ -119,7 +121,9 @@ export default function App() {
       />
 
       {/* Main Content Area */}
-      <main className="relative z-10 flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+      <main className="relative z-10 flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-8">
+        {/* Global Top Promotional Ad Ribbon for https://kaheel7.net/ */}
+        <KaheelPartnerAds language={language} variant="hero-ribbon" />
         
         {/* VIEW 1: HOME */}
         {currentTab === 'home' && (
@@ -132,6 +136,12 @@ export default function App() {
               onOpenAi={() => setCurrentTab('gemini-lab')}
               onSelectCategory={handleSelectCategory}
             />
+
+            {/* Featured Interactive Ad Showcase for https://kaheel7.net/ */}
+            <KaheelPartnerAds language={language} variant="featured-showcase" />
+
+            {/* Cosmic Hadith of the Day: Authentic Prophetic Traditions on the Universe */}
+            <CosmicHadithOfTheDay language={language} />
 
             {/* Cosmic Prayer Times, Dual Hijri-Gregorian Calendar & Qibla Compass on Home */}
             <CosmicPrayerTimes language={language} />
@@ -317,26 +327,35 @@ export default function App() {
               </div>
             </div>
 
-            {/* Quran & Cosmos Section Preview on Home */}
-            <div className="p-8 rounded-3xl bg-gradient-to-r from-amber-950/20 via-slate-900 to-indigo-950/20 border border-amber-500/30 flex flex-col md:flex-row items-center justify-between gap-6">
+            {/* Complete Moroccan Warsh Mushaf & Quran Cosmos Section Preview on Home */}
+            <div className="p-8 rounded-3xl bg-gradient-to-r from-[#07211b] via-slate-900 to-amber-950/30 border-2 border-amber-500/40 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl">
               <div className="space-y-2 text-center md:text-start">
                 <span className="text-xs font-bold uppercase tracking-wider text-amber-300">
-                  {t.quranHeroTitle}
+                  {language === 'ar'
+                    ? 'المصحف المحمدي الشريف • رواية ورش عن نافع (القراءة المغربية)'
+                    : 'Complete Holy Quran • Moroccan Reading (Riwayat Warsh an Nafi)'}
                 </span>
                 <h3 className="text-2xl font-black text-white">
-                  {language === 'ar' ? 'تأملات موثقة تجمع بين النص القرآني وأسرار السماء' : 'Rigorous Reflections Between Scripture & Modern Astronomy'}
-                </h3>
-                <p className="text-sm text-slate-300 max-w-xl">
                   {language === 'ar'
-                    ? 'دراسة الآيات الكونية بمنهج علمي رصين وتفاسير معتمدة دون تكلف أو تأويل مجازف.'
-                    : 'Explore cosmic signs grounded in authoritative classical Tafsir and verified astrophysics.'}
+                    ? 'القرآن الكريم كاملاً برواية ورش عن نافع (114 سورة • 60 حزباً) مع تلاوات القراء المغاربة'
+                    : 'Complete Holy Quran in Riwayat Warsh (114 Surahs • 60 Hizbs) & Cosmic Verse Studies'}
+                </h3>
+                <p className="text-sm text-slate-300 max-w-2xl">
+                  {language === 'ar'
+                    ? 'تصفح جميع سور القرآن الكريم بالرسم العثماني المغربي وضبط ورش من طريق الأزرق، مع الاستماع لكبار القراء المغاربة (عمر القزابري، العيون الكوشي، عبد المجيب بنكيران) ودراسة الآيات الكونية.'
+                    : 'Read all 114 Surahs in authentic Moroccan Warsh script, listen to renowned Moroccan reciters, and explore cosmic Quranic reflections.'}
                 </p>
               </div>
               <button
-                onClick={() => setCurrentTab('quran-cosmos')}
-                className="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-black text-xs shrink-0 shadow-lg shadow-amber-500/20 transition-all"
+                onClick={() => {
+                  setCurrentTab('quran-cosmos');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-black font-black text-xs shrink-0 shadow-lg shadow-amber-500/25 transition-all cursor-pointer"
               >
-                {language === 'ar' ? 'دخول قسم القرآن والكون' : 'Explore Quran & Cosmos'}
+                {language === 'ar'
+                  ? 'فتح المصحف الشريف كاملاً (رواية ورش)'
+                  : 'Open Complete Warsh Quran'}
               </button>
             </div>
           </div>

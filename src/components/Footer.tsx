@@ -86,12 +86,28 @@ export const Footer: React.FC<FooterProps> = ({ language, onSelectTab }) => {
             </ul>
           </div>
 
-          {/* Col 3: Astronomical Authorities */}
+          {/* Col 3: Astronomical & Scientific Miracle Authorities */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400 mb-4">
-              {language === 'ar' ? 'المصادر الفلكية' : 'Astrophysical Sources'}
+              {language === 'ar' ? 'المصادر الفلكية والموسوعات الشريكة' : 'Astrophysical & Partner Sources'}
             </h4>
-            <ul className="space-y-2 text-xs text-slate-400">
+            <ul className="space-y-2.5 text-xs text-slate-400">
+              <li>
+                <a
+                  href="https://kaheel7.net/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-amber-300 hover:text-amber-200 font-bold transition-colors"
+                >
+                  <span className="text-amber-400">•</span>
+                  <span>
+                    {language === 'ar'
+                      ? 'موقع الكحيل للإعجاز العلمي (kaheel7.net)'
+                      : 'Al-Kaheel Scientific Miracles (kaheel7.net)'}
+                  </span>
+                  <ExternalLink className="w-3 h-3 shrink-0" />
+                </a>
+              </li>
               <li className="flex items-center gap-1.5">
                 <span className="text-cyan-400">•</span>
                 <span>NASA Astrophysics Data System (ADS)</span>

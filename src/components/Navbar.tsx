@@ -24,13 +24,13 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   const navItems = [
     { id: 'home', label: t.navHome, icon: Compass },
+    { id: 'quran-cosmos', label: t.navQuranCosmos, icon: BookOpen },
     { id: 'prayer-times', label: t.navPrayerTimes, icon: Calendar },
     { id: 'encyclopedia', label: t.navEncyclopedia, icon: BookOpen },
     { id: 'sky-map', label: t.navSkyMap, icon: Sparkles },
     { id: 'live-feeds', label: t.navLiveFeeds, icon: Radio },
     { id: 'events', label: t.navEvents, icon: Calendar },
     { id: 'virtual-journeys', label: t.navVirtualJourney, icon: Orbit },
-    { id: 'quran-cosmos', label: t.navQuranCosmos, icon: Sparkles },
     { id: 'gallery', label: t.navGallery, icon: Image },
     { id: 'gemini-lab', label: t.navGeminiLab, icon: BrainCircuit },
     { id: 'quiz', label: t.navQuiz, icon: HelpCircle },

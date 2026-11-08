@@ -164,16 +164,22 @@ export const LiveSpaceFeeds: React.FC<LiveSpaceFeedsProps> = ({ language }) => {
   const fetchLiveFeeds = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch('/api/space-feeds');
+      const res = await fetch('/api/space-feeds', {
+        headers: { Accept: 'application/json' },
+      });
       if (res.ok) {
-        const data = await res.json();
-        if (data.liveIss) {
-          setIssPosition(data.liveIss);
+        const rawText = await res.text();
+        const trimmed = rawText.trim();
+        if (trimmed.startsWith('{')) {
+          const data = JSON.parse(trimmed);
+          if (data.liveIss) {
+            setIssPosition(data.liveIss);
+          }
+          if (data.feeds && Array.isArray(data.feeds)) {
+            setFeeds(data.feeds);
+          }
+          setLastUpdated(new Date());
         }
-        if (data.feeds && Array.isArray(data.feeds)) {
-          setFeeds(data.feeds);
-        }
-        setLastUpdated(new Date());
       }
     } catch {
       // Fallback stays on initialSpaceFeeds
