@@ -22,6 +22,7 @@ import { AdminDashboard } from './components/AdminDashboard';
 import { SkyMap } from './components/SkyMap';
 import { LiveSpaceFeeds } from './components/LiveSpaceFeeds';
 import { CelestialEvents } from './components/CelestialEvents';
+import { CosmicPrayerTimes } from './components/CosmicPrayerTimes';
 import { Footer } from './components/Footer';
 import { ArticleModal } from './components/ArticleModal';
 import { GlobalSearchModal } from './components/GlobalSearchModal';
@@ -131,6 +132,9 @@ export default function App() {
               onOpenAi={() => setCurrentTab('gemini-lab')}
               onSelectCategory={handleSelectCategory}
             />
+
+            {/* Cosmic Prayer Times, Dual Hijri-Gregorian Calendar & Qibla Compass on Home */}
+            <CosmicPrayerTimes language={language} />
 
             {/* Interactive Solar System Highlight on Home */}
             <div className="space-y-6">
@@ -389,6 +393,11 @@ export default function App() {
         {/* VIEW: CELESTIAL EVENTS & CALENDAR */}
         {currentTab === 'events' && (
           <CelestialEvents language={language} />
+        )}
+
+        {/* VIEW: COSMIC PRAYER TIMES, HIJRI/GREGORIAN CALENDAR & QIBLA COMPASS */}
+        {currentTab === 'prayer-times' && (
+          <CosmicPrayerTimes language={language} />
         )}
 
         {/* VIEW 4: QURAN & COSMOS */}
