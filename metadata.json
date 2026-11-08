@@ -1,0 +1,6 @@
+{
+  "name": "COSMIC DISCOVERY – اكتشف أسرار الكون",
+  "description": "منصة علمية وإيمانية متطورة متخصصة في علم الفلك والكون والمجرات والنجوم وربطها بالآيات القرآنية الكريمة ومحرك الذكاء الاصطناعي.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
