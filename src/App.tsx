@@ -25,6 +25,7 @@ import { CelestialEvents } from './components/CelestialEvents';
 import { CosmicPrayerTimes } from './components/CosmicPrayerTimes';
 import { CosmicHadithOfTheDay } from './components/CosmicHadithOfTheDay';
 import { KaheelPartnerAds } from './components/KaheelPartnerAds';
+import { GoogleAdUnit } from './components/GoogleAdUnit';
 import { Footer } from './components/Footer';
 import { ArticleModal } from './components/ArticleModal';
 import { GlobalSearchModal } from './components/GlobalSearchModal';
@@ -139,6 +140,17 @@ export default function App() {
 
             {/* Featured Interactive Ad Showcase for https://kaheel7.net/ */}
             <KaheelPartnerAds language={language} variant="featured-showcase" />
+
+            {/* Google Ads Leaderboard Unit on Home */}
+            <GoogleAdUnit
+              language={language}
+              format="leaderboard"
+              slotKey="homeLeaderboard"
+              onOpenAdsAdmin={() => {
+                setCurrentTab('admin');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            />
 
             {/* Cosmic Hadith of the Day: Authentic Prophetic Traditions on the Universe */}
             <CosmicHadithOfTheDay language={language} />
@@ -451,6 +463,17 @@ export default function App() {
             language={language}
           />
         )}
+
+        {/* Global Bottom Google Ads Multiplex Unit */}
+        <GoogleAdUnit
+          language={language}
+          format="multiplex"
+          slotKey="footerMultiplex"
+          onOpenAdsAdmin={() => {
+            setCurrentTab('admin');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+        />
       </main>
 
       {/* Global Search Modal */}

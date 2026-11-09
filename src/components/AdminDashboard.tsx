@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
-import { Shield, BookOpen, BrainCircuit, BarChart3, Plus, Trash2, CheckCircle, Clock, Eye, Edit3, X, HelpCircle } from 'lucide-react';
+import { Shield, BookOpen, BrainCircuit, BarChart3, Plus, Trash2, CheckCircle, Clock, Eye, Edit3, X, HelpCircle, SlidersHorizontal, Copy, Check } from 'lucide-react';
 import { ScientificArticle, Language, CosmicCategory, SiteStatistics, QuizQuestion } from '../types/cosmic';
 import { translations } from '../i18n/translations';
+import {
+  GoogleAdsConfig,
+  loadGoogleAdsConfig,
+  saveGoogleAdsConfig,
+} from './GoogleAdUnit';
 
 interface AdminDashboardProps {
   articles: ScientificArticle[];
@@ -18,8 +23,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 }) => {
   const t = translations[language];
 
-  const [activeTab, setActiveTab] = useState<'articles' | 'gemini-queue' | 'stats' | 'add-article'>('articles');
+  const [activeTab, setActiveTab] = useState<'articles' | 'gemini-queue' | 'stats' | 'google-ads' | 'add-article'>('google-ads');
   const [editingArticle, setEditingArticle] = useState<ScientificArticle | null>(null);
+  const [adsConfig, setAdsConfig] = useState<GoogleAdsConfig>(() => loadGoogleAdsConfig());
+  const [savedNotice, setSavedNotice] = useState(false);
+  const [copiedSnippet, setCopiedSnippet] = useState<'script' | 'adstxt' | null>(null);
 
   // New Article Form State
   const [formData, setFormData] = useState({
@@ -47,6 +55,19 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   const handleDeleteArticle = (id: string) => {
     setArticles((prev) => prev.filter((a) => a.id !== id));
+  };
+
+  const handleSaveAdsConfig = (e: React.FormEvent) => {
+    e.preventDefault();
+    saveGoogleAdsConfig(adsConfig);
+    setSavedNotice(true);
+    setTimeout(() => setSavedNotice(false), 2500);
+  };
+
+  const handleCopySnippet = (type: 'script' | 'adstxt', text: string) => {
+    navigator.clipboard.writeText(text).catch(() => {});
+    setCopiedSnippet(type);
+    setTimeout(() => setCopiedSnippet(null), 2000);
   };
 
   const handleSaveNewArticle = (e: React.FormEvent) => {
@@ -129,6 +150,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   };
 
   const pendingDrafts = articles.filter((a) => !a.isApproved);
+  const headScriptSnippet = `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsConfig.clientId}" crossorigin="anonymous"></script>`;
+  const adsTxtSnippet = `google.com, ${adsConfig.clientId.replace(/^ca-/, '')}, DIRECT, f08c47fec0942fa0`;
 
   return (
     <section className="space-y-8">
@@ -147,7 +170,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
           <button
             onClick={() => setActiveTab('add-article')}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-white font-bold text-xs shadow-lg shadow-cyan-600/20 transition-all"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-white font-bold text-xs shadow-lg shadow-cyan-600/20 transition-all cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>{t.adminTabAdd}</span>
@@ -158,6 +181,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       {/* Tabs Row */}
       <div className="flex items-center gap-2 border-b border-slate-800 pb-2 overflow-x-auto">
         {[
+          {
+            id: 'google-ads',
+            label:
+              language === 'ar'
+                ? 'إعلانات Google AdSense'
+                : language === 'fr'
+                ? 'Google Ads & AdSense'
+                : 'Google Ads & AdSense',
+            icon: SlidersHorizontal,
+          },
           { id: 'articles', label: t.adminTabArticles, icon: BookOpen, count: articles.length },
           { id: 'gemini-queue', label: t.adminTabGeminiQueue, icon: BrainCircuit, count: pendingDrafts.length },
           { id: 'stats', label: t.adminTabStats, icon: BarChart3 },
@@ -168,7 +201,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all whitespace-nowrap ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all whitespace-nowrap cursor-pointer ${
                 isActive
                   ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -185,6 +218,234 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           );
         })}
       </div>
+
+      {/* TAB 0: GOOGLE ADS & ADSENSE MANAGER */}
+      {activeTab === 'google-ads' && (
+        <form
+          onSubmit={handleSaveAdsConfig}
+          className="p-6 sm:p-8 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-2xl space-y-6"
+        >
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+            <div>
+              <h3 className="text-xl font-black text-white">
+                {language === 'ar'
+                  ? 'إدارة إعلانات Google Ads & AdSense'
+                  : language === 'fr'
+                  ? 'Configuration Google Ads & AdSense'
+                  : 'Google Ads & AdSense Configuration'}
+              </h3>
+              <p className="text-xs text-slate-400 mt-1">
+                {language === 'ar'
+                  ? 'تحكم في معرف الناشر (Publisher ID) ومعرفات الوحدات الإعلانية (Ad Slots) وتفعيل الإعلانات عبر الموقع.'
+                  : language === 'fr'
+                  ? 'Gérez votre identifiant éditeur Google AdSense (ca-pub-...) et les emplacements d’annonces sur le site.'
+                  : 'Manage your Google AdSense Publisher ID (ca-pub-...) and ad unit slots across the site.'}
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <label className="inline-flex items-center gap-2 text-xs font-bold text-slate-200 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={adsConfig.enabled}
+                  onChange={(e) => setAdsConfig({ ...adsConfig, enabled: e.target.checked })}
+                  className="w-4 h-4 accent-cyan-500 rounded"
+                />
+                <span>
+                  {language === 'ar'
+                    ? 'تفعيل إعلانات Google'
+                    : language === 'fr'
+                    ? 'Activer Google Ads'
+                    : 'Enable Google Ads'}
+                </span>
+              </label>
+
+              <label className="inline-flex items-center gap-2 text-xs font-bold text-slate-200 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={adsConfig.autoAds}
+                  onChange={(e) => setAdsConfig({ ...adsConfig, autoAds: e.target.checked })}
+                  className="w-4 h-4 accent-amber-500 rounded"
+                />
+                <span>Auto Ads</span>
+              </label>
+            </div>
+          </div>
+
+          {/* Publisher ID & Slots Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="md:col-span-2">
+              <label className="block text-xs font-bold text-slate-300 mb-1.5">
+                {language === 'ar'
+                  ? 'معرّف ناشر Google AdSense (Publisher Client ID)'
+                  : language === 'fr'
+                  ? 'Identifiant Éditeur Google AdSense (Client ID)'
+                  : 'Google AdSense Publisher Client ID'}
+              </label>
+              <input
+                type="text"
+                value={adsConfig.clientId}
+                onChange={(e) => setAdsConfig({ ...adsConfig, clientId: e.target.value.trim() })}
+                placeholder="ca-pub-XXXXXXXXXXXXXXXX"
+                className="w-full p-3 rounded-xl bg-slate-950 border border-slate-700 text-cyan-300 font-mono text-sm"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-300 mb-1.5">
+                {language === 'ar'
+                  ? 'وحدة إعلان الصفحة الرئيسية (Leaderboard Slot ID)'
+                  : 'Home Leaderboard Slot ID'}
+              </label>
+              <input
+                type="text"
+                value={adsConfig.slots.homeLeaderboard}
+                onChange={(e) =>
+                  setAdsConfig({
+                    ...adsConfig,
+                    slots: { ...adsConfig.slots, homeLeaderboard: e.target.value.trim() },
+                  })
+                }
+                className="w-full p-3 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-xs"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-300 mb-1.5">
+                {language === 'ar'
+                  ? 'وحدة إعلان داخل الموسوعة (In-Article Slot ID)'
+                  : 'Encyclopedia In-Article Slot ID'}
+              </label>
+              <input
+                type="text"
+                value={adsConfig.slots.encyclopediaInArticle}
+                onChange={(e) =>
+                  setAdsConfig({
+                    ...adsConfig,
+                    slots: { ...adsConfig.slots, encyclopediaInArticle: e.target.value.trim() },
+                  })
+                }
+                className="w-full p-3 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-xs"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-300 mb-1.5">
+                {language === 'ar'
+                  ? 'وحدة إعلان قسم القرآن والكون (Quran & Cosmos Slot ID)'
+                  : 'Quran & Cosmos Banner Slot ID'}
+              </label>
+              <input
+                type="text"
+                value={adsConfig.slots.quranCosmosBanner}
+                onChange={(e) =>
+                  setAdsConfig({
+                    ...adsConfig,
+                    slots: { ...adsConfig.slots, quranCosmosBanner: e.target.value.trim() },
+                  })
+                }
+                className="w-full p-3 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-xs"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-300 mb-1.5">
+                {language === 'ar'
+                  ? 'وحدة الإعلانات المتعددة السفلية (Multiplex Slot ID)'
+                  : 'Footer Multiplex Slot ID'}
+              </label>
+              <input
+                type="text"
+                value={adsConfig.slots.footerMultiplex}
+                onChange={(e) =>
+                  setAdsConfig({
+                    ...adsConfig,
+                    slots: { ...adsConfig.slots, footerMultiplex: e.target.value.trim() },
+                  })
+                }
+                className="w-full p-3 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-xs"
+              />
+            </div>
+          </div>
+
+          {/* Code Snippets & ads.txt verification */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+            <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-amber-300">
+                  {language === 'ar' ? 'كود تفعيل AdSense في <head>' : 'AdSense <head> Script'}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => handleCopySnippet('script', headScriptSnippet)}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] cursor-pointer"
+                >
+                  {copiedSnippet === 'script' ? (
+                    <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  ) : (
+                    <Copy className="w-3.5 h-3.5" />
+                  )}
+                  <span>{language === 'ar' ? 'نسخ' : 'Copy'}</span>
+                </button>
+              </div>
+              <pre className="text-[11px] font-mono text-slate-400 overflow-x-auto whitespace-pre-wrap break-all">
+                {headScriptSnippet}
+              </pre>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-cyan-300">
+                  {language === 'ar' ? 'سجل التحقق /ads.txt المفعّل' : 'Active /ads.txt Record'}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => handleCopySnippet('adstxt', adsTxtSnippet)}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] cursor-pointer"
+                >
+                  {copiedSnippet === 'adstxt' ? (
+                    <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  ) : (
+                    <Copy className="w-3.5 h-3.5" />
+                  )}
+                  <span>{language === 'ar' ? 'نسخ' : 'Copy'}</span>
+                </button>
+              </div>
+              <pre className="text-[11px] font-mono text-slate-400 overflow-x-auto whitespace-pre-wrap break-all">
+                {adsTxtSnippet}
+              </pre>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between gap-4 pt-4 border-t border-slate-800">
+            <div>
+              {savedNotice && (
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-400">
+                  <CheckCircle className="w-4 h-4" />
+                  <span>
+                    {language === 'ar'
+                      ? 'تم حفظ وتحديث إعدادات Google Ads بنجاح!'
+                      : language === 'fr'
+                      ? 'Paramètres Google Ads enregistrés avec succès !'
+                      : 'Google Ads settings saved and applied!'}
+                  </span>
+                </span>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              className="px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs shadow-lg shadow-cyan-500/20 transition-colors cursor-pointer"
+            >
+              {language === 'ar'
+                ? 'حفظ وتطبيق إعدادات Google Ads'
+                : language === 'fr'
+                ? 'Enregistrer la configuration Google Ads'
+                : 'Save Google Ads Settings'}
+            </button>
+          </div>
+        </form>
+      )}
 
       {/* TAB 1: Articles List */}
       {activeTab === 'articles' && (

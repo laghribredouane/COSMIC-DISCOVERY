@@ -4,6 +4,7 @@ import { ScientificArticle, Language, CosmicCategory } from '../types/cosmic';
 import { filterArticlesList } from '../utils/cosmicCalculations';
 import { ArticleCard } from './ArticleCard';
 import { KaheelPartnerAds } from './KaheelPartnerAds';
+import { GoogleAdUnit } from './GoogleAdUnit';
 import { translations } from '../i18n/translations';
 
 interface EncyclopediaSectionProps {
@@ -94,6 +95,9 @@ export const EncyclopediaSection: React.FC<EncyclopediaSectionProps> = ({
 
       {/* Promotional Partner Banner for https://kaheel7.net/ */}
       <KaheelPartnerAds language={language} variant="compact-banner" />
+
+      {/* Google Ads In-Article Unit */}
+      <GoogleAdUnit language={language} format="in-article" slotKey="encyclopediaInArticle" />
 
       {/* Articles Grid */}
       {filteredArticles.length > 0 ? (

@@ -14,6 +14,7 @@ import { translations } from '../i18n/translations';
 import { MoroccanWarshQuran } from './MoroccanWarshQuran';
 import { CosmicHadithOfTheDay } from './CosmicHadithOfTheDay';
 import { KaheelPartnerAds } from './KaheelPartnerAds';
+import { GoogleAdUnit } from './GoogleAdUnit';
 
 interface QuranCosmosSectionProps {
   language: Language;
@@ -286,6 +287,9 @@ export const QuranCosmosSection: React.FC<QuranCosmosSectionProps> = ({ language
 
       {/* Partner Ad Showcase for https://kaheel7.net/ inside Quran & Cosmos Section */}
       <KaheelPartnerAds language={language} variant="featured-showcase" />
+
+      {/* Google Ads Leaderboard Unit inside Quran & Cosmos Section */}
+      <GoogleAdUnit language={language} format="leaderboard" slotKey="quranCosmosBanner" />
     </section>
   );
 };
