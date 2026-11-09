@@ -49,6 +49,11 @@ export const Footer: React.FC<FooterProps> = ({ language, onSelectTab }) => {
                 </button>
               </li>
               <li>
+                <button onClick={() => onSelectTab('observatories-map')} className="hover:text-cyan-300 transition-colors">
+                  {(t as any).navObservatoriesMap || 'مراصد ومواقع الرصد'}
+                </button>
+              </li>
+              <li>
                 <button onClick={() => onSelectTab('live-feeds')} className="hover:text-cyan-300 transition-colors">
                   {t.navLiveFeeds}
                 </button>

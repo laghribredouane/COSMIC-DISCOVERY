@@ -16,7 +16,12 @@ interface GlobalSearchModalProps {
   onSelectTab: (tab: string) => void;
 }
 
-export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
+export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = (props) => {
+  if (!props.isOpen) return null;
+  return <GlobalSearchModalDialog {...props} />;
+};
+
+const GlobalSearchModalDialog: React.FC<GlobalSearchModalProps> = ({
   isOpen,
   onClose,
   articles,
@@ -27,7 +32,6 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
   onSelectQuranStudy,
   onSelectTab,
 }) => {
-  if (!isOpen) return null;
   const t = translations[language];
   const [query, setQuery] = useState('');
 

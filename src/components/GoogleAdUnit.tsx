@@ -22,7 +22,7 @@ export const DEFAULT_GOOGLE_ADS_CONFIG: GoogleAdsConfig = {
   clientId:
     (typeof import.meta !== 'undefined' &&
       (import.meta as any).env?.VITE_GOOGLE_ADSENSE_CLIENT_ID) ||
-    'ca-pub-8492019384756102',
+    'ca-pub-7807016100432800',
   slots: {
     homeLeaderboard: '1049283741',
     encyclopediaInArticle: '2059384752',

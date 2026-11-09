@@ -647,9 +647,23 @@ app.get('/api/quran/warsh-search', (req: Request, res: Response) => {
  * Google AdSense ads.txt verification endpoint
  */
 app.get('/ads.txt', (_req: Request, res: Response) => {
-  const pubId = (process.env.VITE_GOOGLE_ADSENSE_CLIENT_ID || 'ca-pub-8492019384756102').replace(/^ca-/, '');
+  const pubId = (process.env.VITE_GOOGLE_ADSENSE_CLIENT_ID || 'ca-pub-7807016100432800').replace(/^ca-/, '');
   res.setHeader('Content-Type', 'text/plain; charset=utf-8');
   res.status(200).send(`google.com, ${pubId}, DIRECT, f08c47fec0942fa0\n`);
+});
+
+/**
+ * Google Maps Platform config endpoint
+ */
+app.get('/api/maps/config', (_req: Request, res: Response) => {
+  const apiKey =
+    process.env.VITE_GOOGLE_MAPS_API_KEY ||
+    process.env.GOOGLE_MAPS_API_KEY ||
+    '';
+  res.status(200).json({
+    success: true,
+    apiKey,
+  });
 });
 
 /**

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Telescope, Compass, BookOpen, Sparkles, Orbit, Image, BrainCircuit, HelpCircle, Shield, Globe, Menu, X, Search, Radio, Calendar } from 'lucide-react';
+import { Telescope, Compass, BookOpen, Sparkles, Orbit, Image, BrainCircuit, HelpCircle, Shield, Globe, Menu, X, Search, Radio, Calendar, MapPin } from 'lucide-react';
 import { Language } from '../types/cosmic';
 import { translations } from '../i18n/translations';
 
@@ -24,6 +24,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   const navItems = [
     { id: 'home', label: t.navHome, icon: Compass },
+    { id: 'observatories-map', label: (t as any).navObservatoriesMap || 'مراصد ومواقع الرصد', icon: MapPin },
     { id: 'quran-cosmos', label: t.navQuranCosmos, icon: BookOpen },
     { id: 'prayer-times', label: t.navPrayerTimes, icon: Calendar },
     { id: 'encyclopedia', label: t.navEncyclopedia, icon: BookOpen },

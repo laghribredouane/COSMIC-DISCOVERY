@@ -449,6 +449,579 @@ export const initialArticles: ScientificArticle[] = [
     readingTimeMin: 7,
     views: 6180,
     likes: 540
+  },
+  {
+    id: 'stars-life-cycle',
+    title: {
+      ar: 'دورة حياة النجوم: من السدم الغازية إلى المستعرات العظمى والأقزام البيضاء',
+      en: 'The Stellar Life Cycle: From Nebular Nurseries to Supernovae and White Dwarfs',
+      fr: 'Le Cycle de Vie des Étoiles : Des Nébuleuses aux Supernovas et Naines Blanches'
+    },
+    category: 'stars',
+    summary: {
+      ar: 'رحلة تحول النجوم عبر مليارات السنين منذ ولادتها في أرحام السدم، مروراً باندماج الهيدروجين إلى الهيليوم، وحتى نهاياتها الملحمية.',
+      en: 'The cosmic journey of stars spanning billions of years: born in cold molecular clouds, sustained by thermonuclear fusion, and ending in cataclysmic supernovae or serene white dwarfs.',
+      fr: 'Le voyage cosmique des étoiles sur des milliards d’années : de leur naissance dans les nuages moléculaires jusqu’à leur fin cataclysmique ou paisible.'
+    },
+    introduction: {
+      ar: 'النجوم هي المفاعلات النووية الحرارية التي صنعت كل العناصر الكيميائية الأثقل من الهيليوم في الكون، بما فيها ذرات الكربون والحديد التي تتكون منها أجسادنا وكوكبنا.',
+      en: 'Stars are cosmic alchemical engines that synthesized every element heavier than helium, including the carbon and iron within our bodies and planetary mantle.',
+      fr: 'Les étoiles sont les creusets thermonucléaires ayant forgé tous les éléments plus lourds que l’hélium dans le cosmos.'
+    },
+    contentSimple: {
+      ar: 'تولد النجوم داخل سحب كثيفة وباردة من غاز الهيدروجين تسمى السدم. تحت تأثير الجاذبية، تتجمع المادة وترتفع حرارة المركز حتى تبدأ الشرارة النووية: يتحول الهيدروجين إلى هيليوم ويولد ضوءاً هائلاً يدوم مليارات السنين. وعند نفاد الوقود، تنتفخ النجوم الصغيرة مثل شمسنا لتصبح عمالقة حمراء ثم تموت بهدوء كأقزام بيضاء، بينما تنفجر النجوم العملاقة كمستعرات عظمى (سوبرنوفا) وتخلف وراءها ثقوباً سوداء أو نجوماً نيوترونية.',
+      en: 'Stars condense within dense, cold molecular clouds. Under relentless gravity, core density surges until hydrogen ignites into helium via thermonuclear fusion. Lower-mass stars like our Sun eventually swell into red giants and shed their atmospheres into planetary nebulae, leaving hot white dwarfs. Massive stars undergo violent core collapse, exploding as supernovae and leaving behind neutron stars or black holes.',
+      fr: 'Les étoiles naissent au cœur de nuages denses de gaz. Sous l’effet de la gravité, le cœur s’échauffe et la fusion nucléaire s’enclenche. Les étoiles massives explosent en supernovas tandis que les étoiles moyennes deviennent des naines blanches.'
+    },
+    contentAdvanced: {
+      ar: 'تخضع النجوم لمبدأ التوازن الهيدروستاتيكي، حيث تتعادل قوة الجاذبية الساحقة نحو الداخل مع ضغط الإشعاع والغاز المتولد من الاندماج النووي الحراري نحو الخارج. تتبع النجوم مسارات تطورية محددة على مخطط هرتزبرونغ-راسل (H-R Diagram). النجوم ذات الكتل المتواضعة تعتمد على سلسلة بروتون-بروتون (p-p chain)، بينما تهيمن دورة CNO في النجوم الأثقل من 1.3 كتلة شمسية، مما يسرع استهلاك وقودها النووي ويقلل من عمرها المداري.',
+      en: 'Stellar equilibrium hinges on the hydrostatic balance between gravitational contraction and outward radiative/thermal pressure. Massive stars (>8 M☉) synthesize iron (Fe-56) in successive onion-like shells, culminating in electron degeneracy pressure failure and core-collapse supernovae (Type II).',
+      fr: 'L’équilibre stellaire repose sur la balance hydrostatique entre la gravité et la pression radiative. Les étoiles massives forment des couches successives jusqu’au fer avant d’imploser violemment.'
+    },
+    keyFacts: {
+      ar: [
+        'عمر النجوم: يتراوح بين ملايين السنين للنجوم العملاقة وتريليونات السنين للأقزام الحمر',
+        'حرارة لب الشمس: نحو 15 مليون درجة مئوية',
+        'العنصر النهائي في الاندماج النجمي العادي: الحديد (Fe-56)',
+        'مصدر العناصر الثقيلة كالذهب: تصادم النجوم النيوترونية (Kilonova)'
+      ],
+      en: [
+        'Lifespan: Ranges from a few million years (massive blue giants) to trillions (red dwarfs)',
+        'Solar Core Temperature: ~15 million degrees Celsius',
+        'Final Endothermic Fusion Element: Iron-56',
+        'Source of Heavy Elements like Gold: Neutron star collisions (kilonovae)'
+      ],
+      fr: [
+        'Durée de vie : de quelques millions d’années à plusieurs billions',
+        'Température au cœur du Soleil : ~15 millions de °C',
+        'Élément final de fusion : Le Fer (Fe-56)',
+        'Origine des métaux lourds comme l’or : Kilonovas (collisions d’étoiles à neutrons)'
+      ]
+    },
+    specs: {
+      temperature: '3,000 K (Red Dwarfs) to 40,000+ K (O-type Stars)',
+      mass: '0.08 M☉ to >200 M☉',
+      composition: '74% Hydrogen, 24% Helium, 2% Metals',
+      discoveryYear: 'Astrophysical spectroscopy pioneered in 19th Century'
+    },
+    image: 'https://images.unsplash.com/photo-1538370965046-79c0d6907d47?q=80&w=1600&auto=format&fit=crop',
+    imageCaption: {
+      ar: 'أعمدة من النجوم الشابة والمخاليط الغازية تتوهج في سديم نجمي سحيق',
+      en: 'Pillars of newborn stars and radiant gas clusters across deep interstellar nurseries',
+      fr: 'Piliers de jeunes étoiles et gaz étincelants au cœur d’une pouponnière stellaire'
+    },
+    imageCredit: 'NASA / ESA / Hubble Heritage Team',
+    sources: [
+      { title: 'NASA Astrophysics Data System: Stellar Evolution', url: 'https://adsabs.harvard.edu' },
+      { title: 'Astrophysical Journal: Stellar Nucleosynthesis Overview' }
+    ],
+    relatedQuranVerseId: 'verse-tariq-1',
+    lastUpdated: '2026-03-20',
+    isApproved: true,
+    readingTimeMin: 6,
+    views: 4890,
+    likes: 395
+  },
+  {
+    id: 'stars-neutron-pulsars',
+    title: {
+      ar: 'النجوم النيوترونية والنجوم النابضة: كثافة تفوق الخيال والطارق الكوني',
+      en: 'Neutron Stars & Pulsars: Subatomic Density and the Cosmic Hammer',
+      fr: 'Étoiles à Neutrons et Pulsars : Une Densité Inouïe et le Marteau Cosmique'
+    },
+    category: 'stars',
+    summary: {
+      ar: 'بقايا نجوم عملاقة تنهار حتى تنضغط بروتوناتها وإلكتروناتها إلى نيوترونات خالصة، فتدور مئات المرات في الثانية وترسل ومضات كالمطارق الكونية.',
+      en: 'The ultra-dense remnants of collapsed giant stars where protons and electrons fuse into pure neutrons, rotating hundreds of times per second and emitting periodic radio beacons.',
+      fr: 'Vestiges ultra-denses d’étoiles massives effondrées, tournant sur elles-mêmes des centaines de fois par seconde et émettant de puissants faisceaux périodiques.'
+    },
+    introduction: {
+      ar: 'تعد النجوم النيوترونية أقصى درجات كثافة المادة في الكون قبل أن تتحول إلى ثقب أسود. ملعقة صغيرة من مادتها على الأرض تزن مليارات الأطنان!',
+      en: 'Neutron stars embody the highest density state of matter prior to black hole singularity formation. A single teaspoon of their core would outweigh billions of metric tons on Earth.',
+      fr: 'Les étoiles à neutrons représentent la matière la plus dense de l’univers avant le trou noir. Une seule cuillère à café pèserait des milliards de tonnes sur Terre.'
+    },
+    contentSimple: {
+      ar: 'عندما ينفجر نجم عملاق كـ "سوبرنوفا"، ينهار قلبه إلى كرة صلبة لا يتجاوز قطرها 20 كيلومتراً، ولكنها تزن أكثر من شمسنا كلها! تسمى هذه الأجرام بالنجوم النابضة (Pulsars) لأنها تدور بسرعة جنونية وترسل حزم إشعاعية دقيقة تشبه دقات المطرقة المنتظمة المنتقلة عبر أرجاء الكون.',
+      en: 'When a supergiant star exhausts its fuel and explodes, its core collapses into a sphere merely 20 kilometers wide yet holding greater mass than our entire Sun. As they spin at staggering velocities, they sweep beams of intense radiation across space like regular, rhythmic cosmic drumbeats.',
+      fr: 'Lors de l’explosion d’une étoile géante, son cœur s’effondre en une sphère de seulement 20 km de diamètre, plus lourde que notre Soleil. En tournant, elle balaie l’espace de faisceaux réguliers rappelant des battements métronomiques.'
+    },
+    contentAdvanced: {
+      ar: 'تمنع قوى الانفطار النيوتروني (Neutron Degeneracy Pressure) النجم النيوتروني من الانهيار التام إلى ثقب أسود طالما لم تتجاوز كتلته حد تولمان-أوبنهايمر-فولكوف (حد TOV البالغ نحو 2.16 كتلة شمسية). يمتلك النجم النيوتروني مجالاً مغناطيسياً هائلاً يصل إلى 10¹² إلى 10¹⁵ غاوس في النجوم المغناطيسية (Magnetars)، مما يولد تباطؤاً مدارياً ومرتجفات نجمية (Starquakes) مصحوبة بانفجارات أشعة غاما فائقة الشدة.',
+      en: 'Neutron degeneracy pressure supports the star against gravitational collapse up to the Tolman-Oppenheimer-Volkoff (TOV) limit (~2.16 M☉). Pulsars exhibit relativistic beam emissions governed by intense magnetic dipoles, serving as the most precise natural clocks in the cosmos for testing gravitational wave physics.',
+      fr: 'La pression de dégénérescence des neutrons soutient l’astre contre l’effondrement gravitationnel jusqu’à la limite TOV (~2,16 M☉). Leurs faisceaux magnétosphériques agissent comme des horloges atomiques célestes ultra-précises.'
+    },
+    keyFacts: {
+      ar: [
+        'القطر: نحو 20 كيلومتراً فقط',
+        'الكتلة: 1.4 إلى 2.1 كتلة شمسية',
+        'سرعة الدوران: تصل إلى 716 دورة في الثانية في النجم PSR J1748-2446ad',
+        'الكثافة: 10¹⁴ ضعف كثافة الماء'
+      ],
+      en: [
+        'Diameter: Only ~20 kilometers (~12 miles)',
+        'Mass: 1.4 to 2.1 Solar masses',
+        'Rotational Speed: Up to 716 rotations per second (PSR J1748-2446ad)',
+        'Density: ~10¹⁴ times denser than water'
+      ],
+      fr: [
+        'Diamètre : Seulement ~20 km',
+        'Masse : 1,4 à 2,1 masses solaires',
+        'Vitesse de rotation : jusqu’à 716 tours par seconde',
+        'Densité : ~10¹⁴ fois celle de l’eau'
+      ]
+    },
+    specs: {
+      diameter: '20 km',
+      mass: '1.4 - 2.1 M☉',
+      speed: 'Up to 716 rotations/sec',
+      temperature: '10⁶ K (surface cooling)',
+      discoveryYear: '1967 (Jocelyn Bell Burnell & Antony Hewish)'
+    },
+    image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1600&auto=format&fit=crop',
+    imageCaption: {
+      ar: 'تصور فني لحزم الإشعاع المنبعثة من قطبي نجم نيوتروني نابض',
+      en: 'Artist conception of high-energy relativistic radiation beams beamed from pulsar magnetic poles',
+      fr: 'Vue d’artiste des faisceaux de radiation relativistes émis par un pulsar'
+    },
+    imageCredit: 'NASA / Goddard Space Flight Center / NICER Science Team',
+    sources: [
+      { title: 'NASA NICER Mission: Measuring Neutron Star Interior', url: 'https://www.nasa.gov/nicer' },
+      { title: 'Astrophysical Journal Letters: Pulsar Timing Arrays' }
+    ],
+    relatedQuranVerseId: 'verse-tariq-1',
+    lastUpdated: '2026-03-22',
+    isApproved: true,
+    readingTimeMin: 5,
+    views: 3920,
+    likes: 310
+  },
+  {
+    id: 'cosmic-scales-light-travel',
+    title: {
+      ar: 'أبعاد ومقاييس الكون: كيف يقيس علماء الفلك مليارات السنين الضوئية؟',
+      en: 'Cosmic Scales & Distances: How Astronomers Map Billions of Light-Years',
+      fr: 'Les Échelles du Cosmos : Comment Mesure-t-on les Milliards d’Années-Lumière ?'
+    },
+    category: 'cosmic-distances',
+    summary: {
+      ar: 'سلم المسافات الكونية العجيب: من قياس اختلاف المنظر للنجوم القريبة، إلى الشموع القياسية وسرعة تمدد نسيج الزمكان.',
+      en: 'The cosmic distance ladder: from trigonometric parallax for nearby stars to Cepheid variables, Type Ia supernovae, and cosmological redshift.',
+      fr: 'L’échelle des distances cosmiques : du parallaxe trigonométrique aux céphéides, supernovas de type Ia et décalage vers le rouge.'
+    },
+    introduction: {
+      ar: 'الكون أكبر بكثير من أي مقياس بشري مألوف. السنة الضوئية الواحدة تعادل نحو 9.46 تريليون كيلومتر، ومع ذلك فهي مجرد خطوة ميكروسكوبية في محيط الفضاء الشاسع.',
+      en: 'The universe dwarfs all intuitive human units. A single light-year spans roughly 9.46 trillion kilometers, yet represents merely a microscopic step in the cosmological expanse.',
+      fr: 'Une seule année-lumière équivaut à 9 460 milliards de kilomètres, et n’est pourtant qu’un pas infime dans l’océan cosmique.'
+    },
+    contentSimple: {
+      ar: 'كيف نقيس مسافة شيء لا نستطيع الوصول إليه أبداً؟ يبدأ الفلكيون بطريقة تشبه رؤية عينيك: ينظرون إلى النجم عندما تكون الأرض في جهة من مدارها حول الشمس، ثم ينظرون مجدداً بعد 6 أشهر من الجهة الأخرى. هذا التغير الطفيف في الزاوية يسمى "التزيح". وللمسافات الأبعد في المجرات، نستخدم نجوماً متغيرة تسمى "الشموع القياسية" نعرف شدة لمعانها الحقيقي، ومن خلال خفوت ضوئها نحسب بعدها بدقة.',
+      en: 'How do astronomers gauge distances across gulfs we can never physically traverse? For nearby stars, we employ trigonometric parallax by observing shifts as Earth orbits the Sun every six months. For distant galaxies, we look for standard candles—such as Type Ia supernovae and Cepheid variables—whose intrinsic brightness is precisely known, allowing distance calculation via inverse-square illumination falloff.',
+      fr: 'Les astronomes utilisent le parallaxe pour les étoiles proches, puis des « chandelles standard » comme les supernovas de type Ia et les céphéides pour calculer la distance des galaxies lointaines.'
+    },
+    contentAdvanced: {
+      ar: 'يرتكز قياس الكون على "سلم المسافات الكونية" (Cosmic Distance Ladder). في المستوى الأول: اختلاف المنظر النجمي (Parallax) عبر تلسكوب Gaia بدقة ميكرو-ثانية قوسية. المستوى الثاني: علاقة الدور باللمعان لمتغيرات قيفاوس (Leavitt Period-Luminosity Law). المستوى الثالث: المستعرات العظمى من النوع Ia (Supernovae Ia) المعايرة عبر منحنى فيليبس. المستوى الرابع: قانون هابل-لومتر والانزياح الطيفي نحو الأحمر الناتج عن تمدد الفضاء ذاته.',
+      en: 'The Cosmic Distance Ladder operates via calibrated rungs: Gaia geometric parallax, Cepheid Leavitt Law, Type Ia Phillips relation, and cosmological redshift z. Precise measurement of the Hubble Constant (H₀) remains one of the central puzzles in contemporary cosmology (the Hubble Tension between CMB and local measurements).',
+      fr: 'L’échelle des distances cosmiques s’appuie sur le parallaxe géométrique (Gaia), la loi de Leavitt pour les céphéides, les supernovas Ia et la loi de Hubble-Lemaître via le décalage spectral vers le rouge.'
+    },
+    keyFacts: {
+      ar: [
+        'السنة الضوئية: 9.46 تريليون كيلومتر (المسافة التي يقطعها الضوء في سنة)',
+        'قطر الكون المنظور: نحو 93 مليار سنة ضوئية (بسبب تمدد الزمكان المستمر)',
+        'أقرب نظام نجمي للأرض: قنطورس الأقرب (Proxima Centauri) على بعد 4.24 سنة ضوئية',
+        'أبعد نقطة رصدها جيمس ويب: مجرات على بعد يزيد عن 13.5 مليار سنة ضوئية'
+      ],
+      en: [
+        'Light-Year: ~9.46 trillion km (~5.88 trillion miles)',
+        'Observable Universe Diameter: ~93 billion light-years (due to ongoing spatial expansion)',
+        'Closest Star System: Proxima Centauri at 4.24 light-years',
+        'Farthest Objects Imaged by JWST: Primordial galaxies at lookback times exceeding 13.5 billion years'
+      ],
+      fr: [
+        'Année-lumière : ~9,46 billions de kilomètres',
+        'Diamètre de l’univers observable : ~93 milliards d’années-lumière',
+        'Système le plus proche : Proxima du Centaure à 4,24 années-lumière',
+        'Objets les plus distants : Galaxies à plus de 13,5 milliards d’années de trajet lumineux'
+      ]
+    },
+    specs: {
+      speed: '299,792,458 m/s (Speed of Light)',
+      diameter: '93 Billion Light-Years (Observable Universe)',
+      age: '13.787 ± 0.020 Billion Years'
+    },
+    image: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?q=80&w=1600&auto=format&fit=crop',
+    imageCaption: {
+      ar: 'أفق الأرض الأزرق الرقيق يطل على فراغ الفضاء السحيق والنجوم المتلألئة',
+      en: 'Earth slender atmospheric boundary confronting the boundless void of deep space',
+      fr: 'Le mince voile atmosphérique terrestre face à l’immensité du vide spatial'
+    },
+    imageCredit: 'NASA / ISS Expedition Crew',
+    sources: [
+      { title: 'ESA Gaia Data Release 3: Parallax Measurements', url: 'https://www.cosmos.esa.int/web/gaia' },
+      { title: 'Hubble Space Telescope Key Project on the Extragalactic Distance Scale' }
+    ],
+    relatedQuranVerseId: 'verse-expanding-47',
+    lastUpdated: '2026-03-15',
+    isApproved: true,
+    readingTimeMin: 7,
+    views: 5210,
+    likes: 412
+  },
+  {
+    id: 'observable-universe-horizons',
+    title: {
+      ar: 'سرعة الضوء وحدود الكون المنظور: رحلة إلى أطراف الزمكان',
+      en: 'The Speed of Light & The Cosmic Horizon: Journey to the Edge of Spacetime',
+      fr: 'La Vitesse de la Lumière et l’Horizon Cosmique : Voyage aux Confins de l’Espace-Temps'
+    },
+    category: 'cosmic-distances',
+    summary: {
+      ar: 'لماذا تعد سرعة الضوء الحد الأقصى لنقل المعلومات في الفيزياء؟ وما معنى أفق الحدث الكوني الذي يحجب عنا ما وراءه؟',
+      en: 'Why the speed of light represents nature’s ultimate cosmic speed limit and how the cosmic particle horizon defines what we can observe in spacetime.',
+      fr: 'Pourquoi la vitesse de la lumière est la vitesse limite de la physique et comment l’horizon cosmologique délimite notre univers observable.'
+    },
+    introduction: {
+      ar: 'يسير الضوء بسرعة 300,000 كم في الثانية، ومع ذلك فإن الضوء الصادر عن مجرة أندروميدا المجاورة استغرق 2.5 مليون سنة ليصل إلى أعيننا الليلة!',
+      en: 'Light travels at roughly 300,000 km per second, yet light from our neighboring Andromeda galaxy embarked on its voyage 2.5 million years before reaching your retina tonight.',
+      fr: 'La lumière voyage à 300 000 km/s, mais les photons d’Andromède ont mis 2,5 millions d’années pour parvenir à nos yeux.'
+    },
+    contentSimple: {
+      ar: 'سرعة الضوء ليست مجرد سرعة إشعاع، بل هي السرعة القصوى للسببية في نسيج الكون ذاته. عندما تنظر إلى الشمس، فإنك تراها كما كانت قبل 8 دقائق و20 ثانية. وعندما تنظر إلى النجوم البعيدة، فإنك تشاهد فيلماً وثائقياً حياً للماضي السحيق. وبسبب تمدد الكون المستمر، توجد مناطق شاسعة في الفضاء تبتعد عنا أسرع من سرعة الضوء، ولن نتمكن أبداً من رؤية ما يحدث فيها.',
+      en: 'The speed of light is the fundamental speed of causality in relativity. When you observe the Sun, you see it as it existed 8 minutes and 20 seconds ago. Due to accelerating cosmic expansion driven by dark energy, space beyond our cosmological event horizon is receding from us faster than light can traverse, forever sealing those realms from our view.',
+      fr: 'La vitesse de la lumière est la vitesse de la causalité. Lorsque nous observons les étoiles, nous regardons le passé. En raison de l’expansion de l’univers, les régions situées au-delà de l’horizon cosmique nous resteront à jamais invisibles.'
+    },
+    contentAdvanced: {
+      ar: 'في النسبية الخاصة، يشكل ثابت سرعة الضوء c الثابت الهندسي لتحويل الزمان إلى مكان في فضاء مينكوفسكي. في علم الكونيات، يحدد أفق الجسيمات (Particle Horizon) أبعد مسافة قطعتها الفوتونات منذ الانفجار العظيم إلى الراصد الحالي. وبفعل عامل القياس الكوني a(t) ونموذج لامبدا-سي دي إم (ΛCDM)، تبلغ المسافة المسايرة الحالية لأفق الرصد نحو 46.5 مليار سنة ضوئية في كل اتجاه.',
+      en: 'In Minkowski spacetime, c defines the invariant spacetime interval ds² = -c²dt² + dx² + dy² + dz². In FLRW cosmology, the comoving particle horizon equals the integral of c dt / a(t) from t=0 to the present epoch, yielding ~46.5 billion light-years radius (~93 billion light-years full diameter).',
+      fr: 'Dans l’espace de Minkowski, c est l’invariant fondamental unissant l’espace et le temps. Selon le modèle standard ΛCDM, le rayon comobile de l’horizon des particules atteint ~46,5 milliards d’années-lumière.'
+    },
+    keyFacts: {
+      ar: [
+        'سرعة الضوء الدقيقة في الفراغ: 299,792,458 متر/ثانية',
+        'زمن وصول ضوء القمر للأرض: 1.3 ثانية',
+        'زمن وصول ضوء الشمس للأرض: 8 دقائق و20 ثانية',
+        'قطر أفق الكون المنظور: 93 مليار سنة ضوئية'
+      ],
+      en: [
+        'Exact Speed of Light: 299,792,458 m/s',
+        'Moonlight Transit Time: ~1.3 seconds',
+        'Sunlight Transit Time: 8 minutes and 20 seconds',
+        'Observable Horizon Diameter: ~93 billion light-years'
+      ],
+      fr: [
+        'Vitesse exacte de la lumière : 299 792 458 m/s',
+        'Trajet Terre-Lune de la lumière : ~1,3 seconde',
+        'Trajet Soleil-Terre de la lumière : 8 minutes et 20 secondes',
+        'Diamètre de l’horizon observable : 93 milliards d’années-lumière'
+      ]
+    },
+    specs: {
+      speed: '299,792.458 km/s',
+      diameter: '93 Billion Light-Years',
+      age: '13.787 Billion Years'
+    },
+    image: 'https://images.unsplash.com/photo-1464802686167-b939a6910659?q=80&w=1600&auto=format&fit=crop',
+    imageCaption: {
+      ar: 'مجرات بعيدة ونقاط ضوئية تسافر عبر مليارات السنين الضوئية نحو الراصد',
+      en: 'Distant galaxies streaming across billions of light-years of cosmological expansion',
+      fr: 'Galaxies lointaines dont les photons voyagent depuis des milliards d’années'
+    },
+    imageCredit: 'NASA / ESA / STScI Deep Space Survey',
+    sources: [
+      { title: 'Physical Review D: Cosmological Particle Horizon and Dark Energy', url: 'https://journals.aps.org/prd' },
+      { title: 'Principles of Physical Cosmology (P.J.E. Peebles)' }
+    ],
+    relatedQuranVerseId: 'verse-origin-30',
+    lastUpdated: '2026-03-18',
+    isApproved: true,
+    readingTimeMin: 6,
+    views: 3750,
+    likes: 298
+  },
+  {
+    id: 'quran-cosmic-web-habak',
+    title: {
+      ar: 'النسيج الكوني وحبك السماء: تطابق علمي مذهل مع الآيات القرآنية',
+      en: 'The Cosmic Web & Celestial Filaments: The Quranic Sign of Al-Hubuk',
+      fr: 'La Toile Cosmique et les Filaments Célestes : Le Signe Coranique d’Al-Hubuk'
+    },
+    category: 'quran-cosmos',
+    summary: {
+      ar: 'أظهرت المحاكاة الحاسوبية العملاقة أن المجرات تصطف على شكل خيوط نسيج عنكبوتي محكم يربط أطراف الكون، في توافق بديع مع قوله تعالى: «وَالسَّمَاءِ ذَاتِ الْحُبُكِ».',
+      en: 'State-of-the-art supercomputer simulations reveal that billions of galaxies string along an intricately woven cosmic web, resonating with the Quranic oath: "By the heaven full of woven paths (Al-Hubuk)".',
+      fr: 'Les supercalculateurs modernes ont révélé que les galaxies s’ordonnent en filaments d’une toile cosmique grandiose, en accord remarquable avec le verset coranique sur « le ciel aux voies tissées ».'
+    },
+    introduction: {
+      ar: 'أقسم الله تعالى في سورة الذاريات بقوله: ﴿وَالسَّمَاءِ ذَاتِ الْحُبُكِ﴾. فما هو الحبك في لسان العرب وماذا كشفت مراصد القرن الحادي والعشرين عن نسيج الكون؟',
+      en: 'In Surah Adh-Dhariyat, Allah takes an oath: "By the heaven of paths/weavings (Al-Hubuk)". Classical Arabic lexicography defines Hubuk as exquisite, tightly braided weaves and ripples.',
+      fr: 'Dans la sourate Adh-Dhariyat, le Coran jure par « le ciel aux voies tissées » (Al-Hubuk). Que révèle l’astrophysique moderne sur cette trame cosmique ?'
+    },
+    contentSimple: {
+      ar: 'عندما صوّر العلماء الكون على نطاق واسع باستخدام أقوى الحواسيب الفائقة (مثل محاكاة Millennium وIllustrisTNG)، اكتشفوا مفاجأة مذهلة: المجرات ليست مبعثرة عشوائياً، بل تصطف كخيوط حريرية متصلة تشبه تماماً نسيج الغزل المحبوك بدقة فائقة! بين هذه الخيوط توجد فراغات كونية هائلة، بينما تلتقي الخيوط في عُقد ضخمة تضم آلاف المجرات.',
+      en: 'When astrophysicists map the cosmos on cosmological megaparsec scales, they observe that galaxies do not drift randomly; they string along colossal filaments of dark matter and gas that form a celestial tapestry. Colossal cosmic voids sit between intricate cosmic threads that intersect at massive galaxy cluster hubs.',
+      fr: 'À grande échelle, les galaxies ne sont pas dispersées au hasard : elles s’alignent le long de filaments de matière noire et de gaz formant une gigantesque toile tissée avec une précision mathématique.'
+    },
+    contentAdvanced: {
+      ar: 'تُعرف هذه البنية في الفيزياء الكونية باسم "النسيج الكوني" (The Cosmic Web). تشكلت هذه الخيوط بفعل تذبذبات الكثافة الكمية الأولية المتضخمة في الكون المبكر، حيث انهارت المادة المظلمة الباردة (Cold Dark Matter) بفعل الجاذبية مشكلة صفائح وخيوطاً هيدروديناميكية تركز فيها الغاز الباروني لتتولد المجرات. وقد فسر أئمة التفسير كالطبري وابن كثير والقرطبي "الحُبُك" بأنها "الطرائق المنسوجة بحسن وإحكام كحبك الثوب وتكسر الماء والرمل".',
+      en: 'The Cosmic Web structure emerged from primordial quantum density perturbations amplified during cosmic inflation. Cold Dark Matter gravitationally aggregated into sheets and 1D filaments governed by the Zeldovich approximation. Classical exegetes (Ibn Kathir, Al-Tabari) described Al-Hubuk as tightly woven threads and hydrodynamic ripples.',
+      fr: 'La structure de la toile cosmique découle des fluctuations quantiques primordiales amplifiées par l’inflation. La matière noire s’est effondrée en filaments et feuillets le long desquels les galaxies ont pris naissance.'
+    },
+    keyFacts: {
+      ar: [
+        'طول الخيوط الكونية: يصل إلى مئات الملايين من السنين الضوئية',
+        'مكونات النسيج: 85% من مادته هي مادة مظلمة غير مرئية',
+        'تفسير الحُبُك لغوياً: النسيج المتقن، وطرائق الماء والرمال المتداخلة',
+        'أشهر مشاريع المحاكاة: مشروع IllustrisTNG ومشروع Millennium'
+      ],
+      en: [
+        'Filament Length: Hundreds of millions of light-years',
+        'Composition: ~85% non-baryonic dark matter scaffold',
+        'Linguistic Meaning of Hubuk: Intricate weaves, interlaced tracks and ripples',
+        'Flagship Simulation Models: IllustrisTNG and Millennium Simulation'
+      ],
+      fr: [
+        'Longueur des filaments : plusieurs centaines de millions d’années-lumière',
+        'Composition : ~85% de matière noire non baryonique',
+        'Sens linguistique de Hubuk : Tissage parfait, voies harmonieuses',
+        'Simulations emblématiques : IllustrisTNG et Millennium'
+      ]
+    },
+    specs: {
+      diameter: 'Scale: 100+ Megaparsecs',
+      composition: 'Dark matter filaments, Warm-Hot Intergalactic Medium (WHIM)',
+      discoveryYear: '1980s (CfA Redshift Survey) / 2010s (Illustris)'
+    },
+    image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1600&auto=format&fit=crop',
+    imageCaption: {
+      ar: 'خيوط من الضوء والغاز تشكل نسيجاً كونياً متشابكاً يربط المجرات البعيدة',
+      en: 'Filamentary tendrils of radiant intergalactic gas mapping the cosmic web structure',
+      fr: 'Filaments de gaz et de matière reliant les amas de galaxies dans la toile cosmique'
+    },
+    imageCredit: 'IllustrisTNG Collaboration / Max Planck Institute for Astrophysics',
+    sources: [
+      { title: 'The IllustrisTNG Project: Next-generation cosmological simulations', url: 'https://www.tng-project.org' },
+      { title: 'تفسير القرآن العظيم - ابن كثير (سورة الذاريات)' }
+    ],
+    relatedQuranVerseId: 'verse-expanding-47',
+    lastUpdated: '2026-03-24',
+    isApproved: true,
+    readingTimeMin: 7,
+    views: 6410,
+    likes: 580
+  },
+  {
+    id: 'quran-expanding-universe-samaa',
+    title: {
+      ar: 'اتساع الكون وبداية الخلق: الرتق والفتق في ميزان الفيزياء الفلكية الحديثة',
+      en: 'The Expanding Universe & Cosmic Genesis: Modern Astrophysics in Quranic Reflection',
+      fr: 'L’Univers en Expansion et la Genèse Cosmique : Physique Moderne et Versets Coraniques'
+    },
+    category: 'quran-cosmos',
+    summary: {
+      ar: 'دراسة علمية محكمة تقارن بين نظرية الانفجار العظيم وتمدد الزمكان، وبين الآيتين الكريمتين: «وَالسَّمَاءَ بَنَيْنَاهَا بِأَيْدٍ وَإِنَّا لَمُوسِعُونَ» و«أَنَّ السَّمَاوَاتِ وَالأَرْضَ كَانَتَا رَتْقاً فَفَتَقْنَاهُمَا».',
+      en: 'A rigorous reflection examining cosmological expansion and initial singularity alongside Quranic declarations of cosmic expansion (Surah 51:47) and primal cohesion (Surah 21:30).',
+      fr: 'Une étude scientifique rigoureuse reliant l’expansion de l’espace et la singularité primordiale aux versets coraniques sur l’expansion et la séparation initiale.'
+    },
+    introduction: {
+      ar: 'حتى مطلع القرن العشرين، كان الاعتقاد السائد بين علماء الفلك هو أن الكون أزلي وثابت لا يتغير. وجاءت معادلات النسبية العامة وملاحظات إدوين هابل لتفجر أعظم ثورة علمية: الكون يتمدد وله بداية!',
+      en: 'Until the early 20th century, mainstream physics assumed a static, eternal universe. Einstein field equations and Edwin Hubble observations overturned this dogma: space is dynamically expanding from a singular origin.',
+      fr: 'Jusqu’au début du XXe siècle, la science croyait en un univers statique. Les découvertes d’Einstein et d’Hubble ont révélé une vérité spectaculaire : l’univers est en constante expansion.'
+    },
+    contentSimple: {
+      ar: 'في عام 1929، اكتشف العالم إدوين هابل أن المجرات البعيدة تهرب مبتعدة عنا في كل الاتجاهات، وكلما كانت أبعد كانت سرعتها أكبر! هذا يعني أن الكون بأكمله يتمدد باستمرار. وإذا أرجعنا شريط الزمن إلى الوراء، سنجد أن كل مادة الكون كانت مجتمعة في نقطة واحدة فائقة الكثافة والحرارة قبل أن تنفجر وتتفرع. هذا يتطابق بشكل يثير التأمل مع قوله تعالى: ﴿وَالسَّمَاءَ بَنَيْنَاهَا بِأَيْدٍ وَإِنَّا لَمُوسِعُونَ﴾.',
+      en: 'In 1929, Edwin Hubble observed that distant galaxies are racing away from us: the farther they lie, the faster their apparent recession. Space itself is stretching. Winding the clock backwards leads inescapably to a primal cosmic singularity where all matter-energy was concentrated before the Big Bang expansion unfolded.',
+      fr: 'En 1929, Hubble découvrit que les galaxies s’éloignent les unes des autres : l’espace lui-même grandit. En remontant le temps, toute la matière était réunie en un point originel d’une densité extrême.'
+    },
+    contentAdvanced: {
+      ar: 'تصف معادلات فريدمان-لومتر-روبرتسون-ووكر (FLRW) المشتقة من النسبية العامة ديناميكية تمدد الزمكان عبر معامل المقياس a(t). أثبت رصد المستعرات العظمى عام 1998 عبر مشروعي High-z Supernova Search وSupernova Cosmology Project أن التمدد الكوني لا يتباطأ بفعل الجاذبية، بل يتسارع مدفوعاً بـ "الطاقة المظلمة" (Dark Energy) التي تشكل نحو 68% من محتوى الكون. الصيغة القرآنية ﴿وَإِنَّا لَمُوسِعُونَ﴾ بصيغة اسم الفاعل تدل على الاستمرارية والتجدد.',
+      en: 'The Friedmann equations predict expanding or contracting spatial geometry. In 1998, observations of distant Type Ia supernovae proved that cosmic expansion is accelerating due to dark energy / cosmological constant Λ. The linguistic construct in Arabic (الموسعون) denotes continuous, open-ended ongoing expansion.',
+      fr: 'Les équations de Friedmann décrivent l’évolution métrique de l’espace. En 1998, la découverte de l’accélération de l’expansion causée par l’énergie sombre a confirmé le dynamisme perpétuel du cosmos.'
+    },
+    keyFacts: {
+      ar: [
+        'اكتشاف التمدد الكوني: جورج لومتر (1927) وإدوين هابل (1929)',
+        'ثابت هابل: نحو 70 (كم/ثانية) لكل ميغافارسخ',
+        'مكونات طاقة الكون: 68% طاقة مظلمة، 27% مادة مظلمة، 5% مادة عادية',
+        'إشعاع الخلفية الكونية الميكروي (CMB): تم رصده عام 1965 كشاهد على بداية الكون'
+      ],
+      en: [
+        'Discovery of Cosmic Expansion: Georges Lemaître (1927) & Edwin Hubble (1929)',
+        'Hubble Constant: ~70 km/s/Mpc',
+        'Cosmic Energy Budget: 68% Dark Energy, 27% Dark Matter, 5% Ordinary Matter',
+        'Cosmic Microwave Background (CMB): Discovered in 1965 confirming hot dense origin'
+      ],
+      fr: [
+        'Découverte de l’expansion : Georges Lemaître (1927) et Edwin Hubble (1929)',
+        'Constante de Hubble : ~70 km/s/Mpc',
+        'Bilan énergétique cosmique : 68% énergie sombre, 27% matière noire, 5% matière baryonique',
+        'Fond diffus cosmologique (CMB) : Découvert en 1965 confirmant les origines denses'
+      ]
+    },
+    specs: {
+      age: '13.787 Billion Years',
+      composition: '68% Dark Energy, 27% Dark Matter, 5% Normal Matter',
+      speed: 'Expansion rate ~70 km/s/Mpc'
+    },
+    image: 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?q=80&w=1600&auto=format&fit=crop',
+    imageCaption: {
+      ar: 'اتساع الفضاء ومجرات متلألئة تتوارى في أعماق الكون المنظور',
+      en: 'Accelerating expansion of space carrying billions of galaxies across the cosmological timeline',
+      fr: 'Expansion accélérée de l’espace emportant des milliards de galaxies'
+    },
+    imageCredit: 'NASA / WMAP Science Team / ESA Planck Collaboration',
+    sources: [
+      { title: 'The Astrophysical Journal: Observational Evidence from Supernovae for an Accelerating Universe' },
+      { title: 'ESA Planck 2018 Results: Cosmological Parameters' }
+    ],
+    relatedQuranVerseId: 'verse-expanding-47',
+    lastUpdated: '2026-03-25',
+    isApproved: true,
+    readingTimeMin: 8,
+    views: 7850,
+    likes: 670
+  },
+  {
+    id: 'reflections-lunar-mansions',
+    title: {
+      ar: 'تأملات في منازل القمر والتقويم الفلكي: حركة الأجرام ودقة المدارات',
+      en: 'Reflections on Lunar Mansions: Celestial Mechanics and Quranic Calendars',
+      fr: 'Méditations sur les Demeures Lunaires : Mécanique Céleste et Calendrier Coranique'
+    },
+    category: 'reflections',
+    summary: {
+      ar: '﴿وَالْقَمَرَ قَدَّرْنَاهُ مَنَازِلَ حَتَّىٰ عَادَ كَالْعُرْجُونِ الْقَدِيمِ﴾ — كيف ترتبط أطوار القمر الـ 28 بحساب الشهور والسنين بدقة هندسية متناهية؟',
+      en: 'A reflective exploration of the Moon’s 28 celestial stations, synodic vs sidereal orbital periods, and the mathematical precision underpinning the Hijri lunar calendar.',
+      fr: 'Une méditation sur les 28 stations lunaires, les périodes synodiques et la précision mathématique du calendrier lunaire.'
+    },
+    introduction: {
+      ar: 'يمثل القمر الساعة الفلكية الطبيعية لسكان كوكب الأرض. بحركته اليومية المنتظمة بين النجوم، يمكن لأي إنسان في أي مكان تحديد الأيام والشهور بالعين المجردة.',
+      en: 'The Moon acts as humanity’s celestial clockwork. Its reliable progression against the background stars enables observers on Earth to mark dates and months through direct observation.',
+      fr: 'La Lune constitue l’horloge céleste naturelle de l’humanité, permettant de suivre les mois et les saisons avec exactitude.'
+    },
+    contentSimple: {
+      ar: 'في كل ليلة، يغير القمر موقعه في السماء بمقدار 13 درجة تقريباً باتجاه الشرق، وينتقل من منزلة فلكية إلى منزلة أخرى. يبدأ كهلال نحيل، ثم ينمو ليصبح بدراً كاملاً يضيء ظلمة الليل، ثم يتناقص تدريجياً حتى يصبح كـ "العرجون القديم" (وهو عذق النخل العتيق المنحني المصفر). هذه الدورة الدقيقة هي أساس حساب السنين والأشهر الهجرية ومواقيت العبادات.',
+      en: 'Each night, the Moon advances approximately 13 degrees eastward across the sky, passing through distinct astronomical constellations. It waxes from a delicate crescent to a brilliant full moon before waning back into a curved, withered date-palm stalk (Urjun Al-Qadeem), providing an accessible cosmic calendar for civilizations.',
+      fr: 'Chaque nuit, la Lune se décale d’environ 13 degrés vers l’est, traversant ses demeures célestes, du mince croissant jusqu’à la pleine lune puis au croissant fin ressemblant à une branche de palmier courbée.'
+    },
+    contentAdvanced: {
+      ar: 'يتميز مدار القمر بفارق زمني بين الشهر الاقتراني (Synodic Month: 29.530589 يوماً) وهو دورة الأطوار بالنسبة للشمس، والشهر النجمي (Sidereal Month: 27.321661 يوماً) وهو دورة القمر بالنسبة للنجوم الثابتة. تبلغ زاوية ميلان مدار القمر 5.14 درجة بالنسبة لمستوى مدار الأرض حول الشمس، مما يفسر عدم حدوث خسوف وكسوف في كل شهر قمري، بل فقط عند تقاطع القمر مع العقدتين المداريتين الصاعدة والهابطة.',
+      en: 'Lunar orbital mechanics distinguish between the sidereal month (27.32 days against fixed stars) and the synodic month (29.53 days from new moon to new moon). The 5.14° inclination of the lunar orbit relative to the ecliptic plane explains why syzygy does not produce solar and lunar eclipses each month, occurring only when the Moon aligns with orbital nodes.',
+      fr: 'La mécanique orbitale lunaire distingue le mois synodique (29,53 jours) et le mois sidéral (27,32 jours). L’inclinaison de 5,14° de son orbite explique la rareté relative des éclipses.'
+    },
+    keyFacts: {
+      ar: [
+        'متوسط بعد القمر عن الأرض: 384,400 كيلومتر',
+        'طول الشهر القمري الاقتراني: 29 يوماً و12 ساعة و44 دقيقة',
+        'السرعة المدارية للقمر: نحو 1.022 كم/ثانية',
+        'الانغلاق المداري: يواجه القمر الأرض بوجه واحد دائماً بسبب التزامن المداري'
+      ],
+      en: [
+        'Average Earth-Moon Distance: 384,400 km (~238,855 miles)',
+        'Synodic Month Duration: 29 days, 12 hours, 44 minutes',
+        'Orbital Speed: ~1.022 km/s',
+        'Tidal Locking: The Moon is tidally locked, presenting the same hemisphere toward Earth'
+      ],
+      fr: [
+        'Distance moyenne Terre-Lune : 384 400 km',
+        'Durée du mois synodique : 29 jours, 12 heures et 44 minutes',
+        'Vitesse orbitale : ~1,022 km/s',
+        'Verrouillage gravitationnel : La Lune présente toujours la même face à la Terre'
+      ]
+    },
+    specs: {
+      diameter: '3,474.8 km',
+      mass: '7.342 × 10²² kg (0.0123 Earths)',
+      orbitalPeriod: '27.32 days (Sidereal) / 29.53 days (Synodic)',
+      distance: '384,400 km from Earth'
+    },
+    image: 'https://images.unsplash.com/photo-1522030299830-16b8d3d049fe?q=80&w=1600&auto=format&fit=crop',
+    imageCaption: {
+      ar: 'هلال مضيء يعكس ضوء الشمس في سماء ليلية ساحرة مع تضاريس القمر الدقيقة',
+      en: 'Luminous waxing crescent reflecting sunlight, displaying cratered lunar maria in deep twilight',
+      fr: 'Croissant de lune étincelant révélant les reliefs et mers lunaires'
+    },
+    imageCredit: 'NASA Scientific Visualization Studio / LRO Mission',
+    sources: [
+      { title: 'NASA Lunar Reconnaissance Orbiter (LRO) Atlas', url: 'https://lunar.gsfc.nasa.gov' },
+      { title: 'Astronomical Almanac for the Year 2026' }
+    ],
+    relatedQuranVerseId: 'verse-orbits-33',
+    lastUpdated: '2026-03-23',
+    isApproved: true,
+    readingTimeMin: 5,
+    views: 4320,
+    likes: 388
+  },
+  {
+    id: 'reflections-protected-canopy-magnetosphere',
+    title: {
+      ar: 'الرياح الشمسية والمجال المغناطيسي للأرض: السقف المحفوظ والحماية الكونية',
+      en: 'Solar Winds & Earth Magnetosphere: The Science of the Protected Canopy',
+      fr: 'Vents Solaires et Magnétosphère Terrestre : Le Ciel comme Toit Protecteur'
+    },
+    category: 'reflections',
+    summary: {
+      ar: '﴿وَجَعَلْنَا السَّمَاءَ سَقْفاً مَّحْفُوظاً﴾ — كيف يحمي الغلاف الجوي والأحزمة المغناطيسية كوكب الأرض من العواصف الشمسية القاتلة والأشعة الكونية؟',
+      en: 'A contemplation of Earth’s double armor: the Van Allen radiation belts and the atmospheric ozone barrier deflecting lethal solar coronal ejections and cosmic rays.',
+      fr: 'Une réflexion sur le double bouclier terrestre : la magnétosphère et l’atmosphère protégeant la vie des particules cosmiques mortelles.'
+    },
+    introduction: {
+      ar: 'الفضاء ليس فراغاً وادعاً، بل هو بيئة قاسية تعج بالأشعة الكونية القاتلة والجسيمات المشحونة المتدفقة من الشمس بسرعات تفوق ملايين الكيلومترات في الساعة.',
+      en: 'Space is not a benign void; it is a violent arena inundated by relativistic cosmic rays and relentless solar wind streams moving at millions of kilometers per hour.',
+      fr: 'L’espace est baigné de radiations mortelles et de vents solaires violents filant à des millions de km/h.'
+    },
+    contentSimple: {
+      ar: 'لو نزعنا الغلاف الجوي والمجال المغناطيسي عن كوكب الأرض لدقيقة واحدة، لتبخرت الحياة بأكملها فوراً! في قلب كوكبنا حديد منصهر يدور باستمرار مولداً درعاً مغناطيسياً عملاقاً (المغنيتوسفير) يمتد لعشرات آلاف الكيلومترات في الفضاء. هذا الدرع يعترض الرياح الشمسية القاتلة ويحرفها نحو القطبين لتتحول إلى أضواء الشفق القطبي الساحرة (الأورورا). وفوق ذلك، تمتص طبقة الأوزون الأشعة فوق البنفسجية الحارقة، ويحرق الغلاف الجوي ملايين النيازك يومياً قبل أن تصل إلينا.',
+      en: 'Without Earth’s geomagnetic shield and atmosphere, biological life would be incinerated by ionizing radiation. The geodynamo in Earth’s molten iron outer core generates an immense magnetic bubble (the magnetosphere). This cosmic shield deflects lethal coronal mass ejections, funneling charged particles safely toward the poles to form the auroras. Meanwhile, the mesosphere vaporizes meteors and the ozone layer filters ultraviolet rays.',
+      fr: 'Sans le champ magnétique et l’atmosphère terrestre, la vie serait anéantie par les radiations ionisantes. Le noyau de fer en fusion produit un bouclier gigantesque qui dévie les tempêtes solaires vers les pôles sous forme d’aurores boréales.'
+    },
+    contentAdvanced: {
+      ar: 'يعمل تأثير الدينامو الجيولوجي (Geodynamo Effect) في اللب الخارجي المنصهر للأرض على توليد ثنائي قطب مغناطيسي مستمر. يشكل هذا المجال أحزمة فان ألين الإشعاعية (Van Allen Radiation Belts) وقوس الصدمة المغناطيسي (Bow Shock) الذي يبعد الرياح الشمسية البلازمية ذات السرعات الفائقة (400 إلى 800 كم/ثانية). بالإضافة إلى ذلك، يحجب الغلاف الجوي الأشعة السينية وغاما، مما يطابق بدقة تعبير ﴿سَقْفاً مَّحْفُوظاً﴾: محفوظ هو نفسه من التبدد، وحافظ لما تحته من أشكال الحياة.',
+      en: 'Earth’s magnetosphere interacts with interplanetary magnetic fields (IMF) via magnetic reconnection during solar storms. The Bow Shock compresses solar plasma, shielding the atmosphere from ion stripping (a fate that stripped ancient Mars of its surface water). The term "Saqfan Mahfooza" captures both the self-sustaining integrity of the atmospheric envelope and its shielding function.',
+      fr: 'La magnétosphère protège la Terre de l’érosion atmosphérique par le vent solaire, préservant l’eau et l’air indispensables à la biosphère.'
+    },
+    keyFacts: {
+      ar: [
+        'سمك الغلاف الجوي الفعال: نحو 100 كم (خط كارمان) ويمتد لآلاف الكيلومترات',
+        'امتداد الذيل المغناطيسي للأرض: أكثر من 6 ملايين كيلومتر في الفضاء',
+        'كتلة النيازك المحروقة يومياً: ما بين 50 إلى 100 طن من الغبار والصخور تحترق كشهب',
+        'سرعة الرياح الشمسية: تتراوح بين 300 و800 كم/ثانية'
+      ],
+      en: [
+        'Atmospheric Boundary: ~100 km (Kármán line), extending into exosphere',
+        'Magnetotail Expanse: Extends over 6 million km into deep space',
+        'Daily Meteor Interception: 50 to 100 metric tons of space debris burned as meteors',
+        'Solar Wind Velocity: 300 to 800 km/second'
+      ],
+      fr: [
+        'Limite de l’atmosphère : ~100 km (ligne de Kármán)',
+        'Extension de la queue magnétique : plus de 6 millions de km',
+        'Météores interceptés : 50 à 100 tonnes de débris brûlés chaque jour',
+        'Vitesse du vent solaire : 300 à 800 km/s'
+      ]
+    },
+    specs: {
+      diameter: 'Magnetosphere: 65,000 km day-side / 6,000,000 km tail',
+      composition: 'Atmosphere: 78% N₂, 21% O₂, 0.9% Ar, 0.04% CO₂',
+      temperature: 'From -90°C (Mesopause) to 15°C (Surface average)'
+    },
+    image: 'https://images.unsplash.com/photo-1517976487507-5b3648889aa0?q=80&w=1600&auto=format&fit=crop',
+    imageCaption: {
+      ar: 'أضواء الشفق القطبي الخضراء المتوهجة ترقص في السماء نتيجة تفاعل المجال المغناطيسي مع الجسيمات الشمسية',
+      en: 'Aurora borealis ribbons glowing green as Earth geomagnetic field guides solar particles into upper atmosphere',
+      fr: 'Aurore boréale étincelante née de la rencontre entre le vent solaire et le champ magnétique terrestre'
+    },
+    imageCredit: 'NASA / NOAA Space Weather Prediction Center',
+    sources: [
+      { title: 'NASA Heliophysics: Understanding Earth Space Environment', url: 'https://science.nasa.gov/heliophysics' },
+      { title: 'NOAA Space Weather Prediction Center' },
+      { title: 'الجامع لأحكام القرآن - القرطبي (سورة الأنبياء : 32)' }
+    ],
+    relatedQuranVerseId: 'verse-orbits-33',
+    lastUpdated: '2026-03-25',
+    isApproved: true,
+    readingTimeMin: 6,
+    views: 5120,
+    likes: 476
   }
 ];
 
