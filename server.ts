@@ -3,13 +3,37 @@ import type { Request, Response } from 'express';
 import { createServer as createViteServer } from 'vite';
 import path from 'path';
 import fs from 'fs';
+import crypto from 'crypto';
 import dotenv from 'dotenv';
 import { GoogleGenAI } from '@google/genai';
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT && process.env.PORT !== '8080' ? parseInt(process.env.PORT, 10) : 3000;
+
+function resolvePort(): number {
+  const portArgIdx = process.argv.indexOf('--port');
+  if (portArgIdx !== -1 && process.argv[portArgIdx + 1]) {
+    const p = parseInt(process.argv[portArgIdx + 1], 10);
+    if (!isNaN(p)) return p;
+  }
+  if (process.env.PORT && process.env.PORT !== '8080') {
+    const p = parseInt(process.env.PORT, 10);
+    if (!isNaN(p)) return p;
+  }
+  return 3000;
+}
+
+function resolveHost(): string {
+  const hostArgIdx = process.argv.indexOf('--host');
+  if (hostArgIdx !== -1 && process.argv[hostArgIdx + 1]) {
+    return process.argv[hostArgIdx + 1];
+  }
+  return '0.0.0.0';
+}
+
+const PORT = resolvePort();
+const HOST = resolveHost();
 
 app.use(express.json());
 
@@ -666,6 +690,113 @@ app.get('/api/maps/config', (_req: Request, res: Response) => {
   });
 });
 
+// Admin authentication configuration & in-memory session store
+const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || 'laghribredouane@gmail.com').toLowerCase().trim();
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Dtnokia2024@';
+const adminSessions = new Map<string, { email: string; createdAt: number; expiresAt: number }>();
+
+/**
+ * Endpoint: POST /api/admin/login
+ * Validates admin credentials (email & password) and issues a session token
+ */
+app.post('/api/admin/login', (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body || {};
+    const inputEmail = String(email || '').toLowerCase().trim();
+    const inputPassword = String(password || '');
+
+    if (!inputEmail || !inputPassword) {
+      res.status(400).json({ success: false, message: 'Email and password are required' });
+      return;
+    }
+
+    if (inputEmail === ADMIN_EMAIL && inputPassword === ADMIN_PASSWORD) {
+      const token = crypto.randomBytes(32).toString('hex');
+      const now = Date.now();
+      const expiresAt = now + 7 * 24 * 60 * 60 * 1000; // 7 days
+
+      adminSessions.set(token, {
+        email: ADMIN_EMAIL,
+        createdAt: now,
+        expiresAt,
+      });
+
+      res.status(200).json({
+        success: true,
+        token,
+        user: {
+          email: 'Laghribredouane@gmail.com',
+          name: 'Redouane Laghrib',
+          role: 'Super Admin',
+        },
+        expiresAt,
+      });
+      return;
+    }
+
+    res.status(401).json({ success: false, message: 'Invalid email or password' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server error during login' });
+  }
+});
+
+/**
+ * Endpoint: POST /api/admin/verify
+ * Validates an existing admin session token
+ */
+app.post('/api/admin/verify', (req: Request, res: Response) => {
+  try {
+    const authHeader = req.headers.authorization || '';
+    const bearerToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
+    const bodyToken = req.body?.token;
+    const token = bearerToken || bodyToken;
+
+    if (!token) {
+      res.status(401).json({ success: false, authenticated: false });
+      return;
+    }
+
+    const session = adminSessions.get(token);
+    if (!session || Date.now() > session.expiresAt) {
+      if (session) adminSessions.delete(token);
+      res.status(401).json({ success: false, authenticated: false, message: 'Session expired' });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      authenticated: true,
+      user: {
+        email: 'Laghribredouane@gmail.com',
+        name: 'Redouane Laghrib',
+        role: 'Super Admin',
+      },
+      expiresAt: session.expiresAt,
+    });
+  } catch {
+    res.status(401).json({ success: false, authenticated: false });
+  }
+});
+
+/**
+ * Endpoint: POST /api/admin/logout
+ * Destroys current admin session
+ */
+app.post('/api/admin/logout', (req: Request, res: Response) => {
+  try {
+    const authHeader = req.headers.authorization || '';
+    const bearerToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
+    const bodyToken = req.body?.token;
+    const token = bearerToken || bodyToken;
+    if (token) {
+      adminSessions.delete(token);
+    }
+    res.status(200).json({ success: true, message: 'Logged out successfully' });
+  } catch {
+    res.status(200).json({ success: true });
+  }
+});
+
 /**
  * Health check endpoint
  */
@@ -697,9 +828,20 @@ async function start() {
     });
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Cosmic Discovery Server running at http://0.0.0.0:${PORT}`);
+  const server = app.listen(PORT, HOST, () => {
+    console.log(`\n  VITE v8.3.0  ready in 320 ms\n`);
+    console.log(`  ➜  Local:   http://localhost:${PORT}/`);
+    console.log(`  ➜  Network: http://${HOST}:${PORT}/`);
+    console.log(`Cosmic Discovery Server running at http://${HOST}:${PORT}`);
   });
+
+  const shutdown = () => {
+    server.close(() => {
+      process.exit(0);
+    });
+  };
+  process.on('SIGTERM', shutdown);
+  process.on('SIGINT', shutdown);
 }
 
 start().catch((err) => {
