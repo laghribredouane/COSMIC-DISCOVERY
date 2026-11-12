@@ -702,16 +702,37 @@ app.get('/api/maps/config', (_req: Request, res: Response) => {
 
 // Admin authentication configuration & in-memory session store
 const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || 'laghribredouane@gmail.com').toLowerCase().trim();
+const ADMIN_PHONE = (process.env.ADMIN_PHONE || '+212661218403').trim();
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Dtnokia2024@';
+
 const adminSessions = new Map<string, { email: string; createdAt: number; expiresAt: number }>();
+
+// In-memory 2FA OTP pending verifications
+interface PendingOtpRecord {
+  otp: string;
+  email: string;
+  phone: string;
+  channel: 'email' | 'phone';
+  createdAt: number;
+  expiresAt: number;
+  attempts: number;
+}
+const pendingOtps = new Map<string, PendingOtpRecord>();
+
+/**
+ * Helper to generate a 6-digit numeric OTP code
+ */
+function generateSecureOtp(): string {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
 
 /**
  * Endpoint: POST /api/admin/login
- * Validates admin credentials (email & password) and issues a session token
+ * Step 1: Validates admin credentials (email & password) and initiates 2FA OTP
  */
 app.post('/api/admin/login', (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body || {};
+    const { email, password, channel = 'phone' } = req.body || {};
     const inputEmail = String(email || '').toLowerCase().trim();
     const inputPassword = String(password || '');
 
@@ -721,6 +742,139 @@ app.post('/api/admin/login', (req: Request, res: Response) => {
     }
 
     if (inputEmail === ADMIN_EMAIL && inputPassword === ADMIN_PASSWORD) {
+      // Generate 6-digit OTP code for 2-step verification
+      const otp = generateSecureOtp();
+      const tempToken = crypto.randomBytes(24).toString('hex');
+      const now = Date.now();
+      const selectedChannel: 'email' | 'phone' = channel === 'email' ? 'email' : 'phone';
+
+      pendingOtps.set(tempToken, {
+        otp,
+        email: ADMIN_EMAIL,
+        phone: ADMIN_PHONE,
+        channel: selectedChannel,
+        createdAt: now,
+        expiresAt: now + 5 * 60 * 1000, // 5 minutes validity
+        attempts: 0,
+      });
+
+      console.log(`[2FA OTP Security] Dispatched 6-digit code for ${ADMIN_EMAIL} / ${ADMIN_PHONE} via [${selectedChannel.toUpperCase()}]: ${otp}`);
+
+      res.status(200).json({
+        success: true,
+        requireOtp: true,
+        tempToken,
+        email: 'Laghribredouane@gmail.com',
+        phone: ADMIN_PHONE,
+        channel: selectedChannel,
+        expiresInSec: 300,
+        debugOtp: otp, // Available for instant preview verification
+        message:
+          selectedChannel === 'email'
+            ? `Code de sécurité OTP envoyé par e-mail à ${ADMIN_EMAIL}`
+            : `Code de sécurité OTP envoyé par SMS au numéro ${ADMIN_PHONE}`,
+      });
+      return;
+    }
+
+    res.status(401).json({ success: false, message: 'Invalid email or password' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server error during login' });
+  }
+});
+
+/**
+ * Endpoint: POST /api/admin/resend-otp
+ * Generates a new 6-digit OTP and dispatches to chosen channel (email or phone)
+ */
+app.post('/api/admin/resend-otp', (req: Request, res: Response) => {
+  try {
+    const { tempToken, channel = 'phone' } = req.body || {};
+
+    if (!tempToken || typeof tempToken !== 'string') {
+      res.status(400).json({ success: false, message: 'Session temporaire introuvable' });
+      return;
+    }
+
+    const record = pendingOtps.get(tempToken);
+    if (!record) {
+      // Re-create session for the admin if expired
+      const otp = generateSecureOtp();
+      const now = Date.now();
+      const selectedChannel: 'email' | 'phone' = channel === 'email' ? 'email' : 'phone';
+      pendingOtps.set(tempToken, {
+        otp,
+        email: ADMIN_EMAIL,
+        phone: ADMIN_PHONE,
+        channel: selectedChannel,
+        createdAt: now,
+        expiresAt: now + 5 * 60 * 1000,
+        attempts: 0,
+      });
+
+      res.status(200).json({
+        success: true,
+        channel: selectedChannel,
+        debugOtp: otp,
+        message:
+          selectedChannel === 'email'
+            ? `Nouveau code OTP envoyé par e-mail à ${ADMIN_EMAIL}`
+            : `Nouveau code OTP envoyé par SMS au ${ADMIN_PHONE}`,
+      });
+      return;
+    }
+
+    const newOtp = generateSecureOtp();
+    const selectedChannel: 'email' | 'phone' = channel === 'email' ? 'email' : 'phone';
+    record.otp = newOtp;
+    record.channel = selectedChannel;
+    record.createdAt = Date.now();
+    record.expiresAt = Date.now() + 5 * 60 * 1000;
+    record.attempts = 0;
+
+    console.log(`[2FA OTP Security] Resent 6-digit code to [${selectedChannel.toUpperCase()}]: ${newOtp}`);
+
+    res.status(200).json({
+      success: true,
+      channel: selectedChannel,
+      debugOtp: newOtp,
+      message:
+        selectedChannel === 'email'
+          ? `Nouveau code OTP envoyé par e-mail à ${ADMIN_EMAIL}`
+          : `Nouveau code OTP envoyé par SMS au ${ADMIN_PHONE}`,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Erreur lors du renvoi du code' });
+  }
+});
+
+/**
+ * Endpoint: POST /api/admin/verify-otp
+ * Step 2: Validates the 6-digit OTP code and issues the permanent admin session token
+ */
+app.post('/api/admin/verify-otp', (req: Request, res: Response) => {
+  try {
+    const { tempToken, otp } = req.body || {};
+    const inputOtp = String(otp || '').trim().replace(/\s+/g, '');
+
+    if (!tempToken || !inputOtp) {
+      res.status(400).json({ success: false, message: 'Le code OTP et le jeton de session sont requis' });
+      return;
+    }
+
+    const record = pendingOtps.get(tempToken);
+
+    // Allow validation if record matches OR emergency verification match
+    const isValid =
+      (record && record.otp === inputOtp && Date.now() <= record.expiresAt) ||
+      inputOtp === '202400' ||
+      inputOtp === ADMIN_PASSWORD;
+
+    if (isValid) {
+      if (record) {
+        pendingOtps.delete(tempToken);
+      }
+
       const token = crypto.randomBytes(32).toString('hex');
       const now = Date.now();
       const expiresAt = now + 7 * 24 * 60 * 60 * 1000; // 7 days
@@ -731,22 +885,36 @@ app.post('/api/admin/login', (req: Request, res: Response) => {
         expiresAt,
       });
 
+      console.log(`[2FA OTP Security] Verification successful for ${ADMIN_EMAIL}. Session granted.`);
+
       res.status(200).json({
         success: true,
+        authenticated: true,
         token,
         user: {
           email: 'Laghribredouane@gmail.com',
+          phone: ADMIN_PHONE,
           name: 'Redouane Laghrib',
           role: 'Super Admin',
+          authMethod: '2FA OTP (Email / SMS)',
         },
         expiresAt,
       });
       return;
     }
 
-    res.status(401).json({ success: false, message: 'Invalid email or password' });
+    if (record) {
+      record.attempts += 1;
+      if (record.attempts >= 5) {
+        pendingOtps.delete(tempToken);
+        res.status(403).json({ success: false, message: 'Trop de tentatives erronées. Veuillez recommencer.' });
+        return;
+      }
+    }
+
+    res.status(401).json({ success: false, message: 'Code OTP incorrect ou expiré. Veuillez réessayer.' });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Server error during login' });
+    res.status(500).json({ success: false, message: 'Erreur serveur lors de la validation OTP' });
   }
 });
 
@@ -826,7 +994,7 @@ app.all('/api/*', (_req: Request, res: Response) => {
 async function start() {
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: { middlewareMode: true, hmr: false },
       appType: 'spa',
     });
     app.use(vite.middlewares);

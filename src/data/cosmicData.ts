@@ -1022,6 +1022,432 @@ export const initialArticles: ScientificArticle[] = [
     readingTimeMin: 6,
     views: 5120,
     likes: 476
+  },
+  {
+    id: 'dark-matter-energy',
+    title: {
+      ar: 'المادة المظلمة والطاقة المظلمة: لغز 95% من كتلة وطاقة الوجود',
+      en: 'Dark Matter & Dark Energy: The Enigma of 95% of the Cosmos',
+      fr: 'Matière Noire et Énergie Sombre : L’Énigme de 95% du Cosmos'
+    },
+    category: 'cosmology',
+    summary: {
+      ar: 'كل ما نراه من نجوم ومجرات وكواكب لا يشكل سوى 5% فقط من الكون! ما هي المادة المظلمة التي تمسك المجرات، وما هي الطاقة المظلمة التي تدفع الكون نحو التسارع؟',
+      en: 'All visible stars, planets, and gas clouds account for barely 5% of the cosmos. Discover the invisible gravitational scaffolding of dark matter and the accelerating dark energy.',
+      fr: 'La matière visible ne représente que 5% du cosmos. Découvrez la matière noire invisible et l’énergie sombre accélératrice de l’expansion.'
+    },
+    introduction: {
+      ar: 'في ثلاثينيات وسبعينيات القرن العشرين، كشفت القياسات الدقيقة لسرعة دوران المجرات عن مفاجأة أذهلت علماء الفيزياء الفلكية: المجرات تدور بسرعة هائلة تكفي لتمزيقها وتطاير نجومها، إلا إذا كانت هناك مادة خفية هائلة الكتلة لا تصدر ضوءاً تمسك بها!',
+      en: 'Rotational velocities of outer galactic spiral arms proved that galaxies must be embedded within immense halos of non-luminous mass, now known as Dark Matter.',
+      fr: 'La vitesse de rotation des galaxies a révélé l’existence d’une masse invisible colossale qui maintient la cohésion des étoiles.'
+    },
+    contentSimple: {
+      ar: 'تخيل أنك دخلت قاعة احتفالات ضخمة ولا ترى سوى المصابيح المضيئة، لكنك لا ترى الجدران والأعمدة التي تحمل المبنى! هذا هو حالنا مع الكون. النجوم والمجرات هي "المصابيح" التي تشكل 5% فقط، بينما 27% هي مادة مظلمة تعمل كصمغ جاذبي يمنع المجرات من التفكك، و68% هي طاقة مظلمة غامضة تملأ الفراغ وتدفع المجرات للتباعد عن بعضها بسرعات متزايدة باستمرار. نحن نعيش في محيط كوني لا ندرك معظم كينونته إلا عبر آثاره الجاذبية المتقنة.',
+      en: 'Imagine seeing glowing lightbulbs in an amphitheater while the steel pillars remain completely transparent. That is our cosmos: stars and baryonic matter represent barely 5%. Dark matter (27%) acts as cosmic glue preventing galaxies from flying apart, while dark energy (68%) permeates the spatial vacuum, relentlessly pushing the universe into accelerated cosmic expansion.',
+      fr: 'La matière ordinaire ne compose que 5% de notre univers. La matière noire (27%) agit comme un ciment gravitationnel, tandis que l’énergie sombre (68%) accélère l’expansion cosmique.'
+    },
+    contentAdvanced: {
+      ar: 'تتأكد فرضية المادة المظلمة الباردة (Lambda-CDM Model) عبر ثلاثة أدلة مستقلة: منحنيات دوران المجرات المسطحة (Vera Rubin)، وعدسات الجاذبية القوية والضعيفة (Gravitational Lensing) وتصادم عنقود الرصاصة (Bullet Cluster)، وتذبذبات الباريونات الصوتية في إشعاع الخلفية الكونية (Planck Satellite). لا تتفاعل المادة المظلمة مع القوة الكهرومغناطيسية (لا تمتص ولا تبعث الفوتونات)، مما يجعل كشفها المباشر تحدياً فيزيائياً يتطلب تجارب التبريد الفائق كمرصد XENONnT ومصادم الهادرونات الكبير.',
+      en: 'The standard cosmological model (Lambda-CDM) is corroborated by gravitational lensing in galaxy clusters, the Bullet Cluster collision where dark matter decoupled from hot baryonic gas, and Planck satellite precision measurements of the cosmic microwave background acoustic peaks. Dark matter interacts only via gravitation and possibly the weak nuclear force.',
+      fr: 'Le modèle cosmologique standard s’appuie sur les lentilles gravitationnelles, l’amas de la Balle et les anisotropies du fond diffus cosmologique mesurées par Planck.'
+    },
+    keyFacts: {
+      ar: [
+        'المادة العادية (الذرات والنجوم والبشر) تمثل فقط 4.9% من الكون',
+        'المادة المظلمة تمثل 26.8% وتمنع المجرات من التفكك',
+        'الطاقة المظلمة تمثل 68.3% وتدفع تمدد الكون بتسارع متزايد',
+        'عنقود الرصاصة (Bullet Cluster) يقدم الدليل الأقوى على انفصال المادة المظلمة عن الغاز المرئي'
+      ],
+      en: [
+        'Baryonic matter (atoms, stars, planets) constitutes only 4.9% of the universe',
+        'Dark matter comprises 26.8% and forms the gravitational scaffolding of galaxies',
+        'Dark energy makes up 68.3% and accelerates cosmic spatial expansion',
+        'The Bullet Cluster proves gravitational mass separation from X-ray emitting baryonic gas'
+      ],
+      fr: [
+        'La matière ordinaire ne représente que 4.9% de l’énergie-masse totale',
+        'La matière noire représente 26.8% et structure la toile cosmique',
+        'L’énergie sombre constitue 68.3% et accélère l’expansion',
+        'L’amas de la Balle prouve la séparation entre matière noire et gaz chaud'
+      ]
+    },
+    specs: {
+      diameter: 'Across All Observable Space',
+      mass: '95.1% Total Cosmic Density',
+      temperature: 'Cold (Non-relativistic particles)',
+      speed: 'Universal Expansion Rate 70 km/s/Mpc'
+    },
+    image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1600&auto=format&fit=crop',
+    imageCaption: {
+      ar: 'محاكاة حاسوبية فائقة الدقة للشبكة الكونية وتوزيع هالات المادة المظلمة',
+      en: 'Supercomputer simulation of cosmic web filaments woven by cold dark matter halos',
+      fr: 'Simulation haute résolution des filaments de matière noire tissant la toile cosmique'
+    },
+    imageCredit: 'IllustrisTNG Collaboration / Max Planck Institute for Astrophysics',
+    sources: [
+      { title: 'Planck 2018 Results: Cosmological Parameters (Astronomy & Astrophysics)', url: 'https://www.cosmos.esa.int/web/planck' },
+      { title: 'NASA Dark Energy and Dark Matter Overview', url: 'https://science.nasa.gov/astrophysics/focus-areas/what-is-dark-energy' }
+    ],
+    lastUpdated: '2026-04-01',
+    isApproved: true,
+    readingTimeMin: 7,
+    views: 6240,
+    likes: 540
+  },
+  {
+    id: 'orion-nebula-m42',
+    title: {
+      ar: 'سديم الجبار (M42): المشتل النجمي الأقرب ومعمل ولادة النجوم',
+      en: 'The Orion Nebula (M42): The Great Stellar Nursery & Birth of Solar Systems',
+      fr: 'La Nébuleuse d’Orion (M42) : Pouponnière Stellaire & Genèse des Mondes'
+    },
+    category: 'nebulae',
+    summary: {
+      ar: 'على بعد 1,344 سنة ضوئية في سيف كوكبة الجبار يقع أروع سديم إشعاعي مرئي بالعين المجردة، حيث تتشكل مئات النجوم والكواكب الفتية داخل أشرعة الغاز المتوهج.',
+      en: 'Located 1,344 light-years away in the sword of Orion, M42 is the most studied star-forming crucible where infant suns and proto-planetary disks are forged.',
+      fr: 'Située à 1 344 années-lumière, M42 est la pouponnière stellaire la plus active révélant la formation de disques protoplanétaires.'
+    },
+    introduction: {
+      ar: 'سديم الجبار (المسييه 42) هو إحدى عجائب القبة السماوية الشتوية، مرئي كبقعة ضبابية خافتة تحت حزام الجبار مباشرة، ويمثل مختبراً طبيعياً حياً يتيح لعلماء الفلك مراقبة ولادة النجوم ونشأة الأنظمة الشمسية خطوة بخطوة.',
+      en: 'The Orion Nebula is a stellar maternity ward. Deep inside its glowing hydrogen filaments, young massive stars light up surrounding gas and unveil protoplanetary disks (proplyds).',
+      fr: 'Visible comme une lueur diffuse dans l’épée d’Orion, M42 permet d’observer la naissance des étoiles et des planètes en temps réel.'
+    },
+    contentSimple: {
+      ar: 'إذا أردت أن ترى كيف وُلدت شمسنا وكواكبنا قبل 4.6 مليار سنة، فانظر إلى سديم الجبار! هذا السديم عبارة عن سحابة عملاقة من غاز الهيدروجين والغبار الكوني تمتد لعشرات السنوات الضوئية. في قلبه تجمع رباعي من النجوم الفتية الشديدة السطوع والحرارة تسمى "المعين" (Trapezium). تطلق هذه النجوم إشعاعات فوق بنفسجية جبارة تجعل الغاز المحيط يتوهج بألوان بديعة، بينما تنضغط أجزاء السحابة الأخرى تحت وطأة الجاذبية لتصنع أجنة نجوم وأنظمة كوكبية جديدة كلياً.',
+      en: 'Orion is our cosmic origin mirror. In its core sits the Trapezium cluster—four brilliant massive stars whose intense UV radiation energizes the surrounding hydrogen gas into brilliant hues of pink, emerald, and cyan. Gravity compresses denser pockets within the cloud, collapsing them into nascent protostars with swirling planetary debris discs that mirror our solar system’s early formation.',
+      fr: 'Au cœur de la nébuleuse brille l’amas du Trapèze, dont le rayonnement UV ionise l’hydrogène et fait scintiller le gaz. Les poches denses s’effondrent pour former de nouveaux systèmes solaires.'
+    },
+    contentAdvanced: {
+      ar: 'يُصنف سديم الجبار كمنطقة H II انبعاثية وعاكسة في آن واحد، تحركها إشعاعات النجم ثيتا-1 الجبار سي (Theta-1 Orionis C) من النوع الطيفي O7V بدرجة حرارة سطحية تتجاوز 40,000 كلفن. كشفت كاميرات تلسكوبي هابل وجيمس ويب بالأشعة تحت الحمراء عن أكثر من 150 قرصاً كوكبياً أولياً (Protoplanetary Disks / Proplyds)، مما يثبت تجريبياً أن نشأة الكواكب ليست استثناءً نادراً، بل هي نتيجة حتمية طبيعية لدورات التكاثف النجمي.',
+      en: 'M42 is energized predominantly by Theta-1 Orionis C, an O7V supergiant whose stellar winds carve out expanding ionization ionization cavities. High-resolution infrared imaging from JWST NIRCam pierces dense dust envelopes, resolving proplyds where accretion grains are agglomerating into rocky planetesimals under external photoevaporation.',
+      fr: 'Classée région H II géante, M42 abrite plus de 150 disques protoplanétaires imagés par Hubble et le JWST, prouvant l’universalité de la formation planétaire.'
+    },
+    keyFacts: {
+      ar: [
+        'يبعد حوالي 1,344 سنة ضوئية وهو أقرب حاضنة نجمية ضخمة للأرض',
+        'يمتد قطره لنحو 24 سنة ضوئية وتكفي مادته لتكوين آلاف النجوم كالشمس',
+        'يحتوي على أكثر من 150 قرصاً كوكبياً أولياً تنمو فيها كواكب جديدة',
+        'عنقود المعين (Trapezium) في مركزه يبلغ عمره أقل من مليون سنة فقط'
+      ],
+      en: [
+        'Located ~1,344 light-years away, making it the closest massive stellar foundry to Earth',
+        'Spans roughly 24 light-years in diameter with enough mass for thousands of stars',
+        'Harbors over 150 protoplanetary disks observed forming infant worlds',
+        'The central Trapezium cluster is extraordinarily youthful, under 1 million years old'
+      ],
+      fr: [
+        'Situé à 1 344 années-lumière, le berceau stellaire massif le plus proche',
+        'S’étend sur 24 années-lumière de diamètre',
+        'Abrite plus de 150 disques protoplanétaires en cours d’accrétion',
+        'L’amas central du Trapèze a moins d’un million d’années'
+      ]
+    },
+    specs: {
+      diameter: '24 Light-Years (227 Trillion km)',
+      mass: '2,000 Solar Masses',
+      temperature: '10,000 K (Ionized Plasma)',
+      distance: '1,344 Light-Years (412 Parsecs)'
+    },
+    image: 'https://images.unsplash.com/photo-1543722530-d2c3201371e7?q=80&w=1600&auto=format&fit=crop',
+    imageCaption: {
+      ar: 'سديم الجبار المذهل بأعماق أشرعته السديمية المتألقة',
+      en: 'The Great Orion Nebula glowing in deep hydrogen alpha and oxygen emission filters',
+      fr: 'La grande nébuleuse d’Orion brillant dans les raies d’émission de l’hydrogène et de l’oxygène'
+    },
+    imageCredit: 'NASA / ESA / M. Robberto (STScI/ESA) & the Hubble Space Telescope Orion Treasury Project',
+    sources: [
+      { title: 'Hubble Space Telescope Treasury Project: Orion Nebula Survey', url: 'https://hubblesite.org' },
+      { title: 'ESO VLT Infrared Observations of M42' }
+    ],
+    lastUpdated: '2026-04-02',
+    isApproved: true,
+    readingTimeMin: 5,
+    views: 4890,
+    likes: 420
+  },
+  {
+    id: 'gravitational-waves-ligo',
+    title: {
+      ar: 'موجات الجاذبية: تموجات نسيج الزمكان ورصد تصادم الثقوب السوداء',
+      en: 'Gravitational Waves: Ripples in Spacetime from Colliding Giants',
+      fr: 'Ondes Gravitationnelles : Ondulations de l’Espace-Temps et Trous Noirs'
+    },
+    category: 'discoveries',
+    summary: {
+      ar: 'تنبأ بها ألبرت أينشتاين عام 1916 ورصدتها مراصد LIGO عام 2015: اهتزازات حقيقية في نسيج الفضاء نفسه تسافر بسرعة الضوء ناتجة عن أعنف الاصطدامات الكونية.',
+      en: 'Predicted by Einstein in 1916 and detected by LIGO in 2015: ripples in the fabric of spacetime itself traveling at the speed of light from cataclysmic mergers.',
+      fr: 'Prédites par Einstein et détectées par LIGO en 2015 : des ondulations directes de l’espace-temps voyageant à la vitesse de la lumière.'
+    },
+    introduction: {
+      ar: 'في 14 سبتمبر 2015، اهتز كوكب الأرض بأكمله بمقدار أقل من جزء من ألف من قطر البروتون. كان هذا الاهتزاز هو أول عبور مسجل لموجة جاذبية نتجت عن تصادم ثقبين أسودين على بعد 1.3 مليار سنة ضوئية، مما فتح نافذة حسية جديدة تماماً للبشرية لسماع سيمفونية الكون.',
+      en: 'On September 14, 2015, spacetime itself vibrated across Earth by a fraction of a proton’s diameter (GW150914). For the first time, humanity did not just see the cosmos—we heard the ringing of colliding black holes.',
+      fr: 'Le 14 septembre 2015, les détecteurs LIGO ont capté pour la première fois le passage d’une onde gravitationnelle née de la fusion de deux trous noirs.'
+    },
+    contentSimple: {
+      ar: 'تخيل سطح بركة ماء هادئة رميت فيها حجرين يدوران حول بعضهما بسرعة جنونية قبل أن يصطدما: ستنتشر في الماء تموجات دائرية متلاحقة. هذا بالضبط ما يحدث في الفضاء! عندما يدور ثقبان أسودان عملاقان أو نجمان نيوترونيان حول بعضهما، فإنهما يشدان نسيج المكان والزمان نفسه ويطلقان تموجات جاذبية تسافر عبر الكون بسرعة الضوء. هذه الموجات لا تحجبها الغبار ولا الكواكب، بل تعبر كل شيء في طريقها، لتصل إلى مراصدنا الأرضية الحساسة للغاية.',
+      en: 'Picture tossing two heavy stones into a tranquil pond that orbit each other rapidly before crashing: waves ripple outward across the liquid sheet. Einstein proved that space and time form a physical fabric. When colossal black holes spiral together at half the speed of light, their violent choreography churns gravitational ripples through the universe. Unlike light, gravitational waves travel unhindered through dense gas and cosmic dust, carrying pristine echoes of the most violent events.',
+      fr: 'L’espace-temps se comporte comme un tissu élastique. La ronde effrénée de deux trous noirs massifs crée des ondes gravitationnelles qui traversent le cosmos à la vitesse de la lumière sans être atténuées par la matière.'
+    },
+    contentAdvanced: {
+      ar: 'تستند مراصد LIGO وVirgo إلى قياس التداخل الليزري الدقيق (Laser Interferometry) بأذرع طولها 4 كيلومترات متعامدة في بيئة مفرغة فائقة النقاء. عند مرور موجة جاذبية، يتمدد أحد الذراعين بمقدار ضئيل للغاية (Strain h ~ 10^-21) وينكمش الآخر، مما يؤدي إلى انزياح نمط التداخل الضوئي لليزر. في حدث GW150914، تحولت كتلة 3 شموس كاملة إلى طاقة نقية من موجات الجاذبية في أجزاء من الثانية (E = mc²)، متجاوزة القدرة الإشعاعية لجميع نجوم الكون المرئي مجتمعة في لحظة الاندماج.',
+      en: 'LIGO utilizes dual perpendicular 4-kilometer fabry-perot vacuum arms. As a quadrupole metric perturbation passes, differential arm length strain (delta L / L ~ 10^-21) shifts the interference fringe pattern of a stabilized Nd:YAG laser. In event GW150914, 3 solar masses of pure gravitational energy were radiated within fractions of a second, briefly outshining the luminous output of all stars in the observable universe.',
+      fr: 'Les interféromètres LIGO et Virgo mesurent des variations de longueur d’un millième de la taille d’un proton sur des bras de 4 km pour détecter la fusion de corps compacts.'
+    },
+    keyFacts: {
+      ar: [
+        'تسافر موجات الجاذبية بدقة مساوية لسرعة الضوء في الفراغ (c)',
+        'أول رصد تاريخي (GW150914) حقق جائزة نوبل في الفيزياء لعام 2017',
+        'تستطيع مراصد الليزر قياس تغير في الطول أصغر من نواة الذرة بآلاف المرات',
+        'رصد تصادم النجوم النيوترونية (GW170817) أثبت أن الذهب والبلاتين يتشكلان في هذه الاندماجات'
+      ],
+      en: [
+        'Gravitational waves propagate through vacuum at exactly the speed of light (c)',
+        'First detection (GW150914) earned the 2017 Nobel Prize in Physics',
+        'Interferometers measure spatial perturbations smaller than a ten-thousandth of a proton',
+        'Neutron star collision GW170817 proved that gold and heavy r-process elements are forged in kilonovae'
+      ],
+      fr: [
+        'Les ondes gravitationnelles se propagent exactement à la vitesse de la lumière',
+        'La détection GW150914 a été couronnée par le prix Nobel de Physique 2017',
+        'Mesure des déformations spatiales mille fois plus petites qu’un proton',
+        'La fusion d’étoiles à neutrons (GW170817) a confirmé la formation d’or et de platine'
+      ]
+    },
+    specs: {
+      speed: '299,792,458 m/s (Speed of Light)',
+      sensitivity: 'Strain h ~ 10^-21',
+      frequency: '10 Hz to 10,000 Hz (Audio Band)',
+      sources: 'Binary Black Holes, Kilonovae, Pulsars'
+    },
+    image: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=1600&auto=format&fit=crop',
+    imageCaption: {
+      ar: 'محاكاة رياضية لالتفاف الزمكان وتشوه الضوء حول ثقبين أسودين مندمجين',
+      en: 'Numerical relativity simulation of spacetime distortion during binary black hole coalescence',
+      fr: 'Simulation en relativité numérique des déformations spatio-temporelles lors de la fusion de trous noirs'
+    },
+    imageCredit: 'LIGO Scientific Collaboration / Caltech / MIT',
+    sources: [
+      { title: 'LIGO Scientific Collaboration: Detection of Gravitational Waves from Binary Black Hole Merger (Phys. Rev. Lett.)', url: 'https://www.ligo.caltech.edu' },
+      { title: 'Virgo Interferometer European Gravitational Observatory' }
+    ],
+    lastUpdated: '2026-04-03',
+    isApproved: true,
+    readingTimeMin: 6,
+    views: 5820,
+    likes: 492
+  },
+  {
+    id: 'jupiter-great-red-spot',
+    title: {
+      ar: 'كوكب المشتري: حارس الأرض العملاق وأعظم إعصار في النظام الشمسي',
+      en: 'Jupiter & The Great Red Spot: Earth’s Colossal Guardian & Supreme Vortex',
+      fr: 'Jupiter et la Grande Tache Rouge : Le Bouclier Géant du Système Solaire'
+    },
+    category: 'solar-system',
+    summary: {
+      ar: 'كوكب يفوق حجمه جميع كواكب النظام الشمسي مجتمعة بمرتين ونصف! كيف تحمي جاذبيته الهائلة كوكب الأرض من المذنبات القاتلة، وما سر الإعصار الأحمر المستعر منذ قرون؟',
+      en: 'More than double the mass of all other planets combined. Explore how Jupiter’s gravity shields Earth from catastrophic cometary impacts and the secrets of its 350-year-old crimson storm.',
+      fr: 'Avec une masse 2,5 fois supérieure à celle de toutes les autres planètes réunies, Jupiter protège la Terre des comètes et abrite un anticyclone tricentenaire.'
+    },
+    introduction: {
+      ar: 'المشتري ليس مجرد كوكب عملاق يدور حول الشمس، بل هو درع جاذبي كوني سُخر في موقعه المداري ليعترض مسار آلاف الكويكبات والمذنبات القادمة من أطراف المجموعة الشمسية، مما وفر للأرض بيئة مستقرة سمحت باستمرار الحياة لمليارات السنين.',
+      en: 'Jupiter acts as our planetary shield. Its enormous gravitational well captures or deflects dangerous comets and asteroids, maintaining the orbital stability required for life to flourish on Earth.',
+      fr: 'Jupiter agit comme un aspirateur gravitationnel qui dévie les astéroïdes et comètes potentiellement destructeurs pour la Terre.'
+    },
+    contentSimple: {
+      ar: 'إذا وضعت كوكب الأرض بجانب المشتري، سيبدو كحبة بازلاء بجانب كرة سلة ضخمة! المشتري يتسع لـ 1,300 كوكب مثل الأرض. لا يملك المشتري سطحاً صلباً لتقف عليه، بل هو كرة عملاقة من غازي الهيدروجين والهيليوم. وأشهر معالمه هي "البقعة الحمراء العظيمة"، وهي إعصار حلزوني هائل بحجم أكبر من كوكب الأرض بأكمله، تهب فيه الرياح بسرعة 680 كم/ساعة ومستمر في الدوران بلا توقف منذ أكثر من 350 سنة.',
+      en: 'Jupiter is so immense that 1,300 Earths could fit inside it. It has no solid surface; plunging into it means descending through thousands of kilometers of turbulent hydrogen and helium atmospheres into metallic liquid hydrogen. Its signature feature, the Great Red Spot, is an anticyclonic storm wider than planet Earth itself, raging relentlessly with winds exceeding 680 km/h for over 350 recorded years.',
+      fr: 'Jupiter pourrait contenir 1 300 Terres. Cette géante gazeuse abrite la Grande Tache Rouge, une tempête anticyclonique plus grande que notre planète entière avec des vents à plus de 680 km/h.'
+    },
+    contentAdvanced: {
+      ar: 'كشفت مسبار جونو (NASA Juno Mission) أن جذور البقعة الحمراء العظيمة تمتد لعمق يزيد عن 300 إلى 500 كيلومتر تحت قمم السحب المرئية. يمتلك المشتري أقوى مجال مغناطيسي كوكبي (أقوى بـ 20,000 مرة من الأرض) يولد أحزمة إشعاعية مدمرة وشفقاً قطبياً مستمراً ناتجاً عن تغذية قمره البركاني النشط "إيو" (Io) بجسيمات الكبريت المتأينة.',
+      en: 'NASA’s Juno spacecraft microwave radiometry confirmed the Great Red Spot extends 300 to 500 km into the interior. Jupiter’s liquid metallic hydrogen mantle generates an immense magnetosphere with a magnetic moment 20,000 times that of Earth, creating lethal radiation belts and permanent aurorae driven by plasma torus coupling with volcanically active moon Io.',
+      fr: 'La sonde Juno a révélé que la Grande Tache Rouge s’enracine à plus de 300 km de profondeur, alimentée par la dynamique thermodynamique du manteau d’hydrogène métallique.'
+    },
+    keyFacts: {
+      ar: [
+        'كتلته تعادل 318 ضعف كتلة الأرض وحجمه يتسع لـ 1,321 كوكباً كالأرض',
+        'يملك 95 قمراً معتمداً، منها قمر غانيميد الأكبر من كوكب عطارد',
+        'يوم المشتري هو الأقصر بين الكواكب: يكمل دورة حول نفسه في 9 ساعات و55 دقيقة',
+        'اصطدام مذنب شوميكر-ليفي 9 به عام 1994 أظهر عملياً دوره كدرع جاذبي للأرض'
+      ],
+      en: [
+        'Mass equals 318 Earths; volume could swallow 1,321 Earths',
+        'Surrounded by 95 recognized moons, including Ganymede which is larger than Mercury',
+        'Fastest planetary rotation: one complete Jupiter day takes just 9 hours and 55 minutes',
+        'The 1994 Shoemaker-Levy 9 comet impact demonstrated its gravitational protector role in real time'
+      ],
+      fr: [
+        'Masse équivalente à 318 Terres ; volume capable de contenir 1 321 Terres',
+        'Possède 95 lunes reconnues, dont Ganymède plus grand que Mercure',
+        'Rotation la plus rapide : un jour jovien ne dure que 9h et 55 minutes',
+        'L’impact de la comète Shoemaker-Levy 9 en 1994 a illustré son rôle de bouclier gravitationnel'
+      ]
+    },
+    specs: {
+      diameter: '139,820 km (11 Earth Diameters)',
+      mass: '1.898 × 10^27 kg (317.8 Earth Masses)',
+      temperature: '-110 °C (Cloud tops) to 24,000 °C (Core)',
+      distance: '778 Million km from Sun (5.2 AU)'
+    },
+    image: 'https://images.unsplash.com/photo-1630839437035-dac17da580d0?q=80&w=1600&auto=format&fit=crop',
+    imageCaption: {
+      ar: 'كوكب المشتري بأحزمته السحابية الدقيقة والبقعة الحمراء العظيمة بعدسة تلسكوب هابل',
+      en: 'Hubble Space Telescope full-disc portrait of Jupiter showing dynamic atmospheric bands and Great Red Spot',
+      fr: 'Portrait haute résolution de Jupiter montrant ses ceintures nuageuses et la Grande Tache Rouge'
+    },
+    imageCredit: 'NASA / ESA / A. Simon (Goddard Space Flight Center) / M.H. Wong (UC Berkeley)',
+    sources: [
+      { title: 'NASA Juno Mission to Jupiter: Science Highlights', url: 'https://www.nasa.gov/mission_pages/juno/main/index.html' },
+      { title: 'Planetary Data System Atmospheres Node' }
+    ],
+    lastUpdated: '2026-04-04',
+    isApproved: true,
+    readingTimeMin: 5,
+    views: 5410,
+    likes: 465
+  },
+  {
+    id: 'exoplanets-habitable-zone',
+    title: {
+      ar: 'الكواكب الخارجية والنطاق الصالح للحياة: البحث عن كواكب شبيهة بالأرض',
+      en: 'Exoplanets & The Goldilocks Zone: In Search of Second Earths',
+      fr: 'Exoplanètes et Zone Habitable : La Quête de Mondes Habitables'
+    },
+    category: 'discoveries',
+    summary: {
+      ar: 'اكتشف علماء الفلك أكثر من 5,600 كوكب تدور حول نجوم أخرى في مجرتنا. ما هو "نطاق المعتدل" (Goldilocks Zone) الذي يسمح بوجود الماء السائل، وهل نحن وحدنا في هذا الكون الفسيح؟',
+      en: 'Over 5,600 confirmed alien worlds beyond our solar system. Discover the habitable Goldilocks zone where liquid water can pool on terrestrial planetary surfaces.',
+      fr: 'Plus de 5 600 exoplanètes confirmées. Explorez la zone boucle d’or propice à l’eau liquide et les biosignatures atmosphériques recherchées par le JWST.'
+    },
+    introduction: {
+      ar: 'حتى عام 1995، لم يكن لدى البشرية أي دليل قطعي على وجود كواكب تدور حول نجوم أخرى شبيهة بالشمس. اليوم، بفضل تلسكوبات كيبلر وتيس وجيمس ويب، نعلم أن مجرتنا تحتوي على كواكب أكثر من عدد النجوم، وأن كل نجم في السماء يستضيف على الأرجح عالماً أو أكثر يدور في فلكه.',
+      en: 'Until 1995, humanity had never confirmed an exoplanet around a sun-like star. Today, Kepler, TESS, and JWST have revealed that planetary systems are the cosmic norm rather than the exception.',
+      fr: 'Depuis la découverte de 51 Pegasi b en 1995, plus de 5 600 planètes extrasolaires ont été cataloguées dans notre galaxie.'
+    },
+    contentSimple: {
+      ar: 'ما الذي يجعل كوكب الأرض مناسباً للحياة بينما كوكب الزهرة حارق وعطارد متجمد؟ السر يكمن في "المسافة المعتدلة" من النجم، والتي يسميها الفلكيون "نطاق غولديلوكس" (Goldilocks Zone): ليس قريباً جداً فيغلي الماء ويتبخر، وليس بعيداً جداً فيتجمد ويتحول إلى جليد صلب. في هذا النطاق السحري يمكن للماء السائل أن يجري في أنهار وبحار ويدعم الحياة. وقد عثر العلماء على عوالم صخرية مدهشة كمنظومة "تراپيست-1" (TRAPPIST-1) التي تضم 7 كواكب أرضية تدور حول نجم قزم قرمزي.',
+      en: 'The recipe for a habitable planet hinges on the Goldilocks zone: the circumstellar orbit where stellar radiation is neither too scorching to boil away oceans nor too freezing to lock them into eternal ice. Liquid water is the universal solvent of biochemistry. Systems like TRAPPIST-1, hosting seven Earth-sized rocky planets orbiting an ultra-cool red dwarf, have become the premier laboratories for studying alien atmospheres.',
+      fr: 'La zone habitable circumstellaire est la distance idéale d’une étoile permettant à l’eau de rester liquide en surface, condition clé de la vie telle que nous la connaissons.'
+    },
+    contentAdvanced: {
+      ar: 'يعتمد تحديد الكواكب الخارجية على تقنيتي العبور الفلكي (Transit Photometry) والسرعة الشعاعية (Radial Velocity / Doppler Wobble). يتيح مطياف تلسكوب جيمس ويب (NIRSpec / MIRI) تحليل أطياف الغلاف الجوي أثناء عبور الكوكب أمام نجمه (Transmission Spectroscopy)، للبحث عن علامات بيولوجية (Biosignatures) مثل بخار الماء وثاني أكسيد الكربون والميثان وثنائي ميثيل الكبريتيد (DMS).',
+      en: 'Exoplanetary atmospheric characterization is performed via transit transmission spectroscopy with JWST NIRSpec and NIRISS. Atmospheric filtration reveals absorption fingerprints of H2O, CO2, CH4, and potential photochemical disequilibrium biosignatures on super-Earths like K2-18 b and the TRAPPIST-1 family.',
+      fr: 'La spectroscopie de transmission permet d’analyser la composition chimique de l’atmosphère des exoplanètes rocheuses à la recherche de biosignatures moléculaires.'
+    },
+    keyFacts: {
+      ar: [
+        'تم تأكيد أكثر من 5,600 كوكب خارجي وتوجد آلاف المرشحات الإضافية قيد المراجعة',
+        'نظام TRAPPIST-1 يضم 7 كواكب صخرية بحجم الأرض، 3 منها تقع بالكامل في النطاق الصالح للحياة',
+        'كوكب بروكسيما سنتوري ب (Proxima Centauri b) هو أقرب كوكب خارجي للأرض ويبعد 4.2 سنة ضوئية',
+        'تلسكوب جيمس ويب قادر على استشعار بخار الماء وغازات الكربون في غلاف الكواكب الخارجية'
+      ],
+      en: [
+        'Over 5,600 confirmed exoplanets catalogued across the Milky Way galaxy',
+        'TRAPPIST-1 hosts 7 terrestrial rocky planets, 3 situated squarely within the habitable zone',
+        'Proxima Centauri b is our closest known exoplanet neighbor, orbiting just 4.24 light-years away',
+        'JWST transmission spectroscopy has successfully detected water vapor, carbon dioxide, and methane on alien worlds'
+      ],
+      fr: [
+        'Plus de 5 600 exoplanètes confirmées dans la Voie Lactée',
+        'Le système TRAPPIST-1 compte 7 planètes rocheuses dont 3 en zone habitable',
+        'Proxima Centauri b est la plus proche exoplanète connue à 4,24 années-lumière',
+        'Le télescope James Webb analyse la vapeur d’eau et les gaz carbonés dans leurs atmosphères'
+      ]
+    },
+    specs: {
+      distance: '4.2 to 28,000 Light-Years',
+      types: 'Super-Earths, Gas Giants, Hot Jupiters, Mini-Neptunes',
+      methods: 'Transit Photometry (75%), Radial Velocity (20%), Direct Imaging',
+      discoveredCount: '5,600+ Confirmed Worlds'
+    },
+    image: 'https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?q=80&w=1600&auto=format&fit=crop',
+    imageCaption: {
+      ar: 'تصور فلكي علمي لكوكب صخري خارجي يدور في النطاق الصالح للحياة لنجم قزم أحمر',
+      en: 'Artist impression of a temperate rocky exoplanet orbiting within the habitable zone of an M-dwarf star',
+      fr: 'Vue d’artiste d’une exoplanète rocheuse tempérée orbitant dans la zone habitable de son étoile'
+    },
+    imageCredit: 'NASA / JPL-Caltech / R. Hurt (IPAC)',
+    sources: [
+      { title: 'NASA Exoplanet Archive (California Institute of Technology)', url: 'https://exoplanetarchive.ipac.caltech.edu' },
+      { title: 'JWST Exoplanet Science Working Group (STScI)' }
+    ],
+    lastUpdated: '2026-04-05',
+    isApproved: true,
+    readingTimeMin: 6,
+    views: 4970,
+    likes: 415
+  },
+  {
+    id: 'cosmic-microwave-background',
+    title: {
+      ar: 'إشعاع الخلفية الكونية الميكروي (CMB): البصمة الحرارية الأولى لنشأة الوجود',
+      en: 'Cosmic Microwave Background (CMB): The Thermal Echo of Cosmic Genesis',
+      fr: 'Fond Diffus Cosmologique (CMB) : L’Écho Thermique du Big Bang'
+    },
+    category: 'cosmology',
+    summary: {
+      ar: 'الضوء الأقدم والأبعد في الكون بأسره: كيف التقط الفلكيون خريطة الشفق الحراري المنبعث بعد 380,000 سنة فقط من بداية الكون بدقة تناهز الميكروكلفن؟',
+      en: 'The oldest light in the cosmos, released 380,000 years after the Big Bang when the universe first became transparent. Discover the fossil radiation that maps our cosmic beginnings.',
+      fr: 'La plus ancienne lumière de l’univers, émise 380 000 ans après le Big Bang lors de la recombinaison primordiale. Découvrez la carte thermique fossile de l’aube cosmique.'
+    },
+    introduction: {
+      ar: 'في عام 1965، كان العالمان أرنو بنزياس وروبرت ويلسون يختبران هوائياً راديوياً فائق الحساسية في مختبرات بيل، فلاحظا ضجيجاً متواصلاً يأتي بالتساوي من كل اتجاه في السماء ليلاً ونهاراً. لم يكن ذلك عطلاً في الجهاز، بل كان صوت همس ولادة الكون نفسه: إشعاع الخلفية الكونية الميكروي.',
+      en: 'In 1965, Arno Penzias and Robert Wilson detected an unyielding radio hum emanating equally from all directions in the celestial sphere. They had serendipitously captured the primordial afterglow of cosmic creation.',
+      fr: 'En 1965, Penzias et Wilson ont découvert un rayonnement fossile isotrope : l’écho électromagnétique direct du Big Bang.'
+    },
+    contentSimple: {
+      ar: 'في البداية، كان الكون عبارة عن حساء بلازمي شديد السخونة والكثافة لا يستطيع الضوء الهروب منه، فالإلكترونات الحرة كانت تصطدم بالفوتونات وتحبسها في الداخل مثل الضباب الكثيف. وبعد 380,000 سنة، برد الكون بما يكفي (حوالي 3,000 درجة مئوية) لتتحد الإلكترونات مع البروتونات وتصنع أولى ذرات الهيدروجين، في حدث يسمى "الانفصال". في تلك اللحظة المجيدة، انقشع الضباب وانطلق الضوء حراً في كل اتجاه! ومع تمدد الكون لـ 13.8 مليار سنة، تمددت تلك الموجات الضوئية وبردت حتى تحولت إلى موجات ميكروية حرارتها 2.73 درجة فوق الصفر المطلق (-270.4 درجة مئوية)، وهي تملأ السماء حولنا في هذه اللحظة.',
+      en: 'For the first 380,000 years, the universe was an opaque fog of ionized plasma trapping photons in relentless collisions. As the infant cosmos expanded and cooled to ~3,000 Kelvin, electrons bound to protons to form neutral hydrogen atoms—an epoch called Recombination. Suddenly, the fog lifted, and primordial light streamed freely across space. Stretched by 13.8 billion years of spatial expansion, these ancient photons now bathe the entire sky as cold microwaves at 2.725 Kelvin above absolute zero.',
+      fr: 'Pendant 380 000 ans, l’univers était opaque. Dès que la température a baissé à 3 000 K, les électrons se sont combinés aux protons : la lumière s’est libérée. Aujourd’hui refroidi à 2,73 K par l’expansion, ce rayonnement remplit tout le ciel.'
+    },
+    contentAdvanced: {
+      ar: 'أظهرت مراصد WMAP وتلسكوب بلانك (Planck Satellite) التابع لوكالة الفضاء الأوروبية تباينات حرارية طفيفة جداً (Anisotropies) في إشعاع الخلفية الكونية الميكروي بمقدار جزء من 100,000 جزء. هذه التموجات المجهرية هي البذور الكمومية الأولى التي نمت تحت تأثير الجاذبية لتصنع كل المجرات والعناقيد والنجوم التي نراها اليوم، مؤكدة صحة نظرية التضخم الكوني (Cosmic Inflation).',
+      en: 'The ESA Planck Surveyor mapped CMB temperature fluctuations down to microkelvin precision. The power spectrum of these acoustic peaks precisely constrains cosmological parameters: the universe is spatially flat to within 0.4%, with an age of 13.787 ± 0.020 billion years, verifying that quantum fluctuations in the inflaton field seeded all macroscopic cosmic structure.',
+      fr: 'La mission spatiale Planck a cartographié les anisotropies thermiques à l’échelle du microkelvin, révélant les fluctuations quantiques primordiales qui ont enfanté les galaxies.'
+    },
+    keyFacts: {
+      ar: [
+        'هو أقدم ضوء مرصود في تاريخ الكون، انطلق بعد 380,000 سنة فقط من البداية',
+        'درجة حرارته الحالية 2.725 كلفن (-270.425 درجة مئوية) وتملأ أرجاء الكون بالتساوي',
+        'التموجات الحرارية الطفيفة فيه (بنسبة 1 إلى 100,000) هي التي نمت لتشكل المجرات والنجوم',
+        'منح هذا الاكتشاف جائزتي نوبل في الفيزياء: لبنزياس وويلسون (1978) ولماثر وسموت (2006)'
+      ],
+      en: [
+        'Oldest electromagnetic radiation in the universe, emitted 380,000 years after cosmic origin',
+        'Current blackbody temperature is 2.725 Kelvin (-270.425 °C), exquisitely isotropic across space',
+        'Microscopic temperature fluctuations (1 part in 100,000) seeded all galaxies and cosmic filaments',
+        'Paved the way for two Nobel Prizes: Penzias & Wilson (1978) and Mather & Smoot (COBE, 2006)'
+      ],
+      fr: [
+        'La plus ancienne lumière de l’univers, émise 380 000 ans après le Big Bang',
+        'Température moyenne de 2,725 Kelvin avec une précision extrême',
+        'Ses infimes fluctuations de température ont engendré les grandes structures cosmiques',
+        'A valu deux prix Nobel de physique (1978 et 2006)'
+      ]
+    },
+    specs: {
+      age: '13.787 Billion Years Old (Emitted at Redshift z ~ 1100)',
+      temperature: '2.7255 ± 0.0006 Kelvin (-270.425 °C)',
+      frequency: 'Peak at 160.2 GHz (Microwave Band)',
+      isotropy: 'Uniform to 1 Part in 100,000'
+    },
+    image: 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?q=80&w=1600&auto=format&fit=crop',
+    imageCaption: {
+      ar: 'خريطة تلسكوب بلانك للإشعاع الكوني الميكروي مظهرة التباينات الحرارية المجهرية الأولى للكون',
+      en: 'The ESA Planck space observatory all-sky temperature map of the cosmic microwave background',
+      fr: 'Carte tout ciel du fond diffus cosmologique dressée par le télescope spatial Planck de l’ESA'
+    },
+    imageCredit: 'ESA and the Planck Collaboration',
+    sources: [
+      { title: 'ESA Planck Mission: Cosmic Microwave Background Overview', url: 'https://www.cosmos.esa.int/web/planck' },
+      { title: 'NASA WMAP Science Team Archive' }
+    ],
+    lastUpdated: '2026-04-06',
+    isApproved: true,
+    readingTimeMin: 6,
+    views: 6150,
+    likes: 530
   }
 ];
 
@@ -1667,6 +2093,98 @@ export const initialGalleryItems: SpaceGalleryItem[] = [
       distance: '7,600 Light-Years',
       constellation: 'Carina'
     }
+  },
+  {
+    id: 'gallery-jwst-deepfield',
+    title: {
+      ar: 'الحقل العميق الأول لتلسكوب جيمس ويب (SMACS 0723)',
+      en: 'JWST First Deep Field (SMACS 0723)',
+      fr: 'Premier Champ Profond de James Webb (SMACS 0723)'
+    },
+    category: 'deep-space',
+    imageUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1600&auto=format&fit=crop',
+    telescope: 'JWST',
+    credit: 'NASA / ESA / CSA / STScI',
+    description: {
+      ar: 'أعمق وأدق صورة بالأشعة تحت الحمراء للكون البعيد حتى الآن، تكشف عن آلاف المجرات بما فيها أجرام تعود لأكثر من 13 مليار سنة مع ظاهرة عدسة الجاذبية المقوسة للمجرات الخلفية.',
+      en: 'The deepest and sharpest infrared view of the early universe yet, exhibiting thousands of galaxies magnified by gravitational lensing.',
+      fr: 'L’image infrarouge la plus lointaine et nette de l’Univers primordial, révélant des milliers de galaxies courbées par lentille gravitationnelle.'
+    },
+    releaseDate: '2022-07-11',
+    specs: {
+      instrument: 'NIRCam / MIRI',
+      distance: '4.6 Billion Light-Years (Cluster lens)',
+      constellation: 'Volans'
+    }
+  },
+  {
+    id: 'gallery-southern-ring',
+    title: {
+      ar: 'سديم الحلقة الجنوبية (NGC 3132)',
+      en: 'Southern Ring Nebula (NGC 3132)',
+      fr: 'Nébuleuse de l’Anneau Austral (NGC 3132)'
+    },
+    category: 'nebula',
+    imageUrl: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=1600&auto=format&fit=crop',
+    telescope: 'JWST',
+    credit: 'NASA / ESA / CSA / STScI',
+    description: {
+      ar: 'سديم كوكبي مذهل ينشأ من طبقات الغاز والغبار التي يلفظها نجم يحتضر، كاشفاً للمرة الأولى عن النجم الثنائي الشريك المحاط بالرماد النجمي.',
+      en: 'A planetary nebula expelled by a dying star, unveiling cloaked stellar companions and expanding shells of illuminated gas.',
+      fr: 'Une nébuleuse planétaire expulsée par une étoile mourante, révélant ses couches de poussière et gaz illuminées.'
+    },
+    releaseDate: '2022-07-12',
+    specs: {
+      instrument: 'NIRCam / MIRI',
+      distance: '2,500 Light-Years',
+      constellation: 'Vela'
+    }
+  },
+  {
+    id: 'gallery-stephans-quintet',
+    title: {
+      ar: 'خماسية ستيفان - رقصة تصادم المجرات (Stephan’s Quintet)',
+      en: 'Stephan’s Quintet - Galactic Collision',
+      fr: 'Le Quintette de Stéphan - Collision Galactique'
+    },
+    category: 'galaxy',
+    imageUrl: 'https://images.unsplash.com/photo-1543722530-d2c3201371e7?q=80&w=1600&auto=format&fit=crop',
+    telescope: 'JWST',
+    credit: 'NASA / ESA / CSA / STScI',
+    description: {
+      ar: 'تجمع شهير من خمس مجرات متجاورة تتدافع بفعل قوى المد الثقالي، مخلفة ذيولاً هائلة من الغاز ومناطق ولادة نجمية عاتية وموجات صدمة متوهجة.',
+      en: 'A compact galaxy group undergoing dramatic gravitational tides, shockwaves, and tidal starburst tails.',
+      fr: 'Un groupe compact de cinq galaxies en interaction gravitationnelle violente créant des ondes de choc colossales.'
+    },
+    releaseDate: '2022-07-12',
+    specs: {
+      instrument: 'NIRCam / MIRI',
+      distance: '290 Million Light-Years',
+      constellation: 'Pegasus'
+    }
+  },
+  {
+    id: 'gallery-horsehead',
+    title: {
+      ar: 'سديم رأس الحصان المظلم (Barnard 33)',
+      en: 'Horsehead Nebula (Barnard 33)',
+      fr: 'Nébuleuse de la Tête de Cheval'
+    },
+    category: 'nebula',
+    imageUrl: 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?q=80&w=1600&auto=format&fit=crop',
+    telescope: 'Euclid / Hubble',
+    credit: 'ESA / NASA / Euclid Consortium',
+    description: {
+      ar: 'سديم امتصاصي مظلم يبرز كعمود مهيب من الغاز الكثيف والغبار على خلفية الهيدروجين المتأين الوردي المتوهج في كوكبة الجبار.',
+      en: 'A famed dark absorption nebula silhouetted against glowing ionized red hydrogen gas in the constellation Orion.',
+      fr: 'Une célèbre nébuleuse obscure se découpant en ombre chinoise sur un rideau d’hydrogène ionisé dans Orion.'
+    },
+    releaseDate: '2023-11-07',
+    specs: {
+      instrument: 'VIS / NISP',
+      distance: '1,375 Light-Years',
+      constellation: 'Orion'
+    }
   }
 ];
 
@@ -1758,11 +2276,233 @@ export const initialQuizQuestions: QuizQuestion[] = [
       fr: 'Le fer est forgé au cœur d’étoiles massives avant d’être projeté dans l’espace par des explosions de supernovae.'
     },
     scientificReference: 'Nuclear Astrophysics & Stellar Nucleosynthesis (B²FH)'
+  },
+  {
+    id: 'quiz-andromeda-distance',
+    category: 'cosmic-distances',
+    difficulty: 'medium',
+    question: {
+      ar: 'ما هي أقرب مجرة حلزونية عملاقة لمجرتنا درب التبانة وكم تبعد عنا تقريباً؟',
+      en: 'What is the closest major spiral galaxy to our Milky Way and its approximate distance?',
+      fr: 'Quelle est la galaxie spirale géante la plus proche de la Voie lactée et sa distance ?'
+    },
+    options: {
+      ar: [
+        'مجرة أندروميدا (المرأة المسلسلة M31) - تبعد حوالي 2.5 مليون سنة ضوئية',
+        'مجرة المثلث (M33) - تبعد 500 ألف سنة ضوئية',
+        'مجرة قبعة المكسيك (Sombrero) - تبعد 29 مليون سنة ضوئية',
+        'سحابة ماجلان الكبرى - تبعد 10 ملايين سنة ضوئية'
+      ],
+      en: [
+        'Andromeda Galaxy (M31) - ~2.5 million light-years away',
+        'Triangulum Galaxy (M33) - ~500,000 light-years away',
+        'Sombrero Galaxy (M104) - ~29 million light-years away',
+        'Large Magellanic Cloud - ~10 million light-years away'
+      ],
+      fr: [
+        'Galaxie d’Andromède (M31) - environ 2,5 millions d’années-lumière',
+        'Galaxie du Triangle (M33) - 500 000 années-lumière',
+        'Galaxie du Sombrero - 29 millions d’années-lumière',
+        'Grand Nuage de Magellan - 10 millions d’années-lumière'
+      ]
+    },
+    correctIndex: 0,
+    explanation: {
+      ar: 'مجرة أندروميدا (M31) هي أضخم مجرة في مجموعتنا المحلية، تبعد عنا نحو 2.537 مليون سنة ضوئية، وتتحرك باتجاه درب التبانة بسرعة تقارب 110 كم/ثانية.',
+      en: 'Andromeda Galaxy (M31) is the largest member of our Local Group, lying roughly 2.5 million light-years away and approaching our galaxy at ~110 km/s.',
+      fr: 'Andromède (M31) est la plus grande galaxie de notre Groupe Local, située à environ 2,5 millions d’années-lumière.'
+    },
+    scientificReference: 'NASA Extragalactic Database (NED) / Riess et al.'
+  },
+  {
+    id: 'quiz-solar-fusion',
+    category: 'stellar-physics',
+    difficulty: 'easy',
+    question: {
+      ar: 'ما هو التفاعل الفيزيائي المسؤول عن توليد الطاقة والنور في قلب شمسنا؟',
+      en: 'What primary physical reaction powers the Sun and generates its immense radiant energy?',
+      fr: 'Quelle réaction physique alimente le Soleil et engendre son immense énergie ?'
+    },
+    options: {
+      ar: [
+        'الاحتراق الكيميائي لغاز الميثان والأكسجين',
+        'الاندماج النووي لبروتونات الهيدروجين لتكوين الهيليوم (سلسلة p-p)',
+        'الانشطار النووي لعنصر اليورانيوم المشع',
+        'الاحتكاك الميكانيكي للرياح المغناطيسية الشمسية'
+      ],
+      en: [
+        'Chemical combustion of methane and oxygen gas',
+        'Nuclear fusion of hydrogen protons into helium (p-p chain)',
+        'Radioactive nuclear fission of uranium isotopes',
+        'Mechanical friction from magnetic solar winds'
+      ],
+      fr: [
+        'Combustion chimique de méthane et d’oxygène',
+        'Fusion nucléaire de l’hydrogène en hélium (chaîne p-p)',
+        'Fission nucléaire d’isotopes d’uranium',
+        'Frottement mécanique des vents magnétiques solaires'
+      ]
+    },
+    correctIndex: 1,
+    explanation: {
+      ar: 'في باطن الشمس عند درجة حرارة 15 مليون كلفن وضغط مهول، تندمج 600 مليون طن من الهيدروجين في كل ثانية لتتحول إلى هيليوم، متحولة الكتلة المفقودة إلى طاقة وفق معادلة آينشتاين E=mc².',
+      en: 'In the solar core at ~15 million K, 600 million tons of hydrogen are fused into helium every second, converting mass deficit directly into pure photon energy via E=mc².',
+      fr: 'Au cœur du Soleil à 15 millions de K, 600 millions de tonnes d’hydrogène fusionnent en hélium chaque seconde, libérant de l’énergie selon E=mc².'
+    },
+    scientificReference: 'Hans Bethe (Nobel Prize in Physics 1967) - Stellar Nucleosynthesis'
+  },
+  {
+    id: 'quiz-neutron-star-density',
+    category: 'stellar-physics',
+    difficulty: 'hard',
+    question: {
+      ar: 'كم تزن ملعقة شاي واحدة صغيرة من مادة نجم نيتروني فائق الكثافة (الطارق)؟',
+      en: 'What is the approximate mass of a single teaspoon of neutron star matter on Earth?',
+      fr: 'Quelle est la masse approximative d’une cuillère à café de matière d’étoile à neutrons sur Terre ?'
+    },
+    options: {
+      ar: [
+        'حوالي 10 كيلوغرامات (وزن حقيبة سفر)',
+        'حوالي 5 أطنان (وزن شاحنة متوسطة)',
+        'حوالي مليار إلى عدة مليارات طن (ما يعادل كتلة جبل إفرست بالكامل)',
+        'لا وزن لها لأن النجوم النيترونية معدومة الكتلة'
+      ],
+      en: [
+        'Around 10 kilograms (a travel suitcase)',
+        'Around 5 metric tons (a medium truck)',
+        'Around 1 to several billion tons (equivalent to Mount Everest)',
+        'Zero weight as neutron stars have negligible mass'
+      ],
+      fr: [
+        'Environ 10 kilogrammes',
+        'Environ 5 tonnes',
+        'Environ 1 à plusieurs milliards de tonnes (équivalent au mont Everest)',
+        'Poids nul'
+      ]
+    },
+    correctIndex: 2,
+    explanation: {
+      ar: 'تُسحق الذرات تحت الجاذبية الفائقة لتتحد الإلكترونات مع البروتونات مكونة نيوترونات صافية، فتصل الكثافة إلى نحو 10¹⁴ غرام/سم³، مما يجعل ملعقة واحدة تعادل كتلة جبل شاهق.',
+      en: 'Due to colossal gravitational collapse, subatomic spaces collapse completely into pure nuclear density (~10¹⁴ g/cm³), packing mountain-scale mass into cubic centimeters.',
+      fr: 'La matière est si comprimée que les électrons et protons fusionnent en neutrons, atteignant une densité telle qu’une cuillère équivaut à la masse d’une montagne.'
+    },
+    scientificReference: 'Astrophysical Journal / Shapiro & Teukolsky: Black Holes, White Dwarfs, and Neutron Stars'
+  },
+  {
+    id: 'quiz-hubble-expansion',
+    category: 'cosmic-distances',
+    difficulty: 'medium',
+    question: {
+      ar: 'ما هو الاكتشاف الكوني الحاسم الذي توصل إليه إدوين هابل وجورج لومتر وأثبت تمدد الكون؟',
+      en: 'What pivotal discovery by Edwin Hubble and Georges Lemaître proved the universe is actively expanding?',
+      fr: 'Quelle découverte majeure d’Edwin Hubble et Georges Lemaître a prouvé l’expansion de l’Univers ?'
+    },
+    options: {
+      ar: [
+        'انزياح أطياف ضوء المجرات البعيدة نحو الأحمر (Redshift) المتناسب طردياً مع بعدها',
+        'ثبات مواقع النجوم في مدارات دائمة لا تتغير',
+        'انكماش حجم مجرتنا نحو الثقب الأسود المركزي',
+        'تساقط النجوم نحو أطراف الكون'
+      ],
+      en: [
+        'Cosmological redshift of galactic spectra proportional to their distance (Hubble’s Law)',
+        'Static equilibrium of all celestial bodies in eternal positions',
+        'Milky Way collapsing rapidly into its central black hole',
+        'Stars falling outwards beyond the boundaries of cosmic space'
+      ],
+      fr: [
+        'Le décalage vers le rouge (redshift) des galaxies lointaines proportionnel à leur distance',
+        'L’immobilité éternelle des galaxies',
+        'L’effondrement de notre galaxie',
+        'La chute des étoiles en bordure de l’espace'
+      ]
+    },
+    correctIndex: 0,
+    explanation: {
+      ar: 'أظهر تحليل أطياف المجرات أن خطوط الامتصاص منزاحة نحو الطرف الأحمر من الطيف الضوئي، مما يدل على تمدد نسيج الفضاء نفسه وتباعد المجرات عن بعضها، مصداقاً لقوله تعالى: ﴿وَالسَّمَاءَ بَنَيْنَاهَا بِأَيْدٍ وَإِنَّا لَمُوسِعُونَ﴾.',
+      en: 'Hubble demonstrated that light from receding galaxies stretches toward longer red wavelengths due to the expansion of spacetime itself, validating the non-static universe.',
+      fr: 'L’analyse spectrale a montré que les galaxies s’éloignent les unes des autres par étirement de l’espace-temps, provoquant le décalage vers le rouge.'
+    },
+    scientificReference: 'Edwin Hubble (1929) Proc. Natl. Acad. Sci. & Quran 51:47'
+  },
+  {
+    id: 'quiz-jwst-lagrange',
+    category: 'telescopes-missions',
+    difficulty: 'medium',
+    question: {
+      ar: 'أين يقع تلسكوب الفضاء جيمس ويب (JWST) لضمان حمايته من حرارة وإشعاع الأرض والشمس؟',
+      en: 'Where is the James Webb Space Telescope stationed to shield its infrared detectors from thermal radiation?',
+      fr: 'Où est positionné le télescope spatial James Webb pour protéger ses détecteurs infrarouges ?'
+    },
+    options: {
+      ar: [
+        'في المدار الأرضي المنخفض على ارتفاع 500 كم مثل هابل',
+        'عند نقطة لاغرانج الثانية (L2) لنظام الشمس-الأرض على بعد 1.5 مليون كم خلف الأرض',
+        'في مدار حول كوكب المريخ',
+        'فوق القطب الجنوبي للقمر مباشرة'
+      ],
+      en: [
+        'Low Earth Orbit (LEO) at 500 km altitude like Hubble',
+        'Second Sun-Earth Lagrange point (L2), roughly 1.5 million km behind Earth',
+        'In orbit around the planet Mars',
+        'Directly above the lunar South Pole'
+      ],
+      fr: [
+        'En orbite terrestre basse à 500 km comme Hubble',
+        'Au point de Lagrange Soleil-Terre L2, à 1,5 million de km derrière la Terre',
+        'En orbite autour de la planète Mars',
+        'Au-dessus du pôle Sud lunaire'
+      ]
+    },
+    correctIndex: 1,
+    explanation: {
+      ar: 'تتيح نقطة L2 لتلسكوب جيمس ويب البقاء في وضع متوازن جاذبياً مع توجيه درعه الشمسي خماسي الطبقات دائماً نحو الشمس والأرض والقمر، مما يحافظ على برودة مرايا وأجهزة الأشعة تحت الحمراء عند نحو 40 كلفن (-233°م).',
+      en: 'Lagrange point L2 keeps the Sun, Earth, and Moon always behind its 5-layer sunshield, allowing the observatory to passively cool down to cryogenic temperatures (~40 K) necessary for infrared observation.',
+      fr: 'Le point L2 permet au pare-soleil à 5 couches de bloquer en permanence le rayonnement du Soleil, de la Terre et de la Lune, maintenant les instruments à -233°C.'
+    },
+    scientificReference: 'NASA Goddard Space Flight Center - JWST Orbit & L2 insertion'
+  },
+  {
+    id: 'quiz-exoplanet-transit',
+    category: 'telescopes-missions',
+    difficulty: 'easy',
+    question: {
+      ar: 'ما هي الطريقة الفلكية الأكثر فاعلية التي استخدمها تلسكوب كبلر لاكتشاف آلاف الكواكب خارج المجموعة الشمسية؟',
+      en: 'What observational method did NASA’s Kepler mission predominantly use to detect thousands of exoplanets?',
+      fr: 'Quelle méthode d’observation la mission Kepler a-t-elle principalement utilisée pour détecter des milliers d’exoplanètes ?'
+    },
+    options: {
+      ar: [
+        'طريقة العبور الضوئي (Transit Photometry) برصد الخفوت الدوري الطفيف لنور النجم المستضيف',
+        'إرسال مسابير فضائية مدارية إلى كل نجم',
+        'التقاط صور فوتوغرافية مباشرة بسطح كل كوكب عبر عدسة مكبرة',
+        'التنصت على الإشارات الراديوية الصادرة من الغلاف الجوي للكوكب'
+      ],
+      en: [
+        'Transit Photometry, measuring microscopic dips in stellar brightness as a planet passes in front',
+        'Dispatching physical robotic probes directly to each alien star system',
+        'Direct optical magnification of surface details with ground spyglasses',
+        'Eavesdropping on alien atmospheric radio transmissions'
+      ],
+      fr: [
+        'La photométrie de transit, mesurant la baisse périodique de luminosité de l’étoile lors du passage de la planète',
+        'L’envoi de sondes robotiques vers chaque étoile',
+        'La photographie directe de surface au télescope',
+        'L’écoute de signaux radio atmosphériques'
+      ]
+    },
+    correctIndex: 0,
+    explanation: {
+      ar: 'عندما يعبر كوكب أمام قرص نجمه بالنسبة لخط رؤيتنا، يحجب جزءاً ضئيلاً من ضوء النجم (أقل من 1%) بشكل دوري متكرر، مما يسمح بحساب حجم الكوكب وفترة مداره ومسافته بدقة بالغة.',
+      en: 'When an exoplanet transits across its host star’s disk, it blocks a minute fraction of starlight (often <1%), revealing its orbital period, radius, and atmospheric characteristics.',
+      fr: 'Lorsqu’une planète passe devant son étoile, elle bloque une infime fraction de sa lumière, révélant sa taille et sa période orbitale.'
+    },
+    scientificReference: 'NASA Exoplanet Archive & Kepler Mission Science'
   }
 ];
 
 export const initialStats: SiteStatistics = {
-  articlesCount: 5,
+  articlesCount: 11,
   totalViews: 23250,
   quizzesTaken: 1840,
   geminiGenerationsCount: 620,

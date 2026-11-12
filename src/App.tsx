@@ -43,6 +43,7 @@ export default function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [showAllHomeArticles, setShowAllHomeArticles] = useState(false);
   const [quotaExceeded, setQuotaExceeded] = useState(false);
+  const [virtualSubTab, setVirtualSubTab] = useState<'all' | 'solar-system' | 'scale' | 'light-calc' | 'comparator'>('all');
 
   const t = translations[language];
   const isRtl = language === 'ar';
@@ -59,6 +60,35 @@ export default function App() {
     window.addEventListener('gmp-quota-exceeded', handleQuota);
     return () => window.removeEventListener('gmp-quota-exceeded', handleQuota);
   }, []);
+
+  // Check URL query parameters on load to open shared article if present
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const sharedArticleId = params.get('article');
+    if (sharedArticleId) {
+      const target = articles.find((a) => a.id === sharedArticleId);
+      if (target) {
+        setActiveArticleModal(target);
+      }
+    }
+  }, [articles]);
+
+  // Keep URL query parameter synchronized with active article modal
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const url = new URL(window.location.href);
+      if (activeArticleModal) {
+        url.searchParams.set('article', activeArticleModal.id);
+      } else {
+        url.searchParams.delete('article');
+      }
+      window.history.replaceState({}, '', url.toString());
+    } catch {
+      // Ignore URL state errors
+    }
+  }, [activeArticleModal]);
 
   const handleSelectCategory = (cat: string) => {
     setSelectedCategory(cat as any);
@@ -466,8 +496,8 @@ export default function App() {
 
         {/* VIEW 3: VIRTUAL JOURNEYS & TOOLS */}
         {currentTab === 'virtual-journeys' && (
-          <div className="space-y-16">
-            <div className="text-center max-w-2xl mx-auto space-y-2 mb-8">
+          <div className="space-y-12">
+            <div className="text-center max-w-2xl mx-auto space-y-3">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-xs font-bold">
                 <Orbit className="w-3.5 h-3.5" />
                 <span>{t.sections['virtual-journeys']}</span>
@@ -475,19 +505,86 @@ export default function App() {
               <h1 className="text-3xl sm:text-4xl font-black text-white">
                 {language === 'ar' ? 'الرحلات الافتراضية ومقاييس الكون' : 'Virtual Space Journeys & Cosmic Scales'}
               </h1>
+              <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto">
+                {language === 'ar'
+                  ? 'مجموعة متكاملة من 4 محاكيات تفاعلية ثلاثية الأبعاد وحواسب فلكية دقيقة لمقارنة الأجرام وسرعة الضوء'
+                  : 'Suite of 4 interactive 3D simulators and precision calculators for cosmic scales, light speed, and planetary sizes'}
+              </p>
+            </div>
+
+            {/* Sub-navigation switcher */}
+            <div className="flex items-center justify-center flex-wrap gap-2 p-1.5 bg-slate-900/80 backdrop-blur-xl border border-cyan-900/40 rounded-2xl max-w-4xl mx-auto">
+              <button
+                onClick={() => setVirtualSubTab('all')}
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                  virtualSubTab === 'all'
+                    ? 'bg-gradient-to-r from-cyan-600 to-indigo-600 text-white shadow-md shadow-cyan-500/20'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                }`}
+              >
+                {language === 'ar' ? 'عرض جميع المحاكيات' : 'Show All'}
+              </button>
+              <button
+                onClick={() => setVirtualSubTab('solar-system')}
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                  virtualSubTab === 'solar-system'
+                    ? 'bg-gradient-to-r from-cyan-600 to-indigo-600 text-white shadow-md shadow-cyan-500/20'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                }`}
+              >
+                {language === 'ar' ? '1. المجموعة الشمسية 3D' : '1. 3D Solar System'}
+              </button>
+              <button
+                onClick={() => setVirtualSubTab('scale')}
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                  virtualSubTab === 'scale'
+                    ? 'bg-gradient-to-r from-cyan-600 to-indigo-600 text-white shadow-md shadow-cyan-500/20'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                }`}
+              >
+                {language === 'ar' ? '2. مقاييس الكون التفاعلية' : '2. Cosmic Scales'}
+              </button>
+              <button
+                onClick={() => setVirtualSubTab('light-calc')}
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                  virtualSubTab === 'light-calc'
+                    ? 'bg-gradient-to-r from-cyan-600 to-indigo-600 text-white shadow-md shadow-cyan-500/20'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                }`}
+              >
+                {language === 'ar' ? '3. حاسبة رحلة الضوء' : '3. Light Travel Calc'}
+              </button>
+              <button
+                onClick={() => setVirtualSubTab('comparator')}
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                  virtualSubTab === 'comparator'
+                    ? 'bg-gradient-to-r from-cyan-600 to-indigo-600 text-white shadow-md shadow-cyan-500/20'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                }`}
+              >
+                {language === 'ar' ? '4. مقارنة أحجام وأوزان الأجرام' : '4. Celestial Comparator'}
+              </button>
             </div>
 
             {/* 1. Solar System Simulator */}
-            <VirtualSolarSystem language={language} />
+            {(virtualSubTab === 'all' || virtualSubTab === 'solar-system') && (
+              <VirtualSolarSystem language={language} />
+            )}
 
             {/* 2. Cosmic Scale Explorer */}
-            <CosmicScaleExplorer language={language} />
+            {(virtualSubTab === 'all' || virtualSubTab === 'scale') && (
+              <CosmicScaleExplorer language={language} />
+            )}
 
             {/* 3. Light Travel Calculator */}
-            <LightTravelCalculator language={language} />
+            {(virtualSubTab === 'all' || virtualSubTab === 'light-calc') && (
+              <LightTravelCalculator language={language} />
+            )}
 
             {/* 4. Celestial Comparator */}
-            <CelestialComparator language={language} />
+            {(virtualSubTab === 'all' || virtualSubTab === 'comparator') && (
+              <CelestialComparator language={language} />
+            )}
           </div>
         )}
 

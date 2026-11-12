@@ -7,7 +7,10 @@ export type CosmicCategory =
   | 'black-holes'
   | 'nebulae'
   | 'cosmic-distances'
+  | 'cosmology'
   | 'cosmology-origin'
+  | 'stellar-physics'
+  | 'telescopes-missions'
   | 'virtual-journeys'
   | 'discoveries'
   | 'quran-cosmos'
@@ -36,6 +39,13 @@ export interface CelestialSpecs {
   orbitalPeriod?: string;
   speed?: string;
   discoveryYear?: string;
+  sensitivity?: string;
+  types?: string;
+  frequency?: string;
+  sources?: string;
+  methods?: string;
+  isotropy?: string;
+  [key: string]: string | undefined;
 }
 
 export interface ScientificArticle {
@@ -110,9 +120,9 @@ export interface CelestialBody {
 export interface SpaceGalleryItem {
   id: string;
   title: LocalizedString;
-  category: 'galaxy' | 'nebula' | 'star-cluster' | 'planet' | 'black-hole' | 'telescope';
+  category: 'galaxy' | 'nebula' | 'star-cluster' | 'planet' | 'black-hole' | 'telescope' | 'deep-space';
   imageUrl: string;
-  telescope: 'JWST' | 'Hubble' | 'Chandra' | 'ESO / VLT' | 'Event Horizon Telescope';
+  telescope: 'JWST' | 'Hubble' | 'Chandra' | 'ESO / VLT' | 'Event Horizon Telescope' | 'Euclid / Hubble' | 'Euclid' | string;
   credit: string;
   description: LocalizedString;
   releaseDate: string;

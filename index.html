@@ -3,6 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      // Gracefully prevent sandbox iframe WebSocket connection errors from interrupting execution
+      window.addEventListener('unhandledrejection', function(e) {
+        if (e && e.reason && (
+          (e.reason.message && e.reason.message.includes('WebSocket')) ||
+          (typeof e.reason === 'string' && e.reason.includes('WebSocket'))
+        )) {
+          e.preventDefault();
+        }
+      });
+    </script>
     <title>COSMIC DISCOVERY – اكتشف أسرار الكون | المنصة الكونية والمعرفة العلمية</title>
     <meta name="description" content="منصة علمية وإيمانية متطورة متخصصة في علم الفلك والكون والمجرات والنجوم وربطها بالآيات القرآنية الكريمة ومحرك الذكاء الاصطناعي." />
     <meta property="og:title" content="COSMIC DISCOVERY – اكتشف أسرار الكون | المنصة الكونية والمعرفة العلمية" />
