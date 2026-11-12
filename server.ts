@@ -668,11 +668,21 @@ app.get('/api/quran/warsh-search', (req: Request, res: Response) => {
 });
 
 /**
+ * Robots.txt endpoint allowing search & Google AdSense crawlers
+ */
+app.get('/robots.txt', (_req: Request, res: Response) => {
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=86400');
+  res.status(200).send("User-agent: *\nAllow: /\n\nUser-agent: Mediapartners-Google\nAllow: /\n\nUser-agent: Google-AdSense-Bot\nAllow: /\n");
+});
+
+/**
  * Google AdSense ads.txt verification endpoint
  */
 app.get('/ads.txt', (_req: Request, res: Response) => {
   const pubId = (process.env.VITE_GOOGLE_ADSENSE_CLIENT_ID || 'ca-pub-7807016100432800').replace(/^ca-/, '');
   res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=3600');
   res.status(200).send(`google.com, ${pubId}, DIRECT, f08c47fec0942fa0\n`);
 });
 
