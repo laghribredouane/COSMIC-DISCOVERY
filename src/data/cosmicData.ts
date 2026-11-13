@@ -2505,7 +2505,6 @@ export const initialStats: SiteStatistics = {
   articlesCount: 11,
   totalViews: 23250,
   quizzesTaken: 1840,
-  geminiGenerationsCount: 620,
   activeLearners: 1250
 };
 

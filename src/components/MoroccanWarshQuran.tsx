@@ -814,82 +814,142 @@ export const MoroccanWarshQuran: React.FC<MoroccanWarshQuranProps> = ({ language
           </div>
         )}
 
-        {/* Audio Player Bar */}
-        <div className="mt-6 pt-5 border-t border-emerald-800/50 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 bg-slate-950/75 p-4 rounded-2xl border border-amber-500/25">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-3 flex-1">
-            <div className="flex items-center gap-2 text-amber-300 font-bold text-xs shrink-0">
-              <Volume2 className="w-4 h-4 text-amber-400" />
-              <span>
-                {language === 'ar' ? 'القارئ (برواية ورش):' : 'Moroccan Warsh Reciter:'}
+        {/* Audio Player Bar with Reciter Portrait Thumbnail & Quick Reciter Strip */}
+        <div className="mt-6 pt-5 border-t border-emerald-800/50 bg-slate-950/75 p-4 sm:p-5 rounded-2xl border border-amber-500/25 space-y-4">
+          <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3.5 flex-1">
+              {/* Active Reciter Portrait Thumbnail */}
+              <div className="flex items-center gap-3 shrink-0">
+                <div
+                  className={`relative w-14 h-14 rounded-2xl p-[2px] bg-gradient-to-br from-amber-400 via-yellow-500 to-emerald-500 shadow-lg transition-all ${
+                    isPlayingAudio ? 'ring-2 ring-emerald-400/70 shadow-emerald-500/30' : 'shadow-amber-500/20'
+                  }`}
+                >
+                  <img
+                    src={activeReciter.avatarUrl}
+                    alt={activeReciter.name[language] || activeReciter.name.ar}
+                    className="w-full h-full rounded-[14px] object-cover bg-slate-900"
+                  />
+                  {isPlayingAudio && (
+                    <span className="absolute -bottom-1 -end-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-slate-950 animate-pulse" />
+                  )}
+                </div>
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-1.5 text-amber-300 font-bold text-xs">
+                    <Volume2 className="w-3.5 h-3.5 text-amber-400" />
+                    <span>
+                      {language === 'ar' ? 'القارئ (برواية ورش):' : 'Moroccan Warsh Reciter:'}
+                    </span>
+                  </div>
+                  <span className="text-sm font-black text-white mt-0.5">
+                    {activeReciter.name[language] || activeReciter.name.ar}
+                  </span>
+                </div>
+              </div>
+
+              <select
+                value={selectedReciterId}
+                onChange={(e) => setSelectedReciterId(e.target.value)}
+                aria-label="Select Moroccan Warsh Reciter"
+                className="rounded-xl bg-slate-900 border border-amber-500/40 px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-amber-400"
+              >
+                {MOROCCAN_WARSH_RECITERS.map((reciter) => (
+                  <option key={reciter.id} value={reciter.id}>
+                    {reciter.name[language]} — {reciter.country[language]}
+                  </option>
+                ))}
+              </select>
+
+              <span className="text-[11px] text-slate-400 hidden xl:inline">
+                {activeReciter.title[language]}
               </span>
             </div>
 
-            <select
-              value={selectedReciterId}
-              onChange={(e) => setSelectedReciterId(e.target.value)}
-              aria-label="Select Moroccan Warsh Reciter"
-              className="rounded-xl bg-slate-900 border border-amber-500/40 px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-amber-400"
-            >
-              {MOROCCAN_WARSH_RECITERS.map((reciter) => (
-                <option key={reciter.id} value={reciter.id}>
-                  {reciter.name[language]} — {reciter.country[language]}
-                </option>
-              ))}
-            </select>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={togglePlayAudio}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/20 transition-all cursor-pointer shrink-0"
+              >
+                {isPlayingAudio ? (
+                  <>
+                    <Pause className="w-4 h-4" />
+                    <span>
+                      {language === 'ar'
+                        ? `إيقاف تلاوة سورة ${activeSurahMeta.nameAr}`
+                        : `Pause Surah ${activeSurahMeta.nameEn}`}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-4 h-4" />
+                    <span>
+                      {language === 'ar'
+                        ? `الاستماع لسورة ${activeSurahMeta.nameAr}`
+                        : `Listen to Surah ${activeSurahMeta.nameEn}`}
+                    </span>
+                  </>
+                )}
+              </button>
 
-            <span className="text-[11px] text-slate-400 hidden xl:inline">
-              {activeReciter.title[language]}
-            </span>
+              <div className="text-xs font-mono text-amber-200 bg-slate-900 px-3 py-2 rounded-xl border border-slate-800 shrink-0">
+                {formatSeconds(audioProgress)} / {formatSeconds(audioDuration)}
+              </div>
+
+              <audio
+                ref={audioRef}
+                src={audioStreamUrl}
+                preload="none"
+                onTimeUpdate={() => {
+                  if (audioRef.current) setAudioProgress(audioRef.current.currentTime);
+                }}
+                onLoadedMetadata={() => {
+                  if (audioRef.current) setAudioDuration(audioRef.current.duration);
+                }}
+                onEnded={() => {
+                  setIsPlayingAudio(false);
+                  if (selectedSurahNumber < 114) {
+                    handleSelectSurahFromIndex(selectedSurahNumber + 1);
+                  }
+                }}
+              />
+            </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={togglePlayAudio}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/20 transition-all cursor-pointer shrink-0"
-            >
-              {isPlayingAudio ? (
-                <>
-                  <Pause className="w-4 h-4" />
-                  <span>
-                    {language === 'ar'
-                      ? `إيقاف تلاوة سورة ${activeSurahMeta.nameAr}`
-                      : `Pause Surah ${activeSurahMeta.nameEn}`}
-                  </span>
-                </>
-              ) : (
-                <>
-                  <Play className="w-4 h-4" />
-                  <span>
-                    {language === 'ar'
-                      ? `الاستماع لسورة ${activeSurahMeta.nameAr}`
-                      : `Listen to Surah ${activeSurahMeta.nameEn}`}
-                  </span>
-                </>
-              )}
-            </button>
-
-            <div className="text-xs font-mono text-amber-200 bg-slate-900 px-3 py-2 rounded-xl border border-slate-800 shrink-0">
-              {formatSeconds(audioProgress)} / {formatSeconds(audioDuration)}
-            </div>
-
-            <audio
-              ref={audioRef}
-              src={audioStreamUrl}
-              preload="none"
-              onTimeUpdate={() => {
-                if (audioRef.current) setAudioProgress(audioRef.current.currentTime);
-              }}
-              onLoadedMetadata={() => {
-                if (audioRef.current) setAudioDuration(audioRef.current.duration);
-              }}
-              onEnded={() => {
-                setIsPlayingAudio(false);
-                if (selectedSurahNumber < 114) {
-                  handleSelectSurahFromIndex(selectedSurahNumber + 1);
-                }
-              }}
-            />
+          {/* Interactive Reciters Thumbnail Selector Strip */}
+          <div className="pt-3 border-t border-slate-800/80 flex items-center gap-2.5 overflow-x-auto pb-1">
+            {MOROCCAN_WARSH_RECITERS.map((reciter) => {
+              const isSelected = reciter.id === selectedReciterId;
+              return (
+                <button
+                  key={reciter.id}
+                  type="button"
+                  onClick={() => setSelectedReciterId(reciter.id)}
+                  className={`flex items-center gap-2.5 px-3 py-2 rounded-2xl border text-start transition-all shrink-0 cursor-pointer ${
+                    isSelected
+                      ? 'bg-gradient-to-r from-amber-500/20 to-emerald-500/15 border-amber-400 text-white shadow-md shadow-amber-500/10'
+                      : 'bg-slate-900/80 border-slate-800 text-slate-300 hover:bg-slate-800/90 hover:border-amber-500/40'
+                  }`}
+                >
+                  <img
+                    src={reciter.avatarUrl}
+                    alt={reciter.name[language] || reciter.name.ar}
+                    className={`w-9 h-9 rounded-xl object-cover shrink-0 border ${
+                      isSelected ? 'border-amber-400' : 'border-slate-700'
+                    }`}
+                    loading="lazy"
+                  />
+                  <div className="min-w-0">
+                    <div className={`text-xs font-bold whitespace-nowrap ${isSelected ? 'text-amber-300' : 'text-slate-200'}`}>
+                      {reciter.name[language] || reciter.name.ar}
+                    </div>
+                    <div className="text-[10px] text-slate-400 whitespace-nowrap">
+                      {reciter.country[language] || reciter.country.ar}
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>

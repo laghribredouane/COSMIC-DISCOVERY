@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, Orbit, BrainCircuit, ArrowRight, ArrowLeft, RefreshCw, Star, Layers, ShieldCheck } from 'lucide-react';
+import { Sparkles, Orbit, ArrowRight, ArrowLeft, RefreshCw, Star, Layers, ShieldCheck } from 'lucide-react';
 import { Language, SiteStatistics } from '../types/cosmic';
 import { translations } from '../i18n/translations';
 
@@ -8,7 +8,6 @@ interface HeroSectionProps {
   stats: SiteStatistics;
   onExplore: () => void;
   onLaunchVirtual: () => void;
-  onOpenAi: () => void;
   onSelectCategory: (cat: string) => void;
 }
 
@@ -17,7 +16,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   stats,
   onExplore,
   onLaunchVirtual,
-  onOpenAi,
   onSelectCategory,
 }) => {
   const t = translations[language];
@@ -99,14 +97,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           >
             <Orbit className="w-5 h-5 text-cyan-400" />
             <span>{t.btnVirtualFlight}</span>
-          </button>
-
-          <button
-            onClick={onOpenAi}
-            className="flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-amber-300 hover:text-amber-200 font-bold text-base border border-amber-800/40 shadow-lg hover:-translate-y-0.5 transition-all backdrop-blur-md"
-          >
-            <BrainCircuit className="w-5 h-5 text-amber-400" />
-            <span>{t.btnAiScholar}</span>
           </button>
         </div>
 

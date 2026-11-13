@@ -6,7 +6,6 @@ import {
   Sparkles,
   Orbit,
   Image,
-  BrainCircuit,
   HelpCircle,
   Shield,
   Globe,
@@ -50,8 +49,8 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'events', label: t.navEvents, icon: Calendar, badge: '2026' },
     { id: 'virtual-journeys', label: t.navVirtualJourney, icon: Orbit, badge: '3D' },
     { id: 'quran-cosmos', label: t.navQuranCosmos, icon: BookOpen, badge: 'ورش' },
+    { id: 'national-radios', label: t.navNationalRadios, icon: Radio, badge: '24 إذاعة' },
     { id: 'gallery', label: t.navGallery, icon: Image, badge: 'JWST' },
-    { id: 'gemini-lab', label: t.navGeminiLab, icon: BrainCircuit, badge: 'AI' },
     { id: 'quiz', label: t.navQuiz, icon: HelpCircle, badge: 'تحدي' },
   ];
 
@@ -321,7 +320,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       {mobileMenuOpen && (
         <div className="xl:hidden border-t border-cyan-950/50 bg-[#080d1e]/98 px-4 pt-3 pb-6 space-y-1 backdrop-blur-2xl max-h-[80vh] overflow-y-auto">
           <div className="px-3 py-1.5 text-[11px] font-bold text-cyan-400 uppercase tracking-wider">
-            {language === 'ar' ? 'المسارات التسعة الرئيسية' : '9 Primary Pathways'}
+            {language === 'ar' ? 'المسارات الرئيسية' : 'Primary Pathways'}
           </div>
 
           <button

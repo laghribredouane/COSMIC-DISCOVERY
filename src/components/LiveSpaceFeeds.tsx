@@ -32,6 +32,7 @@ interface LiveStreamChannel {
   agency: 'NASA' | 'ESA' | 'International';
   description: { ar: string; en: string; fr: string };
   embedUrl: string;
+  backupEmbedUrl: string;
   officialUrl: string;
   category: 'earth-view' | 'tv-broadcast' | 'mission-control';
   resolution: string;
@@ -42,13 +43,24 @@ interface LiveStreamChannel {
   }[];
 }
 
+interface DynamicStreamUrls {
+  nasaIssEarth?: string;
+  nasaTvLive?: string;
+  esaWebTv?: string;
+  issSen4k?: string;
+  nasaJplMars?: string;
+}
+
 export const LiveSpaceFeeds: React.FC<LiveSpaceFeedsProps> = ({ language }) => {
   const [feeds, setFeeds] = useState<SpaceMissionFeed[]>(initialSpaceFeeds);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [filterAgency, setFilterAgency] = useState<string>('all');
   const [filterType, setFilterType] = useState<string>('all');
-  
+  const [dynamicStreams, setDynamicStreams] = useState<DynamicStreamUrls>({});
+  const [useBackupFeed, setUseBackupFeed] = useState<boolean>(false);
+  const [playerReloadKey, setPlayerReloadKey] = useState<number>(0);
+
   // Real-time ISS telemetry
   const [issPosition, setIssPosition] = useState<{ latitude: string; longitude: string }>({
     latitude: '24.8124',
@@ -59,7 +71,7 @@ export const LiveSpaceFeeds: React.FC<LiveSpaceFeedsProps> = ({ language }) => {
   const [activeStreamId, setActiveStreamId] = useState<string>('nasa-iss-earth');
   const [isCinemaMode, setIsCinemaMode] = useState<boolean>(false);
 
-  // Curated Official Live Video Streams from NASA and ESA
+  // Curated Official Live Video Streams from NASA and ESA (dynamically refreshed by /api/space-feeds)
   const liveStreams: LiveStreamChannel[] = [
     {
       id: 'nasa-iss-earth',
@@ -74,11 +86,12 @@ export const LiveSpaceFeeds: React.FC<LiveSpaceFeedsProps> = ({ language }) => {
         en: 'Continuous 24/7 live video stream of Earth from external high-definition cameras on the International Space Station traveling at 27,600 km/h.',
         fr: 'Diffusion continue 24/7 de la Terre depuis les caméras HD de la Station Spatiale Internationale orbitant à 27 600 km/h.'
       },
-      embedUrl: 'https://www.youtube-nocookie.com/embed/P9C25Un7xaM?autoplay=0&mute=1&rel=0',
-      officialUrl: 'https://www.nasa.gov/live',
+      embedUrl: dynamicStreams.nasaIssEarth || 'https://www.youtube.com/embed/ROboUHfPUrU?autoplay=0&mute=1&rel=0',
+      backupEmbedUrl: 'https://www.youtube.com/embed/videoseries?list=PL2aBZuCeDwlQMf6xMgQAUAY_nbHAgW5jz&rel=0',
+      officialUrl: 'https://www.nasa.gov/live/',
       category: 'earth-view',
       resolution: '1080p HD • 60fps',
-      badge: { ar: 'بث الأرض المباشر', en: 'Live Earth Cam', fr: 'Direct Terre HD' },
+      badge: { ar: 'بث الأرض المباشر (ISS)', en: 'Live Earth Cam', fr: 'Direct Terre HD' },
       metrics: [
         { label: { ar: 'الارتفاع المداري', en: 'Orbital Altitude', fr: 'Altitude' }, value: '~418 km' },
         { label: { ar: 'السرعة المدارية', en: 'Speed', fr: 'Vitesse' }, value: '27,600 km/h' },
@@ -88,45 +101,47 @@ export const LiveSpaceFeeds: React.FC<LiveSpaceFeedsProps> = ({ language }) => {
     {
       id: 'nasa-tv-public',
       title: {
-        ar: 'قناة NASA TV الرسمية - البث الفضائي الحي والمؤتمرات',
-        en: 'NASA TV Official Live Broadcast Channel',
-        fr: 'NASA TV : Chaîne Officielle de Diffusion en Direct'
+        ar: 'قناة NASA الرسمية - البث الفضائي الحي والمؤتمرات',
+        en: 'NASA Official Live Broadcast & Mission Stream',
+        fr: 'NASA : Diffusion Officielle en Direct'
       },
       agency: 'NASA',
       description: {
-        ar: 'القناة الرسمية لوكالة الفضاء الأمريكية لنقل عمليات إطلاق الصواريخ، والسير في الفضاء، والتغطيات الإخبارية والعلمية المباشرة.',
-        en: 'NASA’s official 24/7 broadcast channel covering rocket launches, astronaut spacewalks, live science briefings, and deep-space milestones.',
-        fr: 'La chaîne de télévision officielle de la NASA couvrant les lancements, les sorties extravéhiculaires et l’actualité spatiale.'
+        ar: 'القناة الرسمية لوكالة الفضاء الأمريكية لنقل البث الفضائي المباشر، وعمليات إطلاق الصواريخ، والسير في الفضاء، والتغطيات العلمية.',
+        en: 'NASA’s official live broadcast stream covering International Space Station operations, rocket launches, spacewalks, and science briefings.',
+        fr: 'Le flux officiel en direct de la NASA couvrant l’ISS, les lancements de fusées, les sorties extravéhiculaires et les conférences scientifiques.'
       },
-      embedUrl: 'https://www.youtube-nocookie.com/embed/21X5lGlDOfg?autoplay=0&mute=1&rel=0',
-      officialUrl: 'https://plus.nasa.gov',
+      embedUrl: dynamicStreams.nasaTvLive || 'https://www.youtube.com/embed/M3HKLzjvKPc?autoplay=0&mute=1&rel=0',
+      backupEmbedUrl: 'https://www.youtube.com/embed/videoseries?list=UULA_DiR1FfKNvjuUpBHmylQ&rel=0',
+      officialUrl: 'https://plus.nasa.gov/',
       category: 'tv-broadcast',
-      resolution: '1080p HD • 60fps',
+      resolution: '1080p HD • Live',
       badge: { ar: 'قناة ناسا الرسمية', en: 'NASA TV Live', fr: 'NASA TV Direct' },
       metrics: [
         { label: { ar: 'نوع البث', en: 'Broadcast Type', fr: 'Type' }, value: '24/7 Live Stream' },
         { label: { ar: 'التغطية', en: 'Coverage', fr: 'Couverture' }, value: 'Artemis, ISS, JWST' },
-        { label: { ar: 'المصدر', en: 'Source', fr: 'Source' }, value: 'NASA Headquarters' }
+        { label: { ar: 'المصدر', en: 'Source', fr: 'Source' }, value: 'NASA / NASA+' }
       ]
     },
     {
       id: 'esa-web-tv',
       title: {
         ar: 'بث وكالة الفضاء الأوروبية المباشر (ESA Web TV)',
-        en: 'ESA Web TV - European Space Agency Live Operations',
-        fr: 'ESA Web TV : Opérations et Lancements de l’Agence Spatiale Européenne'
+        en: 'ESA Web TV - European Space Agency Live Channel',
+        fr: 'ESA Web TV : Chaîne en Direct de l’Agence Spatiale Européenne'
       },
       agency: 'ESA',
       description: {
-        ar: 'البث الحي لوكالة الفضاء الأوروبية لتغطية عمليات الإطلاق (أريان وفيغا)، ومهمات مراقبة الأرض وسنتينل، ومسابر الفضاء البعيد كـ Euclid و Juice.',
-        en: 'Live streaming from the European Space Agency covering Ariane/Vega launches from Kourou, Earth observation, and deep-space spacecraft.',
-        fr: 'Diffusion en direct de l’ESA couvrant les lancements Ariane/Vega depuis Kourou, les satellites Sentinel et les sondes Juice & Euclid.'
+        ar: 'البث الحي الرسمي لقناة ESA Web TV لتغطية عمليات الإطلاق، ومهمات مراقبة الأرض وسنتينل، ومسابر الفضاء البعيد كـ Euclid و Juice.',
+        en: 'Official ESA Web TV live channel covering Ariane/Vega launches from Kourou, Earth observation, and deep-space missions such as Euclid & Juice.',
+        fr: 'Chaîne officielle en direct ESA Web TV couvrant les lancements Ariane/Vega depuis Kourou, Copernicus et les sondes Juice & Euclid.'
       },
-      embedUrl: 'https://www.youtube-nocookie.com/embed/videoseries?list=PLbyvawxScNbs8xH0R8sXJcO2nC5P24l_Y&autoplay=0&mute=1&rel=0',
-      officialUrl: 'https://www.esa.int/ESA_Multimedia/ESA_Web_TV',
+      embedUrl: dynamicStreams.esaWebTv || 'https://player.vimeo.com/video/1244361795?title=0&byline=0&portrait=0&autopause=0&player_id=0&app_id=207236&muted=1',
+      backupEmbedUrl: 'https://www.youtube.com/embed/videoseries?list=UUIBaDdAbGlFDeS33shmlD0A&rel=0',
+      officialUrl: 'https://watch.esa.int/',
       category: 'mission-control',
-      resolution: '1080p HD',
-      badge: { ar: 'وكالة الفضاء الأوروبية', en: 'ESA Live', fr: 'ESA Direct' },
+      resolution: '1080p HD • ESA Web TV',
+      badge: { ar: 'وكالة الفضاء الأوروبية', en: 'ESA Web TV', fr: 'ESA Web TV' },
       metrics: [
         { label: { ar: 'مركز العمليات', en: 'Operations Center', fr: 'Centre' }, value: 'ESOC (Darmstadt)' },
         { label: { ar: 'قاعدة الإطلاق', en: 'Spaceport', fr: 'Base' }, value: 'CSG Kourou, French Guiana' },
@@ -134,32 +149,59 @@ export const LiveSpaceFeeds: React.FC<LiveSpaceFeedsProps> = ({ language }) => {
       ]
     },
     {
+      id: 'iss-sen-4k',
+      title: {
+        ar: 'بث الأرض المباشر بدقة 4K من محطة الفضاء الدولية',
+        en: 'Live 4K Video of Earth from Space (ISS 4K Cameras)',
+        fr: 'Direct Vidéo 4K de la Terre depuis l’Espace (ISS)'
+      },
+      agency: 'International',
+      description: {
+        ar: 'بث مباشر متواصل بدقة 4K فائقة الوضوح للأفق الأرضي والغلاف الجوي والسحب والمدن من كاميرات الفضاء على متن المحطة الدولية.',
+        en: 'Continuous ultra-high-definition 4K live livestream of Earth’s horizon, weather systems, and auroras from space cameras aboard the ISS.',
+        fr: 'Diffusion continue 4K ultra-haute définition de la Terre, des formations nuageuses et de l’horizon spatial depuis la station ISS.'
+      },
+      embedUrl: dynamicStreams.issSen4k || 'https://www.youtube.com/embed/fO9e9jnhYK8?autoplay=0&mute=1&rel=0',
+      backupEmbedUrl: 'https://www.youtube.com/embed/ROboUHfPUrU?autoplay=0&mute=1&rel=0',
+      officialUrl: 'https://www.nasa.gov/international-space-station/',
+      category: 'earth-view',
+      resolution: '4K UHD • Live',
+      badge: { ar: 'بث 4K من المدار', en: '4K Space Live', fr: 'Direct 4K Orbite' },
+      metrics: [
+        { label: { ar: 'الدقة البصرية', en: 'Resolution', fr: 'Résolution' }, value: '4K Ultra HD' },
+        { label: { ar: 'المدار', en: 'Orbit', fr: 'Orbite' }, value: 'LEO (~415 km)' },
+        { label: { ar: 'البث', en: 'Feed Status', fr: 'Statut' }, value: '24/7 Live Stream' }
+      ]
+    },
+    {
       id: 'nasa-perseverance-mars',
       title: {
-        ar: 'تغطية مسبار بيرسيفيرنس المباشرة من المريخ (NASA JPL)',
-        en: 'Mars Perseverance Rover Live Feed & Mission Control',
-        fr: 'Rover Perseverance sur Mars : Flux Direct & Contrôle de Mission'
+        ar: 'تغطية مسبار بيرسيفيرنس ومهمات المريخ (NASA JPL)',
+        en: 'Mars Perseverance Rover & JPL Mission Dispatches',
+        fr: 'Rover Perseverance sur Mars & Flux NASA JPL'
       },
       agency: 'NASA',
       description: {
-        ar: 'تغطية مستمرة لأحدث الصور والبيانات الراديوية الواردة من فوهة جيزيرو على كوكب المريخ عبر شبكة الفضاء السحيق (DSN).',
-        en: 'Telemetry dispatches and live raw camera archive feeds transmitted from Jezero Crater delta via the Deep Space Network.',
-        fr: 'Dépêches télémétriques et flux de transmission brute depuis le cratère Jezero sur Mars relayés par le Deep Space Network.'
+        ar: 'تغطية رسمية متواصلة من مختبر الدفع النفاث (NASA JPL) لمشاهد هبوط ومهام مسبار بيرسيفيرنس ومروحية إنجينويتي في فوهة جيزيرو على المريخ.',
+        en: 'Official NASA JPL multi-angle telemetry and mission broadcasts from Perseverance Rover in Jezero Crater on Mars.',
+        fr: 'Diffusions officielles NASA JPL et séquences de mission du rover Perseverance dans le cratère Jezero sur Mars.'
       },
-      embedUrl: 'https://www.youtube-nocookie.com/embed/nA9UZF-SZoQ?autoplay=0&mute=1&rel=0',
+      embedUrl: dynamicStreams.nasaJplMars || 'https://www.youtube.com/embed/videoseries?list=PLTiv_XWHnOZqut4YY0yVlPIRLeoqub_EJ&rel=0',
+      backupEmbedUrl: 'https://www.youtube.com/embed/videoseries?list=UUryGec9PdUCLjpJW2mgCuLw&rel=0',
       officialUrl: 'https://mars.nasa.gov/mars2020/',
       category: 'mission-control',
-      resolution: '1080p Stream',
-      badge: { ar: 'مهمة المريخ', en: 'Mars 2020 Live', fr: 'Mission Mars 2020' },
+      resolution: '1080p Official JPL',
+      badge: { ar: 'مهمة المريخ JPL', en: 'Mars JPL Feed', fr: 'Mission Mars JPL' },
       metrics: [
-        { label: { ar: 'الموقع', en: 'Location', fr: 'Lieu' }, value: 'Jezero Delta, Mars' },
+        { label: { ar: 'الموقع', en: 'Location', fr: 'Lieu' }, value: 'Jezero Crater, Mars' },
         { label: { ar: 'تأخير الإشارة الضوئية', en: 'Signal Delay', fr: 'Délai Radio' }, value: '~12.5 minutes' },
-        { label: { ar: 'يوم مريخي', en: 'Martian Sol', fr: 'Sol' }, value: 'Sol 1324+' }
+        { label: { ar: 'الجهة المشغلة', en: 'Operator', fr: 'Opérateur' }, value: 'NASA JPL' }
       ]
     }
   ];
 
   const currentStream = liveStreams.find((s) => s.id === activeStreamId) || liveStreams[0];
+  const activeEmbedUrl = useBackupFeed ? currentStream.backupEmbedUrl : currentStream.embedUrl;
 
   const fetchLiveFeeds = async () => {
     setIsLoading(true);
@@ -175,6 +217,9 @@ export const LiveSpaceFeeds: React.FC<LiveSpaceFeedsProps> = ({ language }) => {
           if (data.liveIss) {
             setIssPosition(data.liveIss);
           }
+          if (data.streams && typeof data.streams === 'object') {
+            setDynamicStreams(data.streams);
+          }
           if (data.feeds && Array.isArray(data.feeds)) {
             setFeeds(data.feeds);
           }
@@ -182,7 +227,7 @@ export const LiveSpaceFeeds: React.FC<LiveSpaceFeedsProps> = ({ language }) => {
         }
       }
     } catch {
-      // Fallback stays on initialSpaceFeeds
+      // Fallback stays on verified default streams & initialSpaceFeeds
     } finally {
       setIsLoading(false);
     }
@@ -224,7 +269,12 @@ export const LiveSpaceFeeds: React.FC<LiveSpaceFeedsProps> = ({ language }) => {
       latitude: 'خط العرض:',
       longitude: 'خط الطول:',
       cinemaMode: 'وضع الشاشة السينمائي',
-      cinemaModeExit: 'العودة للوضع العادي'
+      cinemaModeExit: 'العودة للوضع العادي',
+      reloadPlayer: 'إعادة تحميل البث',
+      backupSource: 'مصدر بديل',
+      primarySource: 'البث الأساسي',
+      officialFeedLabel: 'بث رسمي معتمد',
+      operationalLabel: 'متصل ويعمل بكفاءة'
     },
     en: {
       title: 'NASA & ESA Live Space Streams & Telemetry',
@@ -249,7 +299,12 @@ export const LiveSpaceFeeds: React.FC<LiveSpaceFeedsProps> = ({ language }) => {
       latitude: 'Latitude:',
       longitude: 'Longitude:',
       cinemaMode: 'Cinema Theater Mode',
-      cinemaModeExit: 'Exit Theater Mode'
+      cinemaModeExit: 'Exit Theater Mode',
+      reloadPlayer: 'Reload Stream',
+      backupSource: 'Backup Feed',
+      primarySource: 'Primary Live',
+      officialFeedLabel: 'Official Feed',
+      operationalLabel: '100% Operational'
     },
     fr: {
       title: 'Diffusions en Direct NASA & ESA et Télémétrie',
@@ -274,7 +329,12 @@ export const LiveSpaceFeeds: React.FC<LiveSpaceFeedsProps> = ({ language }) => {
       latitude: 'Latitude :',
       longitude: 'Longitude :',
       cinemaMode: 'Mode Cinéma Plein Écran',
-      cinemaModeExit: 'Quitter le Mode Cinéma'
+      cinemaModeExit: 'Quitter le Mode Cinéma',
+      reloadPlayer: 'Recharger le lecteur',
+      backupSource: 'Flux de secours',
+      primarySource: 'Flux principal',
+      officialFeedLabel: 'Flux Officiel',
+      operationalLabel: '100% Opérationnel'
     }
   };
 
@@ -312,9 +372,9 @@ export const LiveSpaceFeeds: React.FC<LiveSpaceFeedsProps> = ({ language }) => {
               <span>{t.refreshBtn}</span>
             </button>
             <div className="text-[11px] text-slate-400">
-              {language === 'ar' ? 'آخر مزامنة:' : 'Last Synced:'}{' '}
+              {language === 'ar' ? 'آخر مزامنة:' : language === 'fr' ? 'Dernière synchro :' : 'Last Synced:'}{' '}
               <span className="text-cyan-300 font-medium">
-                {lastUpdated.toLocaleTimeString(language === 'ar' ? 'ar-EG' : 'en-US')}
+                {lastUpdated.toLocaleTimeString(language === 'ar' ? 'ar-EG' : language === 'fr' ? 'fr-FR' : 'en-US')}
               </span>
             </div>
           </div>
@@ -331,8 +391,8 @@ export const LiveSpaceFeeds: React.FC<LiveSpaceFeedsProps> = ({ language }) => {
           </div>
           <div className="flex items-center gap-4 text-slate-400 text-[11px]">
             <span>🚀 27,600 km/h</span>
-            <span>🛰️ ~418 km Altitude</span>
-            <span>⏱️ 92.68 min Orbit</span>
+            <span>🛰️ ~418 km {language === 'ar' ? 'الارتفاع' : language === 'fr' ? 'Altitude' : 'Altitude'}</span>
+            <span>⏱️ 92.68 min {language === 'ar' ? 'الدورة المدارية' : language === 'fr' ? 'Orbite' : 'Orbit'}</span>
           </div>
         </div>
       </div>
@@ -353,7 +413,25 @@ export const LiveSpaceFeeds: React.FC<LiveSpaceFeedsProps> = ({ language }) => {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={() => setPlayerReloadKey((k) => k + 1)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 hover:bg-slate-800 text-xs font-semibold text-slate-300 transition-colors"
+            >
+              <RefreshCw className="w-3.5 h-3.5 text-emerald-400" />
+              <span>{t.reloadPlayer}</span>
+            </button>
+            <button
+              onClick={() => setUseBackupFeed((v) => !v)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-colors ${
+                useBackupFeed
+                  ? 'bg-amber-950/70 border-amber-500/50 text-amber-300'
+                  : 'bg-slate-900 border-slate-700 hover:bg-slate-800 text-slate-300'
+              }`}
+            >
+              <Layers className="w-3.5 h-3.5 text-amber-400" />
+              <span>{useBackupFeed ? t.primarySource : t.backupSource}</span>
+            </button>
             <button
               onClick={() => setIsCinemaMode(!isCinemaMode)}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 hover:bg-slate-800 text-xs font-semibold text-slate-300 transition-colors"
@@ -380,7 +458,10 @@ export const LiveSpaceFeeds: React.FC<LiveSpaceFeedsProps> = ({ language }) => {
             return (
               <button
                 key={stream.id}
-                onClick={() => setActiveStreamId(stream.id)}
+                onClick={() => {
+                  setActiveStreamId(stream.id);
+                  setUseBackupFeed(false);
+                }}
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap transition-all border shrink-0 ${
                   isSelected
                     ? 'bg-gradient-to-r from-red-600 to-rose-600 text-white border-red-400 shadow-lg shadow-red-500/25 scale-[1.02]'
@@ -405,12 +486,13 @@ export const LiveSpaceFeeds: React.FC<LiveSpaceFeedsProps> = ({ language }) => {
             <div className={`${isCinemaMode ? 'lg:col-span-12' : 'lg:col-span-8'} bg-black relative`}>
               <div className="relative aspect-video w-full bg-slate-950 overflow-hidden">
                 <iframe
-                  src={currentStream.embedUrl}
+                  key={`${currentStream.id}-${useBackupFeed ? 'backup' : 'primary'}-${playerReloadKey}`}
+                  src={activeEmbedUrl}
                   title={currentStream.title[language] || currentStream.title.en}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                  referrerPolicy="strict-origin-when-cross-origin"
                   allowFullScreen
                   className="w-full h-full border-0 absolute inset-0"
-                  loading="lazy"
                 />
 
                 {/* Overlaid Live Tag */}
@@ -432,11 +514,11 @@ export const LiveSpaceFeeds: React.FC<LiveSpaceFeedsProps> = ({ language }) => {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between gap-2">
                     <span className="px-2.5 py-1 rounded-lg text-xs font-black bg-indigo-950 border border-indigo-500/40 text-indigo-300">
-                      {currentStream.agency} Official Feed
+                      {currentStream.agency} • {t.officialFeedLabel}
                     </span>
                     <span className="text-xs text-emerald-400 font-semibold flex items-center gap-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                      100% Operational
+                      {t.operationalLabel}
                     </span>
                   </div>
 
@@ -453,7 +535,7 @@ export const LiveSpaceFeeds: React.FC<LiveSpaceFeedsProps> = ({ language }) => {
                   <div className="space-y-2 pt-2">
                     <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
                       <Gauge className="w-3.5 h-3.5 text-cyan-400" />
-                      <span>{language === 'ar' ? 'بيانات البث الميدانية:' : 'Live Stream Telemetry:'}</span>
+                      <span>{language === 'ar' ? 'بيانات البث الميدانية:' : language === 'fr' ? 'Télémétrie du flux :' : 'Live Stream Telemetry:'}</span>
                     </div>
                     <div className="grid grid-cols-1 gap-2">
                       {currentStream.metrics.map((m, idx) => (

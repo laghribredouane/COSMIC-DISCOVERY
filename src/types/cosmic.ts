@@ -65,7 +65,6 @@ export interface ScientificArticle {
   relatedQuranVerseId?: string;
   lastUpdated: string;
   isApproved: boolean;
-  isGeminiGenerated?: boolean;
   readingTimeMin: number;
   views: number;
   likes: number;
@@ -244,7 +243,6 @@ export interface SiteStatistics {
   articlesCount: number;
   totalViews: number;
   quizzesTaken: number;
-  geminiGenerationsCount: number;
   activeLearners: number;
 }
 

@@ -74,13 +74,13 @@ export const Footer: React.FC<FooterProps> = ({ language, onSelectTab }) => {
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectTab('gallery')} className="hover:text-cyan-300 transition-colors">
-                  {t.navGallery}
+                <button onClick={() => onSelectTab('national-radios')} className="hover:text-cyan-300 transition-colors">
+                  {t.navNationalRadios}
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectTab('gemini-lab')} className="hover:text-cyan-300 transition-colors">
-                  {t.navGeminiLab}
+                <button onClick={() => onSelectTab('gallery')} className="hover:text-cyan-300 transition-colors">
+                  {t.navGallery}
                 </button>
               </li>
               <li>

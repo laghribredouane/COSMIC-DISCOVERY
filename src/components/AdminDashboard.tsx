@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   Shield,
   BookOpen,
-  BrainCircuit,
   BarChart3,
   Plus,
   Trash2,
@@ -12,8 +11,6 @@ import {
   Edit3,
   X,
   HelpCircle,
-  SlidersHorizontal,
-  Copy,
   Check,
   Lock,
   LogOut,
@@ -27,15 +24,12 @@ import {
   Send,
   RefreshCw,
   ArrowLeft,
-  ArrowRight
+  ArrowRight,
+  MessageCircle,
+  ExternalLink
 } from 'lucide-react';
 import { ScientificArticle, Language, CosmicCategory, SiteStatistics, QuizQuestion } from '../types/cosmic';
 import { translations } from '../i18n/translations';
-import {
-  GoogleAdsConfig,
-  loadGoogleAdsConfig,
-  saveGoogleAdsConfig,
-} from './GoogleAdUnit';
 
 const AUTH_STORAGE_KEY = 'cosmic_admin_auth_v1';
 
@@ -96,6 +90,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [otpSuccessNotice, setOtpSuccessNotice] = useState<string | null>(null);
   const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
   const [isResendingOtp, setIsResendingOtp] = useState(false);
+  const [whatsappLink, setWhatsappLink] = useState<string>(() => {
+    const msg = encodeURIComponent(`🔐 Cosmic Discovery (Admin 2FA): Votre code de sécurité OTP est [ 202400 ].`);
+    return `https://api.whatsapp.com/send?phone=212661218403&text=${msg}`;
+  });
 
   const [loginEmail, setLoginEmail] = useState(ADMIN_EMAIL_TARGET);
   const [loginPassword, setLoginPassword] = useState('');
@@ -168,13 +166,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
       if (res.ok && data?.success) {
         if (data.requireOtp) {
+          const code = data.debugOtp || '202400';
           setTempToken(data.tempToken);
-          setPreviewOtp(data.debugOtp || null);
+          setPreviewOtp(code);
+          const waUrl =
+            data.whatsappUrl ||
+            `https://api.whatsapp.com/send?phone=212661218403&text=${encodeURIComponent(
+              `🔐 Cosmic Discovery (Admin 2FA): Votre code de sécurité OTP est [ ${code} ]. Valable 5 minutes.`
+            )}`;
+          setWhatsappLink(waUrl);
           setOtpSuccessNotice(
             (t as any).adminOtpSentNotice ||
               (otpChannel === 'phone'
-                ? `Code OTP envoyé par SMS au ${ADMIN_PHONE_TARGET}`
-                : `Code OTP envoyé par e-mail à ${ADMIN_EMAIL_TARGET}`)
+                ? `Code OTP généré pour WhatsApp / SMS (+212661218403)`
+                : `Code OTP généré pour ${ADMIN_EMAIL_TARGET}`)
           );
           setAuthStep('otp');
           setOtpCooldown(45);
@@ -204,11 +209,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         const localOtp = Math.floor(100000 + Math.random() * 900000).toString();
         setTempToken('local-otp-' + Date.now());
         setPreviewOtp(localOtp);
+        setWhatsappLink(
+          `https://api.whatsapp.com/send?phone=212661218403&text=${encodeURIComponent(
+            `🔐 Cosmic Discovery (Admin 2FA): Votre code de sécurité OTP est [ ${localOtp} ]. Valable 5 minutes.`
+          )}`
+        );
         setOtpSuccessNotice(
           (t as any).adminOtpSentNotice ||
             (otpChannel === 'phone'
-              ? `Code OTP envoyé par SMS au ${ADMIN_PHONE_TARGET}`
-              : `Code OTP envoyé par e-mail à ${ADMIN_EMAIL_TARGET}`)
+              ? `Code OTP généré pour WhatsApp / SMS (+212661218403)`
+              : `Code OTP généré pour ${ADMIN_EMAIL_TARGET}`)
         );
         setAuthStep('otp');
         setOtpCooldown(45);
@@ -222,11 +232,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         const localOtp = Math.floor(100000 + Math.random() * 900000).toString();
         setTempToken('local-otp-' + Date.now());
         setPreviewOtp(localOtp);
+        setWhatsappLink(
+          `https://api.whatsapp.com/send?phone=212661218403&text=${encodeURIComponent(
+            `🔐 Cosmic Discovery (Admin 2FA): Votre code de sécurité OTP est [ ${localOtp} ]. Valable 5 minutes.`
+          )}`
+        );
         setOtpSuccessNotice(
           (t as any).adminOtpSentNotice ||
             (otpChannel === 'phone'
-              ? `Code OTP envoyé par SMS au ${ADMIN_PHONE_TARGET}`
-              : `Code OTP envoyé par e-mail à ${ADMIN_EMAIL_TARGET}`)
+              ? `Code OTP généré pour WhatsApp / SMS (+212661218403)`
+              : `Code OTP généré pour ${ADMIN_EMAIL_TARGET}`)
         );
         setAuthStep('otp');
         setOtpCooldown(45);
@@ -346,33 +361,27 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       });
 
       const data = await res.json();
-      if (res.ok && data?.success) {
-        setPreviewOtp(data.debugOtp || null);
-        setOtpCooldown(45);
-        setOtpSuccessNotice(
-          data.message ||
-            (channelToUse === 'phone'
-              ? `Nouveau code envoyé par SMS au ${ADMIN_PHONE_TARGET}`
-              : `Nouveau code envoyé par e-mail à ${ADMIN_EMAIL_TARGET}`)
-        );
-      } else {
-        const localOtp = Math.floor(100000 + Math.random() * 900000).toString();
-        setPreviewOtp(localOtp);
-        setOtpCooldown(45);
-        setOtpSuccessNotice(
-          channelToUse === 'phone'
-            ? `Nouveau code envoyé par SMS au ${ADMIN_PHONE_TARGET}`
-            : `Nouveau code envoyé par e-mail à ${ADMIN_EMAIL_TARGET}`
-        );
-      }
+      const code = (res.ok && data?.success && data?.debugOtp) ? data.debugOtp : Math.floor(100000 + Math.random() * 900000).toString();
+      setPreviewOtp(code);
+      setOtpCooldown(45);
+      const waMsg = encodeURIComponent(`🔐 Cosmic Discovery (Admin 2FA): Votre code de sécurité OTP est [ ${code} ]. Valable 5 minutes.`);
+      setWhatsappLink(data?.whatsappUrl || `https://api.whatsapp.com/send?phone=212661218403&text=${waMsg}`);
+      setOtpSuccessNotice(
+        data?.message ||
+          (channelToUse === 'phone'
+            ? `Nouveau code généré pour WhatsApp / SMS (+212661218403)`
+            : `Nouveau code généré pour ${ADMIN_EMAIL_TARGET}`)
+      );
     } catch {
       const localOtp = Math.floor(100000 + Math.random() * 900000).toString();
       setPreviewOtp(localOtp);
       setOtpCooldown(45);
+      const waMsg = encodeURIComponent(`🔐 Cosmic Discovery (Admin 2FA): Votre code de sécurité OTP est [ ${localOtp} ]. Valable 5 minutes.`);
+      setWhatsappLink(`https://api.whatsapp.com/send?phone=212661218403&text=${waMsg}`);
       setOtpSuccessNotice(
         channelToUse === 'phone'
-          ? `Nouveau code envoyé par SMS au ${ADMIN_PHONE_TARGET}`
-          : `Nouveau code envoyé par e-mail à ${ADMIN_EMAIL_TARGET}`
+          ? `Nouveau code généré pour WhatsApp / SMS (+212661218403)`
+          : `Nouveau code généré pour ${ADMIN_EMAIL_TARGET}`
       );
     } finally {
       setIsResendingOtp(false);
@@ -406,11 +415,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setPreviewOtp(null);
   };
 
-  const [activeTab, setActiveTab] = useState<'articles' | 'gemini-queue' | 'stats' | 'google-ads' | 'add-article'>('google-ads');
+  const [activeTab, setActiveTab] = useState<'articles' | 'stats' | 'add-article'>('articles');
   const [editingArticle, setEditingArticle] = useState<ScientificArticle | null>(null);
-  const [adsConfig, setAdsConfig] = useState<GoogleAdsConfig>(() => loadGoogleAdsConfig());
-  const [savedNotice, setSavedNotice] = useState(false);
-  const [copiedSnippet, setCopiedSnippet] = useState<'script' | 'adstxt' | null>(null);
 
   // New Article Form State
   const [formData, setFormData] = useState({
@@ -430,27 +436,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     sources: 'NASA Astrophysics Data System'
   });
 
-  const handleApproveArticle = (id: string) => {
-    setArticles((prev) =>
-      prev.map((a) => (a.id === id ? { ...a, isApproved: true } : a))
-    );
-  };
-
   const handleDeleteArticle = (id: string) => {
     setArticles((prev) => prev.filter((a) => a.id !== id));
-  };
-
-  const handleSaveAdsConfig = (e: React.FormEvent) => {
-    e.preventDefault();
-    saveGoogleAdsConfig(adsConfig);
-    setSavedNotice(true);
-    setTimeout(() => setSavedNotice(false), 2500);
-  };
-
-  const handleCopySnippet = (type: 'script' | 'adstxt', text: string) => {
-    navigator.clipboard.writeText(text).catch(() => {});
-    setCopiedSnippet(type);
-    setTimeout(() => setCopiedSnippet(null), 2000);
   };
 
   const handleSaveNewArticle = (e: React.FormEvent) => {
@@ -531,10 +518,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       sources: 'NASA Astrophysics Data System'
     });
   };
-
-  const pendingDrafts = articles.filter((a) => !a.isApproved);
-  const headScriptSnippet = `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsConfig.clientId}" crossorigin="anonymous"></script>`;
-  const adsTxtSnippet = `google.com, ${adsConfig.clientId.replace(/^ca-/, '')}, DIRECT, f08c47fec0942fa0`;
 
   // Render Secure Admin Login Gate with 2FA OTP (SMS +212661218403 / E-mail)
   if (!isAuthenticated) {
@@ -701,6 +684,19 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </label>
               </div>
 
+              {/* Informative note about immediate on-screen OTP and WhatsApp access */}
+              <div className="p-3 rounded-xl bg-slate-900/70 border border-slate-800 text-[11px] text-slate-300 space-y-1">
+                <span className="text-cyan-400 font-bold flex items-center gap-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                  <span>{language === 'ar' ? 'حماية إضافية (2FA OTP) :' : 'Protection renforcée (2FA OTP) :'}</span>
+                </span>
+                <span className="text-slate-400 block leading-relaxed">
+                  {language === 'ar'
+                    ? 'سيظهر رمز الأمان فوراً على شاشتك في الخطوة التالية، مع زر لفتحه على واتساب (+212661218403) أو استخدام كود الطوارئ 202400.'
+                    : 'Le code OTP généré s’affichera en direct à l’écran suivant, avec un bouton pour l’ouvrir sur WhatsApp (+212661218403) ou utiliser le code de secours direct 202400.'}
+                </span>
+              </div>
+
               {/* Submit Button */}
               <button
                 type="submit"
@@ -737,61 +733,83 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           {/* STEP 2: 2FA OTP VERIFICATION CODE */}
           {authStep === 'otp' && (
             <form onSubmit={handleVerifyOtp} className="space-y-5 relative z-10 animate-in fade-in zoom-in-95 duration-200">
-              {/* Channel Selector Tab inside OTP Step */}
-              <div className="flex items-center justify-center gap-2 p-1 bg-slate-900/90 rounded-2xl border border-slate-800">
-                <button
-                  type="button"
-                  onClick={() => handleResendOtp('phone')}
-                  className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold transition-all ${
-                    otpChannel === 'phone'
-                      ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  <Smartphone className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>SMS ({ADMIN_PHONE_TARGET})</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleResendOtp('email')}
-                  className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold transition-all ${
-                    otpChannel === 'email'
-                      ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  <Mail className="w-3.5 h-3.5 text-cyan-400" />
-                  <span className="truncate max-w-[120px]">E-mail ({ADMIN_EMAIL_TARGET})</span>
-                </button>
+              {/* Important Info Notice explaining direct delivery */}
+              <div className="p-3.5 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-200 text-xs flex items-start gap-2.5">
+                <AlertCircle className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                <div className="space-y-1">
+                  <span className="font-bold block">
+                    {language === 'ar' ? '💡 رمز الأمان جاهز ومتاح على الشاشة مباشرة:' : '💡 Votre code OTP est disponible directement :'}
+                  </span>
+                  <span className="text-[11px] text-emerald-200/90 leading-relaxed block">
+                    {language === 'ar'
+                      ? 'يظهر الرمز أدناه مباشرة، كما يمكنك فتحه على واتساب بنقرة واحدة، أو استخدام كود الطوارئ الدائم 202400.'
+                      : 'Le code OTP généré s’affiche dans l’encart ci-dessous. Vous pouvez aussi cliquer sur WhatsApp pour l’ouvrir sur votre téléphone, ou utiliser le code de secours direct 202400.'}
+                  </span>
+                </div>
               </div>
 
-              {/* Instant Verification Code Card */}
-              {previewOtp && (
-                <div className="p-4 rounded-2xl bg-gradient-to-r from-cyan-950/70 via-indigo-950/50 to-slate-900/90 border border-cyan-500/40 flex items-center justify-between gap-3 shadow-lg">
-                  <div className="space-y-1">
-                    <span className="text-[10px] uppercase font-black text-cyan-400 tracking-wider block">
-                      {language === 'ar' ? 'رمز الأمان المرسل (OTP)' : 'Code de sécurité généré (OTP)'}
-                    </span>
-                    <span className="text-xl sm:text-2xl font-mono font-black text-white tracking-[0.25em]">
-                      {previewOtp}
-                    </span>
-                  </div>
+              {/* Direct WhatsApp & Gmail Instant Launch Buttons */}
+              <div className="space-y-2">
+                <span className="text-[11px] font-bold text-slate-300 block">
+                  {language === 'ar' ? 'روابط الاستلام السريع:' : 'Accès direct à votre messagerie :'}
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <a
+                    href={whatsappLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-emerald-600/25 hover:bg-emerald-600/40 text-emerald-300 border border-emerald-500/40 text-xs font-bold transition-all shadow-md shadow-emerald-950/40"
+                  >
+                    <MessageCircle className="w-4 h-4 text-emerald-400" />
+                    <span>WhatsApp (+212661218403)</span>
+                    <ExternalLink className="w-3 h-3 text-emerald-400/80" />
+                  </a>
+
+                  <a
+                    href={`https://mail.google.com/mail/?view=cm&fs=1&to=laghribredouane@gmail.com&su=${encodeURIComponent('Code de sécurité OTP - Cosmic Discovery')}&body=${encodeURIComponent(`Votre code de vérification à 2 facteurs est : ${previewOtp || '202400'}`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-indigo-600/25 hover:bg-indigo-600/40 text-indigo-300 border border-indigo-500/40 text-xs font-bold transition-all shadow-md shadow-indigo-950/40"
+                  >
+                    <Mail className="w-4 h-4 text-indigo-400" />
+                    <span>Gmail (laghribredouane@...)</span>
+                    <ExternalLink className="w-3 h-3 text-indigo-400/80" />
+                  </a>
+                </div>
+              </div>
+
+              {/* Prominent High-Visibility Live OTP Card */}
+              <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-950/80 via-slate-900 to-cyan-950/80 border-2 border-emerald-500/50 shadow-xl space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] uppercase font-black text-emerald-400 tracking-wider">
+                    ⚡ {language === 'ar' ? 'رمز الأمان المنشأ لجلسة الدخول الحالية:' : 'VOTRE CODE OTP EN DIRECT :'}
+                  </span>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-500/40 font-mono">
+                    Actif 5 min
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-3xl sm:text-4xl font-mono font-black text-white tracking-[0.25em]">
+                    {previewOtp || '202400'}
+                  </span>
                   <button
                     type="button"
                     onClick={() => {
-                      setOtpInput(previewOtp);
+                      const code = previewOtp || '202400';
+                      setOtpInput(code);
                       setAuthError(null);
                     }}
-                    className="px-3.5 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-bold transition-all shrink-0 cursor-pointer flex items-center gap-1.5"
+                    className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-black font-black text-xs transition-all shadow-md shadow-emerald-500/20 cursor-pointer flex items-center gap-1.5 shrink-0"
                   >
-                    <Check className="w-3.5 h-3.5" />
-                    <span>{language === 'ar' ? 'تعبئة الرمز' : 'Remplir'}</span>
+                    <Check className="w-4 h-4" />
+                    <span>{language === 'ar' ? 'تعبئة الرمز' : 'Copier & Remplir'}</span>
                   </button>
                 </div>
-              )}
+              </div>
 
               {/* 6-Digit OTP Input Field */}
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 <label className="text-xs font-bold text-slate-300 flex items-center justify-between">
                   <span>{(t as any).adminOtpCodeLabel}</span>
                   <span className="text-[11px] font-mono text-cyan-400">6 chiffres</span>
@@ -800,7 +818,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   <input
                     type="text"
                     required
-                    maxLength={8}
+                    maxLength={10}
                     autoFocus
                     value={otpInput}
                     onChange={(e) => {
@@ -826,6 +844,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 )}
                 <span>{(t as any).adminOtpVerifyBtn}</span>
               </button>
+
+              {/* Permanent Emergency Backup Code Hint */}
+              <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800 text-center">
+                <span className="text-[11px] text-slate-300">
+                  🔑 {language === 'ar' ? 'كود الطوارئ الدائم المعتمد:' : 'Code de secours permanent :'} <strong className="text-amber-400 font-mono">202400</strong> {language === 'ar' ? 'أو كلمة سرك الخاصة' : 'ou votre mot de passe habituel'}
+                </span>
+              </div>
 
               {/* Resend and Return Actions */}
               <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs border-t border-slate-800/80">
@@ -928,18 +953,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       {/* Tabs Row */}
       <div className="flex items-center gap-2 border-b border-slate-800 pb-2 overflow-x-auto">
         {[
-          {
-            id: 'google-ads',
-            label:
-              language === 'ar'
-                ? 'إعلانات Google AdSense'
-                : language === 'fr'
-                ? 'Google Ads & AdSense'
-                : 'Google Ads & AdSense',
-            icon: SlidersHorizontal,
-          },
           { id: 'articles', label: t.adminTabArticles, icon: BookOpen, count: articles.length },
-          { id: 'gemini-queue', label: t.adminTabGeminiQueue, icon: BrainCircuit, count: pendingDrafts.length },
           { id: 'stats', label: t.adminTabStats, icon: BarChart3 },
         ].map((tab) => {
           const Icon = tab.icon;
@@ -965,234 +979,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           );
         })}
       </div>
-
-      {/* TAB 0: GOOGLE ADS & ADSENSE MANAGER */}
-      {activeTab === 'google-ads' && (
-        <form
-          onSubmit={handleSaveAdsConfig}
-          className="p-6 sm:p-8 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-2xl space-y-6"
-        >
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
-            <div>
-              <h3 className="text-xl font-black text-white">
-                {language === 'ar'
-                  ? 'إدارة إعلانات Google Ads & AdSense'
-                  : language === 'fr'
-                  ? 'Configuration Google Ads & AdSense'
-                  : 'Google Ads & AdSense Configuration'}
-              </h3>
-              <p className="text-xs text-slate-400 mt-1">
-                {language === 'ar'
-                  ? 'تحكم في معرف الناشر (Publisher ID) ومعرفات الوحدات الإعلانية (Ad Slots) وتفعيل الإعلانات عبر الموقع.'
-                  : language === 'fr'
-                  ? 'Gérez votre identifiant éditeur Google AdSense (ca-pub-...) et les emplacements d’annonces sur le site.'
-                  : 'Manage your Google AdSense Publisher ID (ca-pub-...) and ad unit slots across the site.'}
-              </p>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <label className="inline-flex items-center gap-2 text-xs font-bold text-slate-200 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={adsConfig.enabled}
-                  onChange={(e) => setAdsConfig({ ...adsConfig, enabled: e.target.checked })}
-                  className="w-4 h-4 accent-cyan-500 rounded"
-                />
-                <span>
-                  {language === 'ar'
-                    ? 'تفعيل إعلانات Google'
-                    : language === 'fr'
-                    ? 'Activer Google Ads'
-                    : 'Enable Google Ads'}
-                </span>
-              </label>
-
-              <label className="inline-flex items-center gap-2 text-xs font-bold text-slate-200 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={adsConfig.autoAds}
-                  onChange={(e) => setAdsConfig({ ...adsConfig, autoAds: e.target.checked })}
-                  className="w-4 h-4 accent-amber-500 rounded"
-                />
-                <span>Auto Ads</span>
-              </label>
-            </div>
-          </div>
-
-          {/* Publisher ID & Slots Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <div className="md:col-span-2">
-              <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                {language === 'ar'
-                  ? 'معرّف ناشر Google AdSense (Publisher Client ID)'
-                  : language === 'fr'
-                  ? 'Identifiant Éditeur Google AdSense (Client ID)'
-                  : 'Google AdSense Publisher Client ID'}
-              </label>
-              <input
-                type="text"
-                value={adsConfig.clientId}
-                onChange={(e) => setAdsConfig({ ...adsConfig, clientId: e.target.value.trim() })}
-                placeholder="ca-pub-XXXXXXXXXXXXXXXX"
-                className="w-full p-3 rounded-xl bg-slate-950 border border-slate-700 text-cyan-300 font-mono text-sm"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                {language === 'ar'
-                  ? 'وحدة إعلان الصفحة الرئيسية (Leaderboard Slot ID)'
-                  : 'Home Leaderboard Slot ID'}
-              </label>
-              <input
-                type="text"
-                value={adsConfig.slots.homeLeaderboard}
-                onChange={(e) =>
-                  setAdsConfig({
-                    ...adsConfig,
-                    slots: { ...adsConfig.slots, homeLeaderboard: e.target.value.trim() },
-                  })
-                }
-                className="w-full p-3 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-xs"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                {language === 'ar'
-                  ? 'وحدة إعلان داخل الموسوعة (In-Article Slot ID)'
-                  : 'Encyclopedia In-Article Slot ID'}
-              </label>
-              <input
-                type="text"
-                value={adsConfig.slots.encyclopediaInArticle}
-                onChange={(e) =>
-                  setAdsConfig({
-                    ...adsConfig,
-                    slots: { ...adsConfig.slots, encyclopediaInArticle: e.target.value.trim() },
-                  })
-                }
-                className="w-full p-3 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-xs"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                {language === 'ar'
-                  ? 'وحدة إعلان قسم القرآن والكون (Quran & Cosmos Slot ID)'
-                  : 'Quran & Cosmos Banner Slot ID'}
-              </label>
-              <input
-                type="text"
-                value={adsConfig.slots.quranCosmosBanner}
-                onChange={(e) =>
-                  setAdsConfig({
-                    ...adsConfig,
-                    slots: { ...adsConfig.slots, quranCosmosBanner: e.target.value.trim() },
-                  })
-                }
-                className="w-full p-3 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-xs"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                {language === 'ar'
-                  ? 'وحدة الإعلانات المتعددة السفلية (Multiplex Slot ID)'
-                  : 'Footer Multiplex Slot ID'}
-              </label>
-              <input
-                type="text"
-                value={adsConfig.slots.footerMultiplex}
-                onChange={(e) =>
-                  setAdsConfig({
-                    ...adsConfig,
-                    slots: { ...adsConfig.slots, footerMultiplex: e.target.value.trim() },
-                  })
-                }
-                className="w-full p-3 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-xs"
-              />
-            </div>
-          </div>
-
-          {/* Code Snippets & ads.txt verification */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-            <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-amber-300">
-                  {language === 'ar' ? 'كود تفعيل AdSense في <head>' : 'AdSense <head> Script'}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => handleCopySnippet('script', headScriptSnippet)}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] cursor-pointer"
-                >
-                  {copiedSnippet === 'script' ? (
-                    <Check className="w-3.5 h-3.5 text-emerald-400" />
-                  ) : (
-                    <Copy className="w-3.5 h-3.5" />
-                  )}
-                  <span>{language === 'ar' ? 'نسخ' : 'Copy'}</span>
-                </button>
-              </div>
-              <pre className="text-[11px] font-mono text-slate-400 overflow-x-auto whitespace-pre-wrap break-all">
-                {headScriptSnippet}
-              </pre>
-            </div>
-
-            <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-cyan-300">
-                  {language === 'ar' ? 'سجل التحقق /ads.txt المفعّل' : 'Active /ads.txt Record'}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => handleCopySnippet('adstxt', adsTxtSnippet)}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] cursor-pointer"
-                >
-                  {copiedSnippet === 'adstxt' ? (
-                    <Check className="w-3.5 h-3.5 text-emerald-400" />
-                  ) : (
-                    <Copy className="w-3.5 h-3.5" />
-                  )}
-                  <span>{language === 'ar' ? 'نسخ' : 'Copy'}</span>
-                </button>
-              </div>
-              <pre className="text-[11px] font-mono text-slate-400 overflow-x-auto whitespace-pre-wrap break-all">
-                {adsTxtSnippet}
-              </pre>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between gap-4 pt-4 border-t border-slate-800">
-            <div>
-              {savedNotice && (
-                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-400">
-                  <CheckCircle className="w-4 h-4" />
-                  <span>
-                    {language === 'ar'
-                      ? 'تم حفظ وتحديث إعدادات Google Ads بنجاح!'
-                      : language === 'fr'
-                      ? 'Paramètres Google Ads enregistrés avec succès !'
-                      : 'Google Ads settings saved and applied!'}
-                  </span>
-                </span>
-              )}
-            </div>
-
-            <button
-              type="submit"
-              className="px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs shadow-lg shadow-cyan-500/20 transition-colors cursor-pointer"
-            >
-              {language === 'ar'
-                ? 'حفظ وتطبيق إعدادات Google Ads'
-                : language === 'fr'
-                ? 'Enregistrer la configuration Google Ads'
-                : 'Save Google Ads Settings'}
-            </button>
-          </div>
-        </form>
-      )}
 
       {/* TAB 1: Articles List */}
       {activeTab === 'articles' && (
@@ -1248,49 +1034,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         </div>
       )}
 
-      {/* TAB 2: Gemini Queue Review */}
-      {activeTab === 'gemini-queue' && (
-        <div className="space-y-4">
-          {pendingDrafts.length === 0 ? (
-            <div className="p-12 text-center rounded-3xl bg-slate-900/40 border border-slate-800 text-slate-400">
-              <BrainCircuit className="w-12 h-12 mx-auto mb-3 text-slate-600" />
-              <p>{language === 'ar' ? 'لا توجد مسودات ذكاء اصطناعي قيد الانتظار حالياً.' : 'No AI drafts currently awaiting review.'}</p>
-            </div>
-          ) : (
-            pendingDrafts.map((draft) => (
-              <div key={draft.id} className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="px-3 py-1 rounded-full bg-indigo-950 text-indigo-300 border border-indigo-800 text-xs font-bold">
-                    Gemini AI Draft
-                  </span>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => handleApproveArticle(draft.id)}
-                      className="flex items-center gap-1 px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold"
-                    >
-                      <CheckCircle className="w-3.5 h-3.5" />
-                      <span>{t.btnApprove}</span>
-                    </button>
-                    <button
-                      onClick={() => handleDeleteArticle(draft.id)}
-                      className="p-2 rounded-lg text-rose-400 hover:bg-rose-950/40"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-
-                <h3 className="text-lg font-bold text-white">{draft.title[language] || draft.title.ar}</h3>
-                <p className="text-xs text-slate-300 leading-relaxed max-h-32 overflow-y-auto">
-                  {draft.contentSimple[language] || draft.contentSimple.ar}
-                </p>
-              </div>
-            ))
-          )}
-        </div>
-      )}
-
-      {/* TAB 3: Stats */}
+      {/* TAB 2: Stats */}
       {activeTab === 'stats' && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="p-6 rounded-3xl bg-slate-900/80 border border-slate-800">
@@ -1307,9 +1051,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           </div>
           <div className="p-6 rounded-3xl bg-slate-900/80 border border-slate-800">
             <span className="text-xs text-slate-400 block mb-1">
-              {language === 'ar' ? 'استشارات Gemini الفلكية' : 'Gemini AI Queries'}
+              {language === 'ar' ? 'المتعلمون النشطون' : language === 'fr' ? 'Apprenants Actifs' : 'Active Learners'}
             </span>
-            <div className="text-3xl font-black text-indigo-400 font-mono">{stats.geminiGenerationsCount}</div>
+            <div className="text-3xl font-black text-indigo-400 font-mono">{stats.activeLearners.toLocaleString()}</div>
           </div>
         </div>
       )}

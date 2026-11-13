@@ -16,17 +16,16 @@ import { LightTravelCalculator } from './components/LightTravelCalculator';
 import { CelestialComparator } from './components/CelestialComparator';
 import { QuranCosmosSection } from './components/QuranCosmosSection';
 import { SpaceGallery } from './components/SpaceGallery';
-import { AiCosmicLab } from './components/AiCosmicLab';
 import { CosmicQuiz } from './components/CosmicQuiz';
 import { AdminDashboard } from './components/AdminDashboard';
 import { SkyMap } from './components/SkyMap';
 import { LiveSpaceFeeds } from './components/LiveSpaceFeeds';
+import { MoroccanRadios } from './components/MoroccanRadios';
 import { CelestialEvents } from './components/CelestialEvents';
 import { CosmicPrayerTimes } from './components/CosmicPrayerTimes';
 import { CosmicHadithOfTheDay } from './components/CosmicHadithOfTheDay';
 import { CosmicObservatoriesMap } from './components/CosmicObservatoriesMap';
 import { KaheelPartnerAds } from './components/KaheelPartnerAds';
-import { GoogleAdUnit } from './components/GoogleAdUnit';
 import { Footer } from './components/Footer';
 import { ArticleModal } from './components/ArticleModal';
 import { GlobalSearchModal } from './components/GlobalSearchModal';
@@ -116,37 +115,6 @@ export default function App() {
     setStats((prev) => ({ ...prev, totalViews: prev.totalViews + 1 }));
   };
 
-  const handleSaveArticleDraft = (draft: Partial<ScientificArticle>) => {
-    const fullArticle: ScientificArticle = {
-      id: `draft-${Date.now()}`,
-      title: draft.title || { ar: 'مسودة فلكية', en: 'Draft', fr: 'Brouillon' },
-      category: draft.category || 'discoveries',
-      summary: draft.summary || { ar: '', en: '', fr: '' },
-      introduction: draft.introduction || draft.summary || { ar: '', en: '', fr: '' },
-      contentSimple: draft.contentSimple || { ar: '', en: '', fr: '' },
-      contentAdvanced: draft.contentAdvanced || { ar: '', en: '', fr: '' },
-      keyFacts: draft.keyFacts || { ar: ['حقائق علمية معتمدة'], en: ['Verified facts'], fr: ['Faits vérifiés'] },
-      specs: draft.specs || {},
-      image: draft.image || 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?q=80&w=1600&auto=format&fit=crop',
-      imageCaption: draft.imageCaption || { ar: 'صورة توضيحية', en: 'Illustration', fr: 'Illustration' },
-      imageCredit: draft.imageCredit || 'NASA / Gemini AI',
-      sources: draft.sources || [{ title: 'NASA Astrophysics Data System' }],
-      lastUpdated: new Date().toISOString().split('T')[0],
-      isApproved: false,
-      isGeminiGenerated: true,
-      readingTimeMin: 5,
-      views: 0,
-      likes: 0,
-    };
-
-    setArticles((prev) => [fullArticle, ...prev]);
-    setStats((prev) => ({
-      ...prev,
-      geminiGenerationsCount: prev.geminiGenerationsCount + 1,
-      articlesCount: prev.articlesCount + 1,
-    }));
-  };
-
   return (
     <div className="relative min-h-screen bg-[#040714] text-slate-100 flex flex-col selection:bg-cyan-500/30 selection:text-cyan-200">
       {/* Background Starfield */}
@@ -192,23 +160,11 @@ export default function App() {
               stats={stats}
               onExplore={() => setCurrentTab('encyclopedia')}
               onLaunchVirtual={() => setCurrentTab('virtual-journeys')}
-              onOpenAi={() => setCurrentTab('gemini-lab')}
               onSelectCategory={handleSelectCategory}
             />
 
             {/* Featured Interactive Ad Showcase for https://kaheel7.net/ */}
             <KaheelPartnerAds language={language} variant="featured-showcase" />
-
-            {/* Google Ads Leaderboard Unit on Home */}
-            <GoogleAdUnit
-              language={language}
-              format="leaderboard"
-              slotKey="homeLeaderboard"
-              onOpenAdsAdmin={() => {
-                setCurrentTab('admin');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-            />
 
             {/* Cosmic Hadith of the Day: Authentic Prophetic Traditions on the Universe */}
             <CosmicHadithOfTheDay language={language} />
@@ -480,6 +436,49 @@ export default function App() {
                   : 'Open Complete Warsh Quran'}
               </button>
             </div>
+
+            {/* Moroccan National Live Radios Preview Banner */}
+            <div className="p-8 rounded-3xl bg-gradient-to-r from-[#091834] via-slate-900 to-emerald-950/30 border border-cyan-500/40 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl">
+              <div className="space-y-2 text-center md:text-start">
+                <span className="text-xs font-bold uppercase tracking-wider text-cyan-300">
+                  {language === 'ar'
+                    ? 'البث الإذاعي الوطني المباشر • إذاعة محمد السادس للقرآن الكريم & SNRT'
+                    : language === 'fr'
+                    ? 'Radios Nationales Marocaines en Direct • Radio Mohammed VI & SNRT'
+                    : 'Moroccan National Live Radio • Idaât Mohammed Assadiss & SNRT'}
+                </span>
+                <h3 className="text-2xl font-black text-white">
+                  {language === 'ar'
+                    ? 'كل الإذاعات الوطنية والجهوية المغربية في بث حي مباشر (24 إذاعة)'
+                    : language === 'fr'
+                    ? 'Toutes les Radios Nationales et Régionales Marocaines en Direct (24 Stations)'
+                    : 'All Moroccan National & Regional Radio Stations Live (24 Stations)'}
+                </h3>
+                <p className="text-sm text-slate-300 max-w-2xl">
+                  {language === 'ar'
+                    ? 'استمع مباشرة لإذاعة محمد السادس للقرآن الكريم، الإذاعة الوطنية، الأمازيغية، الدولية، إذاعة الأخبار المغربية (RIM)، ميدي 1، ميد راديو، أصوات، مارس، والإذاعات الجهوية.'
+                    : language === 'fr'
+                    ? 'Écoutez en direct Radio Mohammed VI du Saint Coran, Al Idaa Al Watania, Radio Amazighe, Chaîne Inter, RIM, Medi1, Med Radio, Aswat, Mars et les radios régionales.'
+                    : 'Listen live to Idaât Mohammed Assadiss Quran Radio, Al Idaa Al Watania, Al Amazighia, Chaîne Inter, RIM, Medi1, Med Radio, Aswat, Mars, and SNRT regional stations.'}
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setCurrentTab('national-radios');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 font-black text-xs shrink-0 shadow-lg shadow-cyan-500/25 transition-all cursor-pointer flex items-center gap-2"
+              >
+                <Radio className="w-4 h-4" />
+                <span>
+                  {language === 'ar'
+                    ? 'فتح الإذاعات الوطنية المباشرة'
+                    : language === 'fr'
+                    ? 'Ouvrir les Radios Nationales'
+                    : 'Open National Radios'}
+                </span>
+              </button>
+            </div>
           </div>
         )}
 
@@ -618,20 +617,17 @@ export default function App() {
           <QuranCosmosSection language={language} />
         )}
 
+        {/* VIEW 4B: MOROCCAN NATIONAL RADIOS */}
+        {currentTab === 'national-radios' && (
+          <MoroccanRadios language={language} />
+        )}
+
         {/* VIEW 5: SPACE GALLERY */}
         {currentTab === 'gallery' && (
           <SpaceGallery language={language} />
         )}
 
-        {/* VIEW 6: GEMINI AI COSMIC LAB */}
-        {currentTab === 'gemini-lab' && (
-          <AiCosmicLab
-            language={language}
-            onSaveArticleDraft={handleSaveArticleDraft}
-          />
-        )}
-
-        {/* VIEW 7: COSMIC QUIZ */}
+        {/* VIEW 6: COSMIC QUIZ */}
         {currentTab === 'quiz' && (
           <CosmicQuiz language={language} />
         )}
@@ -645,17 +641,6 @@ export default function App() {
             language={language}
           />
         )}
-
-        {/* Global Bottom Google Ads Multiplex Unit */}
-        <GoogleAdUnit
-          language={language}
-          format="multiplex"
-          slotKey="footerMultiplex"
-          onOpenAdsAdmin={() => {
-            setCurrentTab('admin');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }}
-        />
       </main>
 
       {/* Global Search Modal */}

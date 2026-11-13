@@ -14,6 +14,7 @@ export interface WarshReciter {
   name: { ar: string; en: string; fr: string };
   country: { ar: string; en: string; fr: string };
   title: { ar: string; en: string; fr: string };
+  avatarUrl: string;
   serverUrl: string;
 }
 
@@ -31,6 +32,7 @@ export const MOROCCAN_WARSH_RECITERS: WarshReciter[] = [
       en: 'Imam of Hassan II Mosque, Casablanca - Riwayat Warsh',
       fr: 'Imam de la Mosquée Hassan II, Casablanca - Riwayat Warsh',
     },
+    avatarUrl: '/images/reciters/omar-kazabri.webp',
     serverUrl: 'https://cdn.mp3quran.net/audio/omar-kazabri/r1/',
   },
   {
@@ -46,6 +48,7 @@ export const MOROCCAN_WARSH_RECITERS: WarshReciter[] = [
       en: 'Moroccan Murattal Recitation - Riwayat Warsh an Nafi',
       fr: 'Récitation Marocaine Murattal - Riwayat Warsh an Nafi',
     },
+    avatarUrl: '/images/reciters/laayoun-kouchi.webp',
     serverUrl: 'https://cdn.mp3quran.net/audio/laayoun-kouchi/r1/',
   },
   {
@@ -61,6 +64,7 @@ export const MOROCCAN_WARSH_RECITERS: WarshReciter[] = [
       en: 'Moroccan Reciter - Riwayat Warsh an Nafi',
       fr: 'Récitant Marocain - Riwayat Warsh an Nafi',
     },
+    avatarUrl: '/images/reciters/abdelmoujib-benkirane.webp',
     serverUrl: 'https://cdn.mp3quran.net/audio/abdelmoujib-benkirane/r1/',
   },
   {
@@ -76,6 +80,7 @@ export const MOROCCAN_WARSH_RECITERS: WarshReciter[] = [
       en: 'Moroccan Recitation - Riwayat Warsh an Nafi',
       fr: 'Récitation Marocaine - Riwayat Warsh an Nafi',
     },
+    avatarUrl: '/images/reciters/younes-souilass.jpg',
     serverUrl: 'https://cdn.mp3quran.net/audio/younes-souilass/r1/',
   },
   {
@@ -91,6 +96,7 @@ export const MOROCCAN_WARSH_RECITERS: WarshReciter[] = [
       en: 'Moroccan Reciter - Riwayat Warsh an Nafi',
       fr: 'Récitant Marocain - Riwayat Warsh an Nafi',
     },
+    avatarUrl: '/images/reciters/rachid-ifrad.webp',
     serverUrl: 'https://cdn.mp3quran.net/audio/rachid-ifrad/r1/',
   },
   {
@@ -106,6 +112,7 @@ export const MOROCCAN_WARSH_RECITERS: WarshReciter[] = [
       en: 'Instructional Murattal Mushaf - Riwayat Warsh',
       fr: 'Mushaf Murattal Éducatif - Riwayat Warsh',
     },
+    avatarUrl: '/images/reciters/mahmoud-husary-warsh.webp',
     serverUrl: 'https://cdn.mp3quran.net/audio/mahmoud-husary/r3/',
   },
   {
@@ -121,6 +128,7 @@ export const MOROCCAN_WARSH_RECITERS: WarshReciter[] = [
       en: 'Historic Mushaf Recorded in Morocco in Riwayat Warsh',
       fr: 'Mushaf Historique Enregistré au Maroc selon Warsh',
     },
+    avatarUrl: '/images/reciters/abdulbasit-warsh.webp',
     serverUrl: 'https://cdn.mp3quran.net/audio/abdulbasit-abdulsamad/r2/',
   },
 ];
