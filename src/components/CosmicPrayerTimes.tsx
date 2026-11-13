@@ -15,12 +15,26 @@ import {
   CheckCircle2,
   AlertCircle,
   Sliders,
-  Eye
+  Eye,
+  Bell,
+  BellOff,
+  Settings
 } from 'lucide-react';
 import { Language } from '../types/cosmic';
+import {
+  PRAYER_ALERTS_UPDATED_EVENT,
+  PRAYER_LOCATION_UPDATED_EVENT,
+  PrayerAlertSettings,
+  loadPrayerAlertSettings,
+  loadPrayerLocationConfig,
+  requestBrowserNotificationPermission,
+  savePrayerAlertSettings,
+  savePrayerLocationConfig,
+} from '../utils/prayerAlerts';
 
 interface CosmicPrayerTimesProps {
   language: Language;
+  onOpenSettings?: () => void;
 }
 
 interface LocationPreset {
@@ -726,20 +740,28 @@ function computeCelestialAzimuths(lat: number, lng: number, now: Date): Celestia
   ];
 }
 
-export const CosmicPrayerTimes: React.FC<CosmicPrayerTimesProps> = ({ language }) => {
+export const CosmicPrayerTimes: React.FC<CosmicPrayerTimesProps> = ({
+  language,
+  onOpenSettings,
+}) => {
+  const savedLoc = useMemo(() => loadPrayerLocationConfig(), []);
+
   // Active Location State
-  const [selectedPresetId, setSelectedPresetId] = useState<string>('makkah');
-  const [lat, setLat] = useState<number>(LOCATION_PRESETS[0].lat);
-  const [lng, setLng] = useState<number>(LOCATION_PRESETS[0].lng);
-  const [utcOffsetHours, setUtcOffsetHours] = useState<number>(LOCATION_PRESETS[0].utcOffsetHours);
-  const [locationLabel, setLocationLabel] = useState<{ ar: string; en: string; fr: string }>({
-    ar: 'مكة المكرمة، المملكة العربية السعودية',
-    en: 'Makkah Al-Mukarramah, Saudi Arabia',
-    fr: 'La Mecque, Arabie Saoudite',
-  });
-  const [calculationMethod, setCalculationMethod] = useState<number>(4);
+  const [selectedPresetId, setSelectedPresetId] = useState<string>(savedLoc.presetId);
+  const [lat, setLat] = useState<number>(savedLoc.lat);
+  const [lng, setLng] = useState<number>(savedLoc.lng);
+  const [utcOffsetHours, setUtcOffsetHours] = useState<number>(savedLoc.utcOffsetHours);
+  const [locationLabel, setLocationLabel] = useState<{ ar: string; en: string; fr: string }>(
+    savedLoc.locationLabel
+  );
+  const [calculationMethod, setCalculationMethod] = useState<number>(savedLoc.calculationMethod);
   const [hijriOffsetDays, setHijriOffsetDays] = useState<number>(0);
   const [advanceHijriAtMaghrib, setAdvanceHijriAtMaghrib] = useState<boolean>(true);
+
+  // Prayer Alert Settings Status (synced with SettingsModal & PrayerAlertMonitor)
+  const [alertSettings, setAlertSettings] = useState<PrayerAlertSettings>(() =>
+    loadPrayerAlertSettings()
+  );
 
   // Geolocation & API Status
   const [geoStatus, setGeoStatus] = useState<'idle' | 'locating' | 'granted' | 'denied'>('idle');
@@ -752,8 +774,8 @@ export const CosmicPrayerTimes: React.FC<CosmicPrayerTimesProps> = ({ language }
   const [apiTimingsOverride, setApiTimingsOverride] = useState<Partial<PrayerTimings> | null>(null);
 
   // Custom Lat/Lng Input Modal/Expand
-  const [customLatInput, setCustomLatInput] = useState<string>('21.4225');
-  const [customLngInput, setCustomLngInput] = useState<string>('39.8262');
+  const [customLatInput, setCustomLatInput] = useState<string>(String(savedLoc.lat));
+  const [customLngInput, setCustomLngInput] = useState<string>(String(savedLoc.lng));
 
   // Interactive Prayer Compass State
   const [observerHeading, setObserverHeading] = useState<number>(0); // 0° = facing North
@@ -767,6 +789,70 @@ export const CosmicPrayerTimes: React.FC<CosmicPrayerTimesProps> = ({ language }
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  // Listen to global prayer alert & auto-detected location changes
+  useEffect(() => {
+    const syncAlerts = () => setAlertSettings(loadPrayerAlertSettings());
+    const syncExternalLocation = () => {
+      const latest = loadPrayerLocationConfig();
+      setLat((prevLat) => (Math.abs(latest.lat - prevLat) > 0.0005 ? latest.lat : prevLat));
+      setLng((prevLng) => (Math.abs(latest.lng - prevLng) > 0.0005 ? latest.lng : prevLng));
+      setUtcOffsetHours((prevOff) =>
+        latest.utcOffsetHours !== prevOff ? latest.utcOffsetHours : prevOff
+      );
+      setCalculationMethod((prevMethod) =>
+        latest.calculationMethod !== prevMethod ? latest.calculationMethod : prevMethod
+      );
+      setSelectedPresetId((prevPreset) =>
+        latest.presetId !== prevPreset ? latest.presetId : prevPreset
+      );
+      setLocationLabel((prevLabel) =>
+        latest.locationLabel.ar !== prevLabel.ar ? latest.locationLabel : prevLabel
+      );
+      setCustomLatInput(String(latest.lat));
+      setCustomLngInput(String(latest.lng));
+    };
+
+    window.addEventListener(PRAYER_ALERTS_UPDATED_EVENT, syncAlerts);
+    window.addEventListener(PRAYER_LOCATION_UPDATED_EVENT, syncExternalLocation);
+    return () => {
+      window.removeEventListener(PRAYER_ALERTS_UPDATED_EVENT, syncAlerts);
+      window.removeEventListener(PRAYER_LOCATION_UPDATED_EVENT, syncExternalLocation);
+    };
+  }, []);
+
+  // Persist active location & synced daily timings so background PrayerAlertMonitor uses exact timings
+  useEffect(() => {
+    const localDate = new Date(Date.now() + utcOffsetHours * 3600000);
+    const dateKey = `${localDate.getUTCFullYear()}-${String(localDate.getUTCMonth() + 1).padStart(2, '0')}-${String(localDate.getUTCDate()).padStart(2, '0')}`;
+    savePrayerLocationConfig({
+      presetId: selectedPresetId,
+      lat,
+      lng,
+      utcOffsetHours,
+      calculationMethod,
+      locationLabel,
+      cachedDateKey: apiTimingsOverride ? dateKey : undefined,
+      cachedTimings: apiTimingsOverride
+        ? {
+            Fajr: apiTimingsOverride.Fajr,
+            Dhuhr: apiTimingsOverride.Dhuhr,
+            Asr: apiTimingsOverride.Asr,
+            Maghrib: apiTimingsOverride.Maghrib,
+            Isha: apiTimingsOverride.Isha,
+          }
+        : undefined,
+    });
+  }, [selectedPresetId, lat, lng, utcOffsetHours, calculationMethod, locationLabel, apiTimingsOverride]);
+
+  const handleQuickToggleAlerts = async () => {
+    const next = { ...alertSettings, enabled: !alertSettings.enabled };
+    setAlertSettings(next);
+    savePrayerAlertSettings(next);
+    if (next.enabled && next.browserNotification) {
+      await requestBrowserNotificationPermission();
+    }
+  };
 
   // Fetch accurate Prayer Times & Hijri Date from Aladhan API whenever coordinates or method change
   const fetchAladhanData = useCallback(
@@ -1425,22 +1511,67 @@ export const CosmicPrayerTimes: React.FC<CosmicPrayerTimesProps> = ({ language }
             </div>
           </div>
 
-          {/* Next Prayer Countdown Bar */}
+          {/* Next Prayer Countdown Bar & 15-Min Pre-Prayer Alert Quick Control */}
           <div className="mt-6 pt-4 border-t border-cyan-500/20 flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-2 text-xs">
-              <Clock className="w-4 h-4 text-amber-400" />
-              <span className="text-slate-300">
-                {language === 'ar' ? 'الصلاة القادمة:' : 'Next Prayer:'}
-              </span>
-              <span className="font-black text-white">
-                {prayerSchedule.nextPrayer.name[language]} ({prayerSchedule.nextPrayer.time})
-              </span>
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="flex items-center gap-2 text-xs">
+                <Clock className="w-4 h-4 text-amber-400" />
+                <span className="text-slate-300">
+                  {language === 'ar' ? 'الصلاة القادمة:' : 'Next Prayer:'}
+                </span>
+                <span className="font-black text-white">
+                  {prayerSchedule.nextPrayer.name[language]} ({prayerSchedule.nextPrayer.time})
+                </span>
+              </div>
+
+              <div className="px-3 py-1 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold">
+                {language === 'ar'
+                  ? `متبقي ${prayerSchedule.remH} س و ${prayerSchedule.remM} د`
+                  : `In ${prayerSchedule.remH}h ${prayerSchedule.remM}m`}
+              </div>
             </div>
 
-            <div className="px-3 py-1 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold">
-              {language === 'ar'
-                ? `متبقي ${prayerSchedule.remH} س و ${prayerSchedule.remM} د`
-                : `In ${prayerSchedule.remH}h ${prayerSchedule.remM}m`}
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={handleQuickToggleAlerts}
+                data-testid="quick-toggle-prayer-alerts"
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+                  alertSettings.enabled
+                    ? 'bg-emerald-500/20 border-emerald-400/50 text-emerald-300 hover:bg-emerald-500/30'
+                    : 'bg-slate-900/80 border-slate-700 text-slate-400 hover:text-white'
+                }`}
+              >
+                {alertSettings.enabled ? (
+                  <Bell className="w-3.5 h-3.5 text-emerald-400" />
+                ) : (
+                  <BellOff className="w-3.5 h-3.5 text-slate-400" />
+                )}
+                <span>
+                  {alertSettings.enabled
+                    ? language === 'ar'
+                      ? `التنبيه الصوتي مفعّل (قبل ${alertSettings.minutesBefore} د)`
+                      : language === 'fr'
+                      ? `Alerte active (-${alertSettings.minutesBefore} min)`
+                      : `Audio Alert On (${alertSettings.minutesBefore}m prior)`
+                    : language === 'ar'
+                    ? 'التنبيه الصوتي معطّل'
+                    : language === 'fr'
+                    ? 'Alerte désactivée'
+                    : 'Audio Alert Off'}
+                </span>
+              </button>
+
+              {onOpenSettings && (
+                <button
+                  type="button"
+                  onClick={onOpenSettings}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-cyan-500/30 text-cyan-300 text-xs font-bold transition-colors cursor-pointer"
+                >
+                  <Settings className="w-3.5 h-3.5" />
+                  <span>{language === 'ar' ? 'لوحة الإعدادات' : language === 'fr' ? 'Paramètres' : 'Settings'}</span>
+                </button>
+              )}
             </div>
           </div>
         </div>

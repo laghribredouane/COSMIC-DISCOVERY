@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Sparkles, Orbit, ArrowRight, ArrowLeft, RefreshCw, Star, Layers, ShieldCheck } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { Sparkles, Orbit, ArrowRight, ArrowLeft, RefreshCw, Star, Layers } from 'lucide-react';
 import { Language, SiteStatistics } from '../types/cosmic';
 import { translations } from '../i18n/translations';
+import { HeroParticles } from './HeroParticles';
 
 interface HeroSectionProps {
   language: Language;
@@ -21,6 +22,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const t = translations[language];
   const isRtl = language === 'ar';
   const ArrowIcon = isRtl ? ArrowLeft : ArrowRight;
+  const heroContainerRef = useRef<HTMLElement | null>(null);
 
   const cosmicFacts = [
     {
@@ -58,7 +60,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   ];
 
   return (
-    <section className="relative overflow-hidden pt-12 pb-20 px-4 sm:px-6 lg:px-8">
+    <section
+      ref={heroContainerRef}
+      className="relative overflow-hidden rounded-3xl pt-12 pb-20 px-4 sm:px-6 lg:px-8"
+    >
+      {/* Interactive Mouse-Reactive Cosmic Particle System */}
+      <HeroParticles containerRef={heroContainerRef} />
+
       {/* Glow Backdrop */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-gradient-to-tr from-cyan-600/20 via-indigo-600/20 to-purple-600/10 blur-[130px] rounded-full pointer-events-none" />
 

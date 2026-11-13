@@ -24,11 +24,15 @@ import { MoroccanRadios } from './components/MoroccanRadios';
 import { CelestialEvents } from './components/CelestialEvents';
 import { CosmicPrayerTimes } from './components/CosmicPrayerTimes';
 import { CosmicHadithOfTheDay } from './components/CosmicHadithOfTheDay';
+import { DailyAdhkar } from './components/DailyAdhkar';
 import { CosmicObservatoriesMap } from './components/CosmicObservatoriesMap';
 import { KaheelPartnerAds } from './components/KaheelPartnerAds';
 import { Footer } from './components/Footer';
 import { ArticleModal } from './components/ArticleModal';
 import { GlobalSearchModal } from './components/GlobalSearchModal';
+import { SettingsModal } from './components/SettingsModal';
+import { PrayerAlertMonitor } from './components/PrayerAlertMonitor';
+import { autoUpdateLocationOnAppOpen, checkAndAutoRefreshAppVersion } from './utils/prayerAlerts';
 import { translations } from './i18n/translations';
 import { Sparkles, ArrowRight, ArrowLeft, Telescope, Orbit, Layers, BookOpen, Radio, Calendar, Compass, Box, MapPin } from 'lucide-react';
 
@@ -40,6 +44,8 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState<CosmicCategory | 'all'>('all');
   const [activeArticleModal, setActiveArticleModal] = useState<ScientificArticle | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [testAlertCounter, setTestAlertCounter] = useState(0);
   const [showAllHomeArticles, setShowAllHomeArticles] = useState(false);
   const [quotaExceeded, setQuotaExceeded] = useState(false);
   const [virtualSubTab, setVirtualSubTab] = useState<'all' | 'solar-system' | 'scale' | 'light-calc' | 'comparator'>('all');
@@ -58,6 +64,21 @@ export default function App() {
     const handleQuota = () => setQuotaExceeded(true);
     window.addEventListener('gmp-quota-exceeded', handleQuota);
     return () => window.removeEventListener('gmp-quota-exceeded', handleQuota);
+  }, []);
+
+  // Automatic geographic location & latest deployment refresh when opening or returning to the app
+  useEffect(() => {
+    autoUpdateLocationOnAppOpen();
+    checkAndAutoRefreshAppVersion();
+
+    const handleVisibilityRefresh = () => {
+      if (document.visibilityState === 'visible') {
+        autoUpdateLocationOnAppOpen();
+        checkAndAutoRefreshAppVersion();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityRefresh);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityRefresh);
   }, []);
 
   // Check URL query parameters on load to open shared article if present
@@ -145,6 +166,7 @@ export default function App() {
         language={language}
         setLanguage={setLanguage}
         onOpenSearch={() => setIsSearchOpen(true)}
+        onOpenSettings={() => setIsSettingsOpen(true)}
       />
 
       {/* Main Content Area */}
@@ -169,8 +191,14 @@ export default function App() {
             {/* Cosmic Hadith of the Day: Authentic Prophetic Traditions on the Universe */}
             <CosmicHadithOfTheDay language={language} />
 
+            {/* Daily Adhkar Section (directly below Hadith of the Day) */}
+            <DailyAdhkar language={language} />
+
             {/* Cosmic Prayer Times, Dual Hijri-Gregorian Calendar & Qibla Compass on Home */}
-            <CosmicPrayerTimes language={language} />
+            <CosmicPrayerTimes
+              language={language}
+              onOpenSettings={() => setIsSettingsOpen(true)}
+            />
 
             {/* Interactive Solar System Highlight on Home */}
             <div className="space-y-6">
@@ -604,7 +632,10 @@ export default function App() {
 
         {/* VIEW: COSMIC PRAYER TIMES, HIJRI/GREGORIAN CALENDAR & QIBLA COMPASS */}
         {currentTab === 'prayer-times' && (
-          <CosmicPrayerTimes language={language} />
+          <CosmicPrayerTimes
+            language={language}
+            onOpenSettings={() => setIsSettingsOpen(true)}
+          />
         )}
 
         {/* VIEW: GOOGLE MAPS - COSMIC OBSERVATORIES & SKY WATCHING */}
@@ -670,6 +701,25 @@ export default function App() {
           onSelectVerse={() => setCurrentTab('quran-cosmos')}
         />
       )}
+
+      {/* Global Background 15-Minute Pre-Prayer Audio & Notification Monitor */}
+      <PrayerAlertMonitor
+        language={language}
+        testTriggerCounter={testAlertCounter}
+        onOpenSettings={() => setIsSettingsOpen(true)}
+      />
+
+      {/* Settings & Prayer Alerts Panel */}
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        language={language}
+        onNavigateToPrayerTimes={() => {
+          setCurrentTab('prayer-times');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onTriggerTestBanner={() => setTestAlertCounter((c) => c + 1)}
+      />
 
       {/* Footer */}
       <Footer language={language} onSelectTab={setCurrentTab} />

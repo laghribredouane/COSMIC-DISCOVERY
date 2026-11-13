@@ -16,10 +16,13 @@ import {
   Calendar,
   MapPin,
   Lock,
-  ChevronDown
+  ChevronDown,
+  Settings,
+  Bell
 } from 'lucide-react';
 import { Language } from '../types/cosmic';
 import { translations } from '../i18n/translations';
+import { PRAYER_ALERTS_UPDATED_EVENT, loadPrayerAlertSettings } from '../utils/prayerAlerts';
 
 interface NavbarProps {
   currentTab: string;
@@ -27,6 +30,7 @@ interface NavbarProps {
   language: Language;
   setLanguage: (lang: Language) => void;
   onOpenSearch: () => void;
+  onOpenSettings: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -35,11 +39,19 @@ export const Navbar: React.FC<NavbarProps> = ({
   language,
   setLanguage,
   onOpenSearch,
+  onOpenSettings,
 }) => {
   const t = translations[language];
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
   const [toolsDropdownOpen, setToolsDropdownOpen] = useState(false);
+  const [alertsEnabled, setAlertsEnabled] = useState<boolean>(() => loadPrayerAlertSettings().enabled);
+
+  React.useEffect(() => {
+    const sync = () => setAlertsEnabled(loadPrayerAlertSettings().enabled);
+    window.addEventListener(PRAYER_ALERTS_UPDATED_EVENT, sync);
+    return () => window.removeEventListener(PRAYER_ALERTS_UPDATED_EVENT, sync);
+  }, []);
 
   // The 9 Primary Pathways explicitly requested by the user
   const primary9Pathways = [
@@ -212,6 +224,26 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               <Lock className="w-3.5 h-3.5 text-red-400" />
               <span className="hidden md:inline">{t.navAdmin}</span>
+            </button>
+
+            {/* Settings & Prayer Alerts Panel Button */}
+            <button
+              type="button"
+              onClick={onOpenSettings}
+              data-testid="navbar-settings-button"
+              title={language === 'ar' ? 'لوحة الإعدادات وتنبيهات الصلاة' : 'Settings & Prayer Alerts'}
+              aria-label={language === 'ar' ? 'لوحة الإعدادات' : 'Settings'}
+              className="relative flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-lg bg-slate-800/60 hover:bg-slate-700/60 text-slate-200 hover:text-cyan-300 border border-slate-700/50 text-xs font-bold transition-colors cursor-pointer"
+            >
+              <Settings className="w-4 h-4 text-cyan-400" />
+              <span className="hidden lg:inline">
+                {language === 'ar' ? 'الإعدادات' : language === 'fr' ? 'Paramètres' : 'Settings'}
+              </span>
+              <span
+                className={`w-2 h-2 rounded-full ${
+                  alertsEnabled ? 'bg-emerald-400 shadow-sm shadow-emerald-400/70' : 'bg-slate-500'
+                }`}
+              />
             </button>
 
             {/* Quick Search Button */}
@@ -393,6 +425,41 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
               );
             })}
+          </div>
+
+          <div className="pt-2 border-t border-slate-800/80 my-2">
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenSettings();
+              }}
+              className="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-bold bg-cyan-950/40 text-cyan-200 border border-cyan-500/30"
+            >
+              <div className="flex items-center gap-3">
+                <Bell className="w-5 h-5 text-cyan-400" />
+                <span>
+                  {language === 'ar'
+                    ? 'لوحة الإعدادات والتنبيهات'
+                    : language === 'fr'
+                    ? 'Paramètres & Alertes Prière'
+                    : 'Settings & Prayer Alerts'}
+                </span>
+              </div>
+              <span
+                className={`text-[10px] px-2 py-0.5 rounded font-bold ${
+                  alertsEnabled ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-800 text-slate-400'
+                }`}
+              >
+                {alertsEnabled
+                  ? language === 'ar'
+                    ? 'مفعّل'
+                    : 'ON'
+                  : language === 'ar'
+                  ? 'معطّل'
+                  : 'OFF'}
+              </span>
+            </button>
           </div>
 
           <div className="pt-2 border-t border-red-900/40">

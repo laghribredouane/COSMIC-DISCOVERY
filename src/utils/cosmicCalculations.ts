@@ -185,6 +185,7 @@ export function filterArticlesList(
   lang: Language = 'ar'
 ): ScientificArticle[] {
   const cleanQuery = query.trim().toLowerCase();
+  const normalizedQuery = normalizeArabic(cleanQuery);
 
   return articles.filter(article => {
     // Category match
@@ -203,7 +204,12 @@ export function filterArticlesList(
       title.includes(cleanQuery) ||
       summary.includes(cleanQuery) ||
       intro.includes(cleanQuery) ||
-      keyFacts.includes(cleanQuery)
+      keyFacts.includes(cleanQuery) ||
+      (normalizedQuery.length > 0 &&
+        (normalizeArabic(title).includes(normalizedQuery) ||
+          normalizeArabic(summary).includes(normalizedQuery) ||
+          normalizeArabic(intro).includes(normalizedQuery) ||
+          normalizeArabic(keyFacts).includes(normalizedQuery)))
     );
   });
 }

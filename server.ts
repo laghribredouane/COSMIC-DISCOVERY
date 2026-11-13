@@ -246,6 +246,83 @@ app.get('/api/prayer-times', async (req: Request, res: Response) => {
   }
 });
 
+const SERVER_BOOT_VERSION = `${Date.now().toString(36)}-${crypto.randomBytes(3).toString('hex')}`;
+
+/**
+ * Endpoint: GET /api/version
+ * Allows opened clients to detect fresh deployments and automatically refresh stale sessions
+ */
+app.get('/api/version', (_req: Request, res: Response) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.status(200).json({
+    success: true,
+    version: SERVER_BOOT_VERSION,
+    serverTime: new Date().toISOString(),
+  });
+});
+
+/**
+ * Endpoint: GET /api/geolocation
+ * Automatically resolves approximate city/coordinates from the requester IP when browser GPS is unavailable or pending
+ */
+app.get('/api/geolocation', async (req: Request, res: Response) => {
+  try {
+    const forwarded = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim();
+    const clientIp = forwarded || req.socket.remoteAddress || '';
+    const isPrivateIp =
+      !clientIp ||
+      clientIp === '::1' ||
+      clientIp.startsWith('127.') ||
+      clientIp.startsWith('10.') ||
+      clientIp.startsWith('192.168.') ||
+      clientIp.startsWith('::ffff:127.');
+
+    const targetUrl = isPrivateIp
+      ? 'https://ipapi.co/json/'
+      : `https://ipapi.co/${encodeURIComponent(clientIp)}/json/`;
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3500);
+    const geoRes = await fetch(targetUrl, {
+      headers: { Accept: 'application/json', 'User-Agent': 'CosmicDiscovery/1.0' },
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+
+    if (geoRes.ok) {
+      const geoData = await safeParseJson(geoRes);
+      const lat = Number(geoData?.latitude);
+      const lng = Number(geoData?.longitude);
+      if (geoData && !geoData.error && !isNaN(lat) && !isNaN(lng)) {
+        let utcOffsetHours = 0;
+        if (typeof geoData.utc_offset === 'string' && /^[+-]\d{4}$/.test(geoData.utc_offset)) {
+          const sign = geoData.utc_offset.startsWith('-') ? -1 : 1;
+          const hh = parseInt(geoData.utc_offset.slice(1, 3), 10);
+          const mm = parseInt(geoData.utc_offset.slice(3, 5), 10);
+          utcOffsetHours = sign * (hh + mm / 60);
+        } else {
+          utcOffsetHours = Math.round(lng / 15);
+        }
+
+        res.status(200).json({
+          success: true,
+          city: geoData.city || '',
+          country: geoData.country_name || '',
+          countryCode: geoData.country_code || '',
+          lat: Number(lat.toFixed(4)),
+          lng: Number(lng.toFixed(4)),
+          utcOffsetHours,
+          timezone: geoData.timezone || 'UTC',
+        });
+        return;
+      }
+    }
+    res.status(200).json({ success: false });
+  } catch {
+    res.status(200).json({ success: false });
+  }
+});
+
 // Cached Warsh Quran & Jalalayn datasets in memory
 interface RawWarshVerse {
   chapter: number;
@@ -575,37 +652,17 @@ app.get('/api/maps/config', (_req: Request, res: Response) => {
 
 // Admin authentication configuration & in-memory session store
 const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || 'laghribredouane@gmail.com').toLowerCase().trim();
-const ADMIN_PHONE = (process.env.ADMIN_PHONE || '+212661218403').trim();
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Dtnokia2024@';
 
 const adminSessions = new Map<string, { email: string; createdAt: number; expiresAt: number }>();
 
-// In-memory 2FA OTP pending verifications
-interface PendingOtpRecord {
-  otp: string;
-  email: string;
-  phone: string;
-  channel: 'email' | 'phone';
-  createdAt: number;
-  expiresAt: number;
-  attempts: number;
-}
-const pendingOtps = new Map<string, PendingOtpRecord>();
-
-/**
- * Helper to generate a 6-digit numeric OTP code
- */
-function generateSecureOtp(): string {
-  return Math.floor(100000 + Math.random() * 900000).toString();
-}
-
 /**
  * Endpoint: POST /api/admin/login
- * Step 1: Validates admin credentials (email & password) and initiates 2FA OTP
+ * Validates admin credentials (email & password) and issues an admin session token directly
  */
 app.post('/api/admin/login', (req: Request, res: Response) => {
   try {
-    const { email, password, channel = 'phone' } = req.body || {};
+    const { email, password } = req.body || {};
     const inputEmail = String(email || '').toLowerCase().trim();
     const inputPassword = String(password || '');
 
@@ -615,148 +672,6 @@ app.post('/api/admin/login', (req: Request, res: Response) => {
     }
 
     if (inputEmail === ADMIN_EMAIL && inputPassword === ADMIN_PASSWORD) {
-      // Generate 6-digit OTP code for 2-step verification
-      const otp = generateSecureOtp();
-      const tempToken = crypto.randomBytes(24).toString('hex');
-      const now = Date.now();
-      const selectedChannel: 'email' | 'phone' = channel === 'email' ? 'email' : 'phone';
-
-      pendingOtps.set(tempToken, {
-        otp,
-        email: ADMIN_EMAIL,
-        phone: ADMIN_PHONE,
-        channel: selectedChannel,
-        createdAt: now,
-        expiresAt: now + 5 * 60 * 1000, // 5 minutes validity
-        attempts: 0,
-      });
-
-      console.log(`[2FA OTP Security] Dispatched 6-digit code for ${ADMIN_EMAIL} / ${ADMIN_PHONE} via [${selectedChannel.toUpperCase()}]: ${otp}`);
-
-      const whatsappText = encodeURIComponent(`🔐 Cosmic Discovery (Admin 2FA): Votre code de sécurité OTP est [ ${otp} ]. Valable 5 minutes.`);
-      const whatsappUrl = `https://api.whatsapp.com/send?phone=212661218403&text=${whatsappText}`;
-
-      res.status(200).json({
-        success: true,
-        requireOtp: true,
-        tempToken,
-        email: 'Laghribredouane@gmail.com',
-        phone: ADMIN_PHONE,
-        channel: selectedChannel,
-        expiresInSec: 300,
-        debugOtp: otp, // Visible on screen for instant validation
-        whatsappUrl,
-        message:
-          selectedChannel === 'email'
-            ? `Code de sécurité OTP envoyé pour ${ADMIN_EMAIL}`
-            : `Code de sécurité OTP généré pour WhatsApp / SMS (${ADMIN_PHONE})`,
-      });
-      return;
-    }
-
-    res.status(401).json({ success: false, message: 'Invalid email or password' });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Server error during login' });
-  }
-});
-
-/**
- * Endpoint: POST /api/admin/resend-otp
- * Generates a new 6-digit OTP and dispatches to chosen channel (email or phone)
- */
-app.post('/api/admin/resend-otp', (req: Request, res: Response) => {
-  try {
-    const { tempToken, channel = 'phone' } = req.body || {};
-
-    if (!tempToken || typeof tempToken !== 'string') {
-      res.status(400).json({ success: false, message: 'Session temporaire introuvable' });
-      return;
-    }
-
-    const record = pendingOtps.get(tempToken);
-    if (!record) {
-      // Re-create session for the admin if expired
-      const otp = generateSecureOtp();
-      const now = Date.now();
-      const selectedChannel: 'email' | 'phone' = channel === 'email' ? 'email' : 'phone';
-      pendingOtps.set(tempToken, {
-        otp,
-        email: ADMIN_EMAIL,
-        phone: ADMIN_PHONE,
-        channel: selectedChannel,
-        createdAt: now,
-        expiresAt: now + 5 * 60 * 1000,
-        attempts: 0,
-      });
-
-      res.status(200).json({
-        success: true,
-        channel: selectedChannel,
-        debugOtp: otp,
-        message:
-          selectedChannel === 'email'
-            ? `Nouveau code OTP envoyé par e-mail à ${ADMIN_EMAIL}`
-            : `Nouveau code OTP envoyé par SMS au ${ADMIN_PHONE}`,
-      });
-      return;
-    }
-
-    const newOtp = generateSecureOtp();
-    const selectedChannel: 'email' | 'phone' = channel === 'email' ? 'email' : 'phone';
-    record.otp = newOtp;
-    record.channel = selectedChannel;
-    record.createdAt = Date.now();
-    record.expiresAt = Date.now() + 5 * 60 * 1000;
-    record.attempts = 0;
-
-    console.log(`[2FA OTP Security] Resent 6-digit code to [${selectedChannel.toUpperCase()}]: ${newOtp}`);
-
-    const whatsappText = encodeURIComponent(`🔐 Cosmic Discovery (Admin 2FA): Votre nouveau code de sécurité OTP est [ ${newOtp} ]. Valable 5 minutes.`);
-    const whatsappUrl = `https://api.whatsapp.com/send?phone=212661218403&text=${whatsappText}`;
-
-    res.status(200).json({
-      success: true,
-      channel: selectedChannel,
-      debugOtp: newOtp,
-      whatsappUrl,
-      message:
-        selectedChannel === 'email'
-          ? `Nouveau code OTP envoyé pour ${ADMIN_EMAIL}`
-          : `Nouveau code OTP généré pour WhatsApp / SMS (${ADMIN_PHONE})`,
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Erreur lors du renvoi du code' });
-  }
-});
-
-/**
- * Endpoint: POST /api/admin/verify-otp
- * Step 2: Validates the 6-digit OTP code and issues the permanent admin session token
- */
-app.post('/api/admin/verify-otp', (req: Request, res: Response) => {
-  try {
-    const { tempToken, otp } = req.body || {};
-    const inputOtp = String(otp || '').trim().replace(/\s+/g, '');
-
-    if (!tempToken || !inputOtp) {
-      res.status(400).json({ success: false, message: 'Le code OTP et le jeton de session sont requis' });
-      return;
-    }
-
-    const record = pendingOtps.get(tempToken);
-
-    // Allow validation if record matches OR emergency verification match
-    const isValid =
-      (record && record.otp === inputOtp && Date.now() <= record.expiresAt) ||
-      inputOtp === '202400' ||
-      inputOtp === '780701' ||
-      inputOtp === ADMIN_PASSWORD;
-
-    if (isValid) {
-      if (record) {
-        pendingOtps.delete(tempToken);
-      }
-
       const token = crypto.randomBytes(32).toString('hex');
       const now = Date.now();
       const expiresAt = now + 7 * 24 * 60 * 60 * 1000; // 7 days
@@ -767,36 +682,22 @@ app.post('/api/admin/verify-otp', (req: Request, res: Response) => {
         expiresAt,
       });
 
-      console.log(`[2FA OTP Security] Verification successful for ${ADMIN_EMAIL}. Session granted.`);
-
       res.status(200).json({
         success: true,
         authenticated: true,
         token,
         user: {
-          email: 'Laghribredouane@gmail.com',
-          phone: ADMIN_PHONE,
-          name: 'Redouane Laghrib',
+          name: 'Administrator',
           role: 'Super Admin',
-          authMethod: '2FA OTP (Email / SMS)',
         },
         expiresAt,
       });
       return;
     }
 
-    if (record) {
-      record.attempts += 1;
-      if (record.attempts >= 5) {
-        pendingOtps.delete(tempToken);
-        res.status(403).json({ success: false, message: 'Trop de tentatives erronées. Veuillez recommencer.' });
-        return;
-      }
-    }
-
-    res.status(401).json({ success: false, message: 'Code OTP incorrect ou expiré. Veuillez réessayer.' });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Erreur serveur lors de la validation OTP' });
+    res.status(401).json({ success: false, message: 'Invalid email or password' });
+  } catch {
+    res.status(500).json({ success: false, message: 'Server error during login' });
   }
 });
 
@@ -827,8 +728,7 @@ app.post('/api/admin/verify', (req: Request, res: Response) => {
       success: true,
       authenticated: true,
       user: {
-        email: 'Laghribredouane@gmail.com',
-        name: 'Redouane Laghrib',
+        name: 'Administrator',
         role: 'Super Admin',
       },
       expiresAt: session.expiresAt,
@@ -883,6 +783,7 @@ async function start() {
     const distPath = path.resolve(process.cwd(), 'dist');
     app.use(express.static(distPath));
     app.get('*', (_req: Request, res: Response) => {
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
       res.sendFile(path.join(distPath, 'index.html'));
     });
   }
