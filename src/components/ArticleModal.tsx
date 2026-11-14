@@ -27,7 +27,9 @@ import {
   Copy,
   BookOpen,
   Send,
-  Smartphone
+  Smartphone,
+  Link2,
+  Mail
 } from 'lucide-react';
 import { ScientificArticle, Language } from '../types/cosmic';
 import { translations } from '../i18n/translations';
@@ -63,6 +65,12 @@ const LinkedInIcon: React.FC<{ className?: string }> = ({ className = 'w-4 h-4' 
   </svg>
 );
 
+const EmailIcon: React.FC<{ className?: string }> = ({ className = 'w-4 h-4' }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z" />
+  </svg>
+);
+
 interface ArticleModalProps {
   article: ScientificArticle | null;
   articles?: ScientificArticle[];
@@ -93,6 +101,8 @@ const ArticleModalDialog: React.FC<ArticleModalProps & { article: ScientificArti
   const [readingLevel, setReadingLevel] = useState<'simple' | 'advanced'>('simple');
   const [liked, setLiked] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [richCopied, setRichCopied] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [showSharePanel, setShowSharePanel] = useState(false);
   const [shareFeedback, setShareFeedback] = useState<string | null>(null);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -137,19 +147,27 @@ const ArticleModalDialog: React.FC<ArticleModalProps & { article: ScientificArti
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
+        if (isShareModalOpen) {
+          setIsShareModalOpen(false);
+          return;
+        }
         stopSpeech();
         onClose();
       } else if (e.key === 'ArrowRight') {
-        if (isRtl) handlePrev();
-        else handleNext();
+        if (!isShareModalOpen) {
+          if (isRtl) handlePrev();
+          else handleNext();
+        }
       } else if (e.key === 'ArrowLeft') {
-        if (isRtl) handleNext();
-        else handlePrev();
+        if (!isShareModalOpen) {
+          if (isRtl) handleNext();
+          else handlePrev();
+        }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentIndex, articles, isRtl]);
+  }, [currentIndex, articles, isRtl, isShareModalOpen]);
 
   const stopSpeech = () => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
@@ -304,75 +322,77 @@ const ArticleModalDialog: React.FC<ArticleModalProps & { article: ScientificArti
     return false;
   };
 
-  const handleShare = async () => {
-    const shareUrl = getShareUrl();
-    const titleText = article.title[language] || article.title.ar;
-    const summaryText = article.summary[language] || article.summary.ar;
-
-    // 1. If Web Share API is supported, use it directly
-    if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
-      try {
-        await navigator.share({
-          title: titleText,
-          text: `${titleText}\n\n${summaryText}`,
-          url: shareUrl,
-        });
-        setCopied(true);
-        setShareFeedback('shared');
-        setTimeout(() => {
-          setCopied(false);
-          setShareFeedback(null);
-        }, 3000);
-        return;
-      } catch (err: any) {
-        // If user cancelled the share dialog, do not trigger fallback
-        if (err?.name === 'AbortError') {
-          return;
-        }
-      }
-    }
-
-    // 2. Fallback: Copy link to clipboard and open social platforms panel
-    await copyToClipboard(shareUrl);
-    setShowSharePanel(true);
-  };
-
   const shareTitle = article.title[language] || article.title.ar;
   const shareSummary = article.summary[language] || article.summary.ar;
   const currentShareUrl = getShareUrl();
 
+  const handleOpenShare = () => {
+    setIsShareModalOpen(true);
+  };
+
+  const handleNativeDeviceShare = async () => {
+    if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
+      try {
+        await navigator.share({
+          title: shareTitle,
+          text: `${shareTitle}\n\n${shareSummary}`,
+          url: currentShareUrl,
+        });
+      } catch (err: any) {
+        if (err?.name !== 'AbortError') {
+          console.error('Web Share error:', err);
+        }
+      }
+    }
+  };
+
+  const copyRichShareText = async () => {
+    const textToCopy = `${shareTitle}\n\n${shareSummary}\n\n${currentShareUrl}`;
+    const ok = await copyToClipboard(textToCopy);
+    if (ok) {
+      setRichCopied(true);
+      setTimeout(() => setRichCopied(false), 3000);
+    }
+  };
+
   const socialPlatforms = useMemo(() => [
     {
-      name: 'WhatsApp',
+      name: language === 'ar' ? 'واتساب' : 'WhatsApp',
       icon: WhatsAppIcon,
-      bgClass: 'bg-[#25D366] hover:bg-[#20bd5a] text-white',
-      url: `https://api.whatsapp.com/send?text=${encodeURIComponent(`${shareTitle}\n\n${currentShareUrl}`)}`,
+      bgClass: 'bg-[#25D366] hover:bg-[#20bd5a] text-white shadow-md shadow-[#25D366]/20',
+      url: `https://api.whatsapp.com/send?text=${encodeURIComponent(`${shareTitle}\n\n${shareSummary}\n\n${currentShareUrl}`)}`,
     },
     {
-      name: 'X (Twitter)',
+      name: language === 'ar' ? 'إكس (تويتر)' : 'X (Twitter)',
       icon: XTwitterIcon,
-      bgClass: 'bg-black hover:bg-slate-900 text-white border border-slate-700',
+      bgClass: 'bg-black hover:bg-slate-900 text-white border border-slate-700 shadow-md',
       url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTitle)}&url=${encodeURIComponent(currentShareUrl)}`,
     },
     {
-      name: 'Telegram',
+      name: language === 'ar' ? 'تيليغرام' : 'Telegram',
       icon: TelegramIcon,
-      bgClass: 'bg-[#229ED9] hover:bg-[#1e8ec3] text-white',
+      bgClass: 'bg-[#229ED9] hover:bg-[#1e8ec3] text-white shadow-md shadow-[#229ED9]/20',
       url: `https://t.me/share/url?url=${encodeURIComponent(currentShareUrl)}&text=${encodeURIComponent(shareTitle)}`,
     },
     {
-      name: 'Facebook',
+      name: language === 'ar' ? 'فيسبوك' : 'Facebook',
       icon: FacebookIcon,
-      bgClass: 'bg-[#1877F2] hover:bg-[#166fe5] text-white',
+      bgClass: 'bg-[#1877F2] hover:bg-[#166fe5] text-white shadow-md shadow-[#1877F2]/20',
       url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentShareUrl)}`,
     },
     {
-      name: 'LinkedIn',
+      name: language === 'ar' ? 'لينكد إن' : 'LinkedIn',
       icon: LinkedInIcon,
-      bgClass: 'bg-[#0A66C2] hover:bg-[#095196] text-white',
+      bgClass: 'bg-[#0A66C2] hover:bg-[#095196] text-white shadow-md shadow-[#0A66C2]/20',
       url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentShareUrl)}`,
     },
-  ], [shareTitle, currentShareUrl]);
+    {
+      name: language === 'ar' ? 'البريد الإلكتروني' : 'Email',
+      icon: EmailIcon,
+      bgClass: 'bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white shadow-md shadow-cyan-600/20',
+      url: `mailto:?subject=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(`${shareTitle}\n\n${shareSummary}\n\n${currentShareUrl}`)}`,
+    },
+  ], [shareTitle, shareSummary, currentShareUrl, language]);
 
   const fontClass =
     fontSizeLevel === 'xlarge'
@@ -523,10 +543,10 @@ const ArticleModalDialog: React.FC<ArticleModalProps & { article: ScientificArti
               {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
             </button>
 
-            {/* Share Button (Web Share API / Copy Link / Social) */}
+            {/* Share Button (Direct Link & Social Media) */}
             <button
               type="button"
-              onClick={handleShare}
+              onClick={handleOpenShare}
               title={
                 language === 'ar'
                   ? 'مشاركة المقال'
@@ -534,14 +554,14 @@ const ArticleModalDialog: React.FC<ArticleModalProps & { article: ScientificArti
                   ? 'Partager l’article'
                   : 'Share Article'
               }
-              className={`p-2 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${
+              className={`p-2 sm:px-3 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${
                 copied
                   ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/50'
-                  : 'bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-cyan-300'
+                  : 'bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 border border-cyan-500/40 hover:border-cyan-400'
               }`}
             >
-              {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Share2 className="w-4 h-4" />}
-              <span className="text-xs font-semibold hidden lg:inline">
+              {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Share2 className="w-4 h-4 text-cyan-300" />}
+              <span className="text-xs font-semibold">
                 {copied
                   ? language === 'ar'
                     ? 'تم النسخ!'
@@ -753,6 +773,42 @@ const ArticleModalDialog: React.FC<ArticleModalProps & { article: ScientificArti
             <p className="text-base sm:text-lg text-cyan-200/90 font-medium leading-relaxed bg-cyan-950/25 p-4 rounded-2xl border border-cyan-900/30">
               {article.summary[language] || article.summary.ar}
             </p>
+          </div>
+
+          {/* Quick Action & Share Toolbar */}
+          <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl bg-slate-900/80 border border-cyan-900/40 shadow-md">
+            <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400">
+              <span className="flex items-center gap-1.5">
+                <Calendar className="w-3.5 h-3.5 text-cyan-400" />
+                <span>{article.lastUpdated}</span>
+              </span>
+              <span className="text-slate-600 hidden sm:inline">•</span>
+              <span className="flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5 text-cyan-400" />
+                <span>{article.readingTimeMin} {t.readingTime}</span>
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleOpenShare}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500/25 to-blue-500/25 hover:from-cyan-500/40 hover:to-blue-500/40 border border-cyan-500/50 text-cyan-200 text-xs font-bold transition-all cursor-pointer shadow-sm hover:scale-[1.02]"
+              >
+                <Share2 className="w-4 h-4 text-cyan-300" />
+                <span>{t.shareArticle}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => copyToClipboard(currentShareUrl)}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-semibold transition-colors cursor-pointer"
+                title={language === 'ar' ? 'نسخ رابط المقال المباشر' : 'Copy Direct Article Link'}
+              >
+                {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-cyan-400" />}
+                <span>{copied ? (language === 'ar' ? 'تم النسخ' : 'Copied') : (language === 'ar' ? 'نسخ الرابط' : 'Copy Link')}</span>
+              </button>
+            </div>
           </div>
 
           {/* Hero Image */}
@@ -1155,46 +1211,24 @@ const ArticleModalDialog: React.FC<ArticleModalProps & { article: ScientificArti
                 </span>
               </button>
 
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={handleShare}
-                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border transition-all cursor-pointer font-medium ${
-                    copied
-                      ? 'bg-emerald-500/20 border-emerald-500/60 text-emerald-300'
-                      : 'bg-slate-900 border-slate-800 hover:border-cyan-700/60 hover:text-cyan-300 text-slate-300'
-                  }`}
+                  onClick={handleOpenShare}
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500/20 to-blue-500/20 hover:from-cyan-500/30 hover:to-blue-500/30 border border-cyan-500/50 hover:border-cyan-400 text-cyan-200 font-bold text-xs transition-all cursor-pointer shadow-sm"
                 >
-                  {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Share2 className="w-4 h-4" />}
-                  <span>
-                    {copied
-                      ? language === 'ar'
-                        ? 'تم نسخ الرابط!'
-                        : language === 'fr'
-                        ? 'Lien copié !'
-                        : 'Link Copied!'
-                      : t.shareArticle}
-                  </span>
+                  <Share2 className="w-4 h-4 text-cyan-400" />
+                  <span>{t.shareArticle}</span>
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => setShowSharePanel(!showSharePanel)}
-                  title={
-                    language === 'ar'
-                      ? 'خيارات المشاركة عبر شبكات التواصل'
-                      : language === 'fr'
-                      ? 'Options de partage social'
-                      : 'Social sharing options'
-                  }
-                  className={`p-1.5 rounded-lg border transition-colors cursor-pointer ${
-                    showSharePanel
-                      ? 'bg-cyan-500/20 border-cyan-500 text-cyan-300'
-                      : 'bg-slate-900 border-slate-800 hover:bg-slate-800 text-slate-400 hover:text-cyan-300'
-                  }`}
-                  aria-label="Toggle social platforms share panel"
+                  onClick={() => copyToClipboard(currentShareUrl)}
+                  className="p-2 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 hover:text-cyan-300 transition-colors cursor-pointer"
+                  title={language === 'ar' ? 'نسخ الرابط المباشر' : 'Copy Direct Link'}
+                  aria-label="Copy Direct Link"
                 >
-                  <Send className="w-4 h-4" />
+                  {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
                 </button>
               </div>
             </div>
@@ -1208,6 +1242,209 @@ const ArticleModalDialog: React.FC<ArticleModalProps & { article: ScientificArti
           </div>
         </div>
       </div>
+
+      {/* Dedicated Floating Share Dialog Modal */}
+      {isShareModalOpen && (
+        <div
+          className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
+          onClick={() => setIsShareModalOpen(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="share-modal-title"
+        >
+          <div
+            className="relative w-full max-w-lg rounded-3xl bg-[#090e24] border border-cyan-500/50 shadow-2xl p-5 sm:p-6 text-slate-100 flex flex-col gap-4 animate-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto scrollbar-thin"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Share Modal Header */}
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-cyan-500/20 border border-cyan-500/40 text-cyan-300">
+                  <Share2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 id="share-modal-title" className="text-base font-bold text-white">
+                    {language === 'ar'
+                      ? 'مشاركة المقال العلمي'
+                      : language === 'fr'
+                      ? 'Partager l’article scientifique'
+                      : 'Share Scientific Article'}
+                  </h3>
+                  <p className="text-xs text-slate-400">
+                    {language === 'ar'
+                      ? 'انسخ الرابط المباشر أو انشر المقال عبر منصات التواصل'
+                      : 'Copy direct link or share on social platforms'}
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setIsShareModalOpen(false)}
+                className="p-1.5 rounded-xl bg-slate-800/80 hover:bg-rose-950/40 text-slate-400 hover:text-rose-400 border border-slate-700 transition-colors cursor-pointer"
+                aria-label="Close"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Article Mini Card Preview */}
+            <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-cyan-900/40 flex items-start gap-3">
+              {article.image && (
+                <img
+                  src={article.image}
+                  alt=""
+                  className="w-16 h-16 rounded-xl object-cover shrink-0 border border-slate-800"
+                />
+              )}
+              <div className="min-w-0 flex-1">
+                <span className="inline-block px-2 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 text-[10px] font-bold border border-cyan-500/30 mb-1">
+                  {t.sections[article.category] || article.category}
+                </span>
+                <h4 className="text-xs sm:text-sm font-bold text-white truncate">
+                  {article.title[language] || article.title.ar}
+                </h4>
+                <p className="text-[11px] text-slate-400 line-clamp-2 mt-0.5">
+                  {article.summary[language] || article.summary.ar}
+                </p>
+              </div>
+            </div>
+
+            {/* Copied Success Alerts */}
+            {copied && (
+              <div className="p-3 rounded-xl bg-emerald-950/70 border border-emerald-500/60 flex items-center gap-2 text-xs text-emerald-300 font-semibold animate-in fade-in">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span>
+                  {language === 'ar'
+                    ? 'تم نسخ الرابط المباشر للمقال بنجاح! جاهز للصق والمشاركة.'
+                    : language === 'fr'
+                    ? 'Lien direct de l’article copié avec succès !'
+                    : 'Direct article link copied successfully!'}
+                </span>
+              </div>
+            )}
+
+            {richCopied && (
+              <div className="p-3 rounded-xl bg-cyan-950/70 border border-cyan-500/60 flex items-center gap-2 text-xs text-cyan-300 font-semibold animate-in fade-in">
+                <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" />
+                <span>
+                  {language === 'ar'
+                    ? 'تم نسخ عنوان وملخص المقال مع الرابط بنجاح!'
+                    : 'Article title, summary & link copied!'}
+                </span>
+              </div>
+            )}
+
+            {/* Direct Link Section */}
+            <div>
+              <label className="block text-xs font-bold text-slate-300 mb-1.5 flex items-center gap-1.5">
+                <Link2 className="w-3.5 h-3.5 text-cyan-400" />
+                <span>
+                  {language === 'ar'
+                    ? 'الرابط المباشر للمقال:'
+                    : language === 'fr'
+                    ? 'Lien direct de l’article :'
+                    : 'Direct Article Link:'}
+                </span>
+              </label>
+              <div className="flex items-center gap-2 bg-slate-950 p-1.5 rounded-xl border border-slate-800 focus-within:border-cyan-500/70 transition-colors">
+                <input
+                  type="text"
+                  readOnly
+                  value={currentShareUrl}
+                  onClick={(e) => (e.target as HTMLInputElement).select()}
+                  className="bg-transparent text-xs font-mono text-cyan-300 flex-1 px-2.5 py-1.5 outline-none select-all truncate"
+                />
+                <button
+                  type="button"
+                  onClick={() => copyToClipboard(currentShareUrl)}
+                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer shrink-0 ${
+                    copied
+                      ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/30'
+                      : 'bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-md shadow-cyan-500/20'
+                  }`}
+                >
+                  {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>
+                    {copied
+                      ? language === 'ar'
+                        ? 'تم النسخ'
+                        : 'Copied'
+                      : language === 'ar'
+                      ? 'نسخ الرابط'
+                      : language === 'fr'
+                      ? 'Copier'
+                      : 'Copy Link'}
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            {/* Social Platforms Grid */}
+            <div>
+              <span className="block text-xs font-bold text-slate-300 mb-2">
+                {language === 'ar'
+                  ? 'المشاركة عبر منصات التواصل الاجتماعي:'
+                  : language === 'fr'
+                  ? 'Partager sur les réseaux sociaux :'
+                  : 'Share on Social Media:'}
+              </span>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                {socialPlatforms.map((platform) => (
+                  <a
+                    key={platform.name}
+                    href={platform.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${platform.bgClass}`}
+                  >
+                    <platform.icon className="w-4 h-4 shrink-0" />
+                    <span className="truncate">{platform.name}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Additional Actions: Copy Rich Text + Web Share */}
+            <div className="pt-2 border-t border-slate-800/80 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
+              <button
+                type="button"
+                onClick={copyRichShareText}
+                className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold border border-slate-700 transition-colors cursor-pointer"
+                title={language === 'ar' ? 'نسخ عنوان وملخص المقال مع الرابط المباشر' : 'Copy title & summary with direct link'}
+              >
+                <Copy className="w-3.5 h-3.5 text-cyan-400" />
+                <span>
+                  {richCopied
+                    ? language === 'ar'
+                      ? 'تم نسخ النص الكامل'
+                      : 'Copied Full Text'
+                    : language === 'ar'
+                    ? 'نسخ الملخص مع الرابط'
+                    : 'Copy Summary & Link'}
+                </span>
+              </button>
+
+              {canUseWebShare && (
+                <button
+                  type="button"
+                  onClick={handleNativeDeviceShare}
+                  className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-cyan-950/60 hover:bg-cyan-900/60 text-cyan-300 hover:text-cyan-200 text-xs font-bold border border-cyan-800/50 transition-colors cursor-pointer"
+                >
+                  <Smartphone className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>
+                    {language === 'ar'
+                      ? 'تطبيقات الجهاز'
+                      : language === 'fr'
+                      ? 'Applications de l’appareil'
+                      : 'Device Apps'}
+                  </span>
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

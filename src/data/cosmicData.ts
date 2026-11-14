@@ -2498,6 +2498,175 @@ export const initialQuizQuestions: QuizQuestion[] = [
       fr: 'Lorsqu’une planète passe devant son étoile, elle bloque une infime fraction de sa lumière, révélant sa taille et sa période orbitale.'
     },
     scientificReference: 'NASA Exoplanet Archive & Kepler Mission Science'
+  },
+  {
+    id: 'quiz-solar-system-largest',
+    category: 'solar-system',
+    difficulty: 'easy',
+    question: {
+      ar: 'ما هو أكبر كوكب في مجموعة الشمسية من حيث الحجم والكتلة؟',
+      en: 'What is the largest planet in our Solar System by size and mass?',
+      fr: 'Quelle est la plus grande planète de notre Système Solaire en taille et en masse ?'
+    },
+    options: {
+      ar: ['المريخ (Mars)', 'المشتري (Jupiter)', 'زحل (Saturn)', 'نبتون (Neptune)'],
+      en: ['Mars', 'Jupiter', 'Saturn', 'Neptune'],
+      fr: ['Mars', 'Jupiter', 'Saturn', 'Neptune']
+    },
+    correctIndex: 1,
+    explanation: {
+      ar: 'يُعد المشتري عملاق الغاز الكوني الأكبر في مجموعتنا الشمسية، حيث يتسع لأكثر من 1300 كوكب بحجم الأرض، وتبلغ كتلته ضعف كتلة جميع كواكب المجموعة مجتمعة.',
+      en: 'Jupiter is the undisputed king of planets in our solar system, capable of holding over 1,300 Earths inside its volume.',
+      fr: 'Jupiter est la plus massive des planètes, pouvant contenir plus de 1 300 Terres en son sein.'
+    },
+    scientificReference: 'NASA Solar System Exploration'
+  },
+  {
+    id: 'quiz-solar-system-rings',
+    category: 'solar-system',
+    difficulty: 'medium',
+    question: {
+      ar: 'أي كوكب في مجموعتنا الشمسية يمتلك نظام حلقات جليدية وصخرية هو الأبرز والأكثر لمعاناً؟',
+      en: 'Which planet in our Solar System boasts the most prominent and dazzling ring system?',
+      fr: 'Quelle planète de notre Système Solaire possède le système d’anneaux le plus spectaculaire ?'
+    },
+    options: {
+      ar: ['المريخ', 'زحل (Saturn)', 'عطارد', 'الزهرة'],
+      en: ['Mars', 'Saturn', 'Mercury', 'Venus'],
+      fr: ['Mars', 'Saturne', 'Mercure', 'Vénus']
+    },
+    correctIndex: 1,
+    explanation: {
+      ar: 'تتكون حلقات زحل من مليارات جزيئات الجليد والصخور المتراوحة بين حبيبات غبرية وصخور بحجم جبال صغيرة، وهي مرئية بوضوح حتى عبر تلسكوب صغير.',
+      en: 'Saturn’s rings are composed of countless icy particles ranging from microscopic dust grains to boulder-sized chunks.',
+      fr: 'Les anneaux de Saturne sont composés de milliards de particules de glace et de roches.'
+    },
+    scientificReference: 'Cassini-Huygens Mission Data / NASA'
+  },
+  {
+    id: 'quiz-solar-system-resonance',
+    category: 'solar-system',
+    difficulty: 'hard',
+    question: {
+      ar: 'ما هي نسبة الرنين المداري (Orbital Resonance) الشهيرة بين أقمار المشتري الغاليلية الداخلية: إيو، أوروبا، وغانيميد؟',
+      en: 'What is the famous orbital resonance ratio among Jupiter’s inner Galilean moons Io, Europa, and Ganymede?',
+      fr: 'Quel est le ratio de résonance orbitale entre les lunes galiléennes Io, Europe et Ganymède ?'
+    },
+    options: {
+      ar: ['1:1:1', '4:2:1 (لكل 4 دورات لإيو، يدور أوروبا دورتين وغانيميد دورة واحدة)', '10:5:2', '3:2:1'],
+      en: ['1:1:1', '4:2:1 (For every 4 orbits of Io, Europa completes 2, and Ganymede 1)', '10:5:2', '3:2:1'],
+      fr: ['1:1:1', '4:2:1 (Pour 4 orbites d’Io, Europe en fait 2 et Ganymède 1)', '10:5:2', '3:2:1']
+    },
+    correctIndex: 1,
+    explanation: {
+      ar: 'تتحرك أقمار إيو وأوروبا وغانيميد في رنين مداري دقيق بنسبة 4:2:1، مما يولد قوى مد وجزر هائلة تسخن باطن إيو وتجعلها أكثر الأجرام نشاطاً بركانياً في النظام الشمسي.',
+      en: 'Io, Europa, and Ganymede are locked in a 4:2:1 Laplace resonance, causing tidal heating that powers Io’s intense volcanism.',
+      fr: 'Io, Europe et Ganymède sont bloquées en résonance de Laplace 4:2:1, engendrant un réchauffement par marées.'
+    },
+    scientificReference: 'Celestial Mechanics & NASA Galileo Mission'
+  },
+  {
+    id: 'quiz-galaxy-milkyway-type',
+    category: 'galaxies',
+    difficulty: 'easy',
+    question: {
+      ar: 'كيف تُصنف مجرة درب التبانة مورفولوجياً ضمن أشكال المجرات في الكون؟',
+      en: 'How is the Milky Way galaxy morphologically classified among cosmic galaxy types?',
+      fr: 'Comment la Voie Lactée est-elle classée morphologiquement parmi les galaxies ?'
+    },
+    options: {
+      ar: ['مجرة إهليلجية (Elliptical)', 'مجرة حلزونية ضلعية (Barred Spiral)', 'مجرة غير منتظمة (Irregular)', 'مجرة عدسية (Lenticular)'],
+      en: ['Elliptical Galaxy', 'Barred Spiral Galaxy', 'Irregular Galaxy', 'Lenticular Galaxy'],
+      fr: ['Galaxie elliptique', 'Galaxie spirale barrée', 'Galaxie irrégulière', 'Galaxie lenticulaire']
+    },
+    correctIndex: 1,
+    explanation: {
+      ar: 'تصنف درب التبانة كمجرة حلزونية ضلعية (SBbc) تتميز بوجود شريط مركزي بارز من النجوم يخترق قلبها وتتفرع منه الأذرع الحلزونية الكبرى.',
+      en: 'The Milky Way is an SBbc barred spiral galaxy featuring a prominent central stellar bar from which spiral arms unwind.',
+      fr: 'La Voie Lactée est une galaxie spirale barrée dotée d’une barre centrale proéminente.'
+    },
+    scientificReference: 'Hubble Galaxy Classification Sequence'
+  },
+  {
+    id: 'quiz-phenomena-supernova',
+    category: 'black-holes',
+    difficulty: 'medium',
+    question: {
+      ar: 'ماذا يُطلق على الانفجار النجمي الهائل الذي يحدث عند موت نجم عملاق، مسبباً إضاءة تعادل مجرة بأكملها وتخليق العناصر الثقيلة؟',
+      en: 'What is the colossal stellar explosion marking the death of a massive star called?',
+      fr: 'Comment appelle-t-on l’explosion stellaire cataclysmique marquant la mort d’une étoile massive ?'
+    },
+    options: {
+      ar: ['الكسوف الشمسي', 'المستعر الأعظم (Supernova)', 'الشفق القطبي', 'التوهج الشمسي'],
+      en: ['Solar Eclipse', 'Supernova', 'Aurora Borealis', 'Solar Flare'],
+      fr: ['Éclipse Solaire', 'Supernova', 'Aurore Polaire', 'Éruption Solaire']
+    },
+    correctIndex: 1,
+    explanation: {
+      ar: 'المستعر الأعظم (Supernova) هو الانهيار الكטاسليكي لنواة نجم فائق الكتلة، يليه ارتداد وانفجار يذرّ عناصر الذهب والحديد والكربون في الفضاء.',
+      en: 'A Supernova is the catastrophic explosion of a massive star, dispersing heavy synthesized elements across interstellar space.',
+      fr: 'Une supernova est l’explosion cataclysmique d’une étoile massive, disséminant des éléments lourds.'
+    },
+    scientificReference: 'Stellar Evolution & Supernova Cosmology Project'
+  },
+  {
+    id: 'quiz-quran-expansion',
+    category: 'quran-cosmos',
+    difficulty: 'easy',
+    question: {
+      ar: 'أي آية كريمة في سورة الذاريات تشير إلى حقيقة توسع الكون الفسيح؟',
+      en: 'Which blessed Quranic verse in Surah Adh-Dhariyat points to the continuous expansion of the universe?',
+      fr: 'Quel verset coranique de la sourate Adh-Dhariyat évoque l’expansion continue de l’univers ?'
+    },
+    options: {
+      ar: [
+        '﴿وَالسَّمَاءَ بَنَيْنَاهَا بِأَيْدٍ وَإِنَّا لَمُوسِعُونَ﴾ (الذاريات: 47)',
+        '﴿وَالشَّمْسُ تَجْرِي لِمُسْتَقَرٍّ لَّهَا﴾ (ليس في الذاريات)',
+        '﴿خَلَقَ السَّمَاوَاتِ وَالْأَرْضَ بِالْحَقِّ﴾',
+        '﴿وَالسَّمَاءِ ذَاتِ الْبُرُوجِ﴾'
+      ],
+      en: [
+        'And the heaven We constructed with strength, and indeed, We are [its] expander (Adh-Dhariyat: 47)',
+        'And the Sun runs toward its resting place',
+        'He created the heavens and earth in truth',
+        'By the sky containing great constellations'
+      ],
+      fr: [
+        'Et le ciel, Nous l’avons construit fort et puissant, et Nous le étendons constamment (Adh-Dhariyat : 47)',
+        'Et le Soleil court vers un gîte qui lui est propre',
+        'Il a créé les cieux et la terre en toute vérité',
+        'Par le ciel aux constellations'
+      ]
+    },
+    correctIndex: 0,
+    explanation: {
+      ar: 'تفيد كلمة ﴿لَمُوسِعُونَ﴾ في لغة العرب التوسعة المستمرة، وهو ما توافق بدقة تامة مع اكتشاف إدوين هابل عام 1929 لتوسع الكون وتباعد المجرات.',
+      en: 'The Arabic term "Mūsi‘ūn" denotes ongoing expansion, perfectly harmonizing with modern cosmological observations of accelerating galactic recession.',
+      fr: 'Le terme "Mūsi‘ūn" en arabe signifie l’action d’élargir et d’étendre continuellement l’espace.'
+    },
+    scientificReference: 'Classical Arabic Lexicon (Lisan al-Arab) & Modern Cosmology'
+  },
+  {
+    id: 'quiz-quran-bihusban',
+    category: 'quran-cosmos',
+    difficulty: 'medium',
+    question: {
+      ar: 'في أي سورة قرآنية كريمة ورد وصف حركة الشمس والقمر بدقة حسابية محكمة في قوله تعالى: ﴿وَالشَّمْسُ وَالْقَمَرُ بِحُسْبَانٍ﴾؟',
+      en: 'In which Surah does the verse ﴿And the sun and the moon [move] by precise calculation﴾ appear?',
+      fr: 'Dans quelle sourate trouve-t-on le verset ﴿Le Soleil et la Lune évoluent selon un calcul précis (Bihusban)﴾ ?'
+    },
+    options: {
+      ar: ['سورة الرحمن (Ar-Rahman)', 'سورة البقرة', 'سورة يس', 'سورة الملك'],
+      en: ['Surah Ar-Rahman', 'Surah Al-Baqarah', 'Surah Yaseen', 'Surah Al-Mulk'],
+      fr: ['Sourate Ar-Rahman', 'Sourate Al-Baqarah', 'Sourate Yaseen', 'Sourate Al-Mulk']
+    },
+    correctIndex: 0,
+    explanation: {
+      ar: 'وردت في سورة الرحمن الآية 5: ﴿وَالشَّمْسُ وَالْقَمَرُ بِحُسْبَانٍ﴾، تعبيراً عن دقة المدارات والقوانين الفيزيائية والجاذبية التي تحكم أجرام المجموعة الشمسية.',
+      en: 'Appearing in Surah Ar-Rahman (55:5), "Bihusban" refers to precise mathematical calculations governing orbits, gravity, and celestial mechanics.',
+      fr: 'Présent dans la sourate Ar-Rahman (55:5), "Bihusban" souligne la précision mathématique et géométrique des orbites.'
+    },
+    scientificReference: 'Tafsir Ibn Kathir & Celestial Mechanics'
   }
 ];
 
