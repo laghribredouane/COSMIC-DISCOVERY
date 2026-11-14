@@ -1,8 +1,16 @@
 @import "tailwindcss";
 
 @layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   body {
     font-family: 'Cairo', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+    touch-action: manipulation;
   }
   
   [dir="ltr"] {
@@ -12,6 +20,14 @@
   .font-quran {
     font-family: 'Scheherazade New', 'Amiri Quran', 'Amiri', 'Traditional Arabic', serif;
   }
+}
+
+/* Safe area padding utilities for mobile phones & notched screens */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 1rem);
+}
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 1rem);
 }
 
 /* Custom smooth dark cosmic scrollbar */

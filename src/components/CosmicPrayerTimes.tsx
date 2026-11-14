@@ -1989,6 +1989,40 @@ export const CosmicPrayerTimes: React.FC<CosmicPrayerTimesProps> = ({
                 <span className="font-mono font-bold text-cyan-300">{observerHeading}°</span>
                 <button
                   type="button"
+                  onClick={async () => {
+                    if (typeof window !== 'undefined') {
+                      if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
+                        try {
+                          const res = await (DeviceOrientationEvent as any).requestPermission();
+                          if (res === 'granted') {
+                            window.addEventListener('deviceorientation', (e: DeviceOrientationEvent) => {
+                              const heading = (e as any).webkitCompassHeading || e.alpha;
+                              if (typeof heading === 'number' && !isNaN(heading)) {
+                                const norm = (e as any).webkitCompassHeading !== undefined ? (e as any).webkitCompassHeading : (360 - (e.alpha || 0)) % 360;
+                                setObserverHeading(Number(norm.toFixed(1)));
+                              }
+                            });
+                          }
+                        } catch {}
+                      } else if ('ondeviceorientation' in window) {
+                        window.addEventListener('deviceorientation', (e: DeviceOrientationEvent) => {
+                          const heading = (e as any).webkitCompassHeading || e.alpha;
+                          if (typeof heading === 'number' && !isNaN(heading)) {
+                            const norm = (e as any).webkitCompassHeading !== undefined ? (e as any).webkitCompassHeading : (360 - (e.alpha || 0)) % 360;
+                            setObserverHeading(Number(norm.toFixed(1)));
+                          }
+                        });
+                      }
+                    }
+                  }}
+                  className="px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-300 text-[11px] font-bold transition-colors cursor-pointer flex items-center gap-1"
+                  title={language === 'ar' ? 'تفعيل مستشعر بوصلة الهاتف الحية' : 'Enable Live Sensor Compass'}
+                >
+                  <Compass className="w-3 h-3 text-cyan-400" />
+                  <span>{language === 'ar' ? 'بوصلة الجهاز' : 'Sensor'}</span>
+                </button>
+                <button
+                  type="button"
                   onClick={() => setObserverHeading(Math.round(qiblaData.qiblaBearing))}
                   className="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 text-[11px] font-bold transition-colors cursor-pointer"
                 >
